@@ -73,7 +73,7 @@ class FitnessEvaluator:
     def __init__(self, config: AppConfig, base_controller: FuzzyController):
         self.config = config
         self.base_controller = base_controller
-        self.encoder = ChromosomeEncoder(config.fuzzy)
+        self.encoder = ChromosomeEncoder(controller=base_controller)
         self._eval_count = 0
     
     def evaluate(self, chromosome: np.ndarray) -> float:

@@ -1,24 +1,20 @@
-# ==============================================================================
-# simulator.py - Motor de simulación principal
-# ==============================================================================
 """
-Orquesta la simulación completa de la vivienda inteligente.
-Integra el modelo térmico, el ambiente y el controlador difuso para
-ejecutar la simulación paso a paso y registrar todos los resultados.
+Motor de simulacion temporal multi-dispositivo.
 """
+
+from typing import Callable, Dict, List, Optional
 
 import numpy as np
 import pandas as pd
-from typing import Optional, Callable, Dict, List
 
 from app.config import AppConfig
+from app.simulation.devices import AVAILABLE_DEVICES, ControlledDevice
 from app.simulation.environment import EnvironmentProfile
-from app.simulation.house_model import HouseModel
 from app.simulation.scenario_generator import get_scenario_configs
 
 
 class SimulationResult:
-    """Encapsula los resultados completos de una simulación."""
+    """Encapsula los resultados completos de una simulacion."""
 
     def __init__(self, data: pd.DataFrame, config: AppConfig, label: str = "base"):
         self.data = data
@@ -26,8 +22,7 @@ class SimulationResult:
         self.label = label
 
     def to_csv(self, filepath: str):
-        """Exporta resultados a CSV."""
-        self.data.to_csv(filepath, index=False, float_format='%.4f')
+        self.data.to_csv(filepath, index=False, float_format="%.4f")
 
     @property
     def num_steps(self) -> int:
@@ -35,170 +30,153 @@ class SimulationResult:
 
     @property
     def duration_hours(self) -> float:
-        return self.data['time_hours'].iloc[-1]
+        return float(self.data["time_hours"].iloc[-1]) if not self.data.empty else 0.0
 
 
 class Simulator:
-    """
-    Motor de simulación que ejecuta el bucle principal.
-    
-    Flujo por cada paso temporal:
-    1. Obtener estado ambiental (temperatura, radiación, ocupación, tarifa)
-    2. Preparar entradas para el controlador difuso
-    3. Evaluar controlador → obtener nivel de climatización
-    4. Aplicar al modelo térmico → actualizar temperatura interior
-    5. Calcular consumos y costos
-    6. Registrar todos los datos
-    """
+    """Ejecuta una simulacion temporal usando el controlador difuso activo."""
 
     def __init__(self, config: AppConfig):
         self.config = config
 
-    def run(self,
-            controller_fn: Callable[[Dict[str, float]], float],
-            label: str = "base",
-            progress_callback: Optional[Callable[[int, int], None]] = None
-            ) -> SimulationResult:
-        """
-        Ejecuta la simulación completa.
-        
-        Args:
-            controller_fn: Función que recibe un dict con las variables de entrada
-                          y retorna el nivel de climatización [0, 100].
-            label: Etiqueta para identificar esta simulación.
-            progress_callback: Función opcional (step, total) para reportar progreso.
-            
-        Returns:
-            SimulationResult con todos los datos registrados.
-        """
+    def run(
+        self,
+        controller_fn: Callable[[Dict[str, float]], float],
+        label: str = "base",
+        progress_callback: Optional[Callable[[int, int], None]] = None,
+    ) -> SimulationResult:
         cfg = self.config
         sim_cfg = cfg.simulation
-        
-        # Generar escenario usando la configuración
         sim_c, env_c = get_scenario_configs(
             scenario_type=sim_cfg.scenario_type,
             horizon_hours=sim_cfg.horizon_hours,
             seed=sim_cfg.random_seed,
             target_temp=sim_cfg.target_temperature,
         )
-        # Sobrescribir con configuración completa
         sim_c.time_step_hours = sim_cfg.time_step_hours
-        
-        # Crear perfil ambiental
         environment = EnvironmentProfile(sim_c, env_c)
-        
-        # Crear modelo de vivienda
-        house = HouseModel(cfg.house, dt=sim_cfg.time_step_hours)
-        house.reset()
-        
-        # Registros de simulación
+
+        device_factory = AVAILABLE_DEVICES.get(sim_cfg.device_key, AVAILABLE_DEVICES["hvac"])
+        device = ControlledDevice(device_factory(), dt=sim_cfg.time_step_hours)
+        target_temp = device.config.target_temperature
+        comfort_range = device.config.comfort_range
+
         records: List[Dict] = []
-        
-        # Acumuladores
         cumulative_cost = 0.0
         cumulative_energy = 0.0
-        
-        num_steps = sim_c.num_steps
-        target_temp = sim_cfg.target_temperature
-        comfort_range = sim_cfg.comfort_range
-        
-        for step in range(num_steps):
-            # 1. Estado ambiental
+
+        for step in range(sim_c.num_steps):
             env_state = environment.get_state_at(step)
-            
-            # 2. Preparar entradas del controlador
-            temp_error = house.temperature_indoor - target_temp
-            
-            # Normalizar consumo base respecto al máximo del escenario
-            max_base = env_c.base_consumption_max
-            consumption_normalized = min(env_state['base_consumption'] / max_base, 1.0) if max_base > 0 else 0.0
-            
-            controller_inputs = {
-                'temp_error': temp_error,
-                'temperature_indoor': house.temperature_indoor,
-                'temperature_outdoor': env_state['temperature_outdoor'],
-                'occupancy': env_state['occupancy'],
-                'tariff_normalized': env_state['tariff_normalized'],
-                'consumption_normalized': consumption_normalized,
-                'target_temperature': target_temp,
-            }
-            
-            # 3. Evaluar controlador
+            controller_inputs = self._build_controller_inputs(device, env_state)
+
             try:
-                hvac_level = controller_fn(controller_inputs)
-                hvac_level = float(np.clip(hvac_level, 0.0, 100.0))
+                control_level = float(np.clip(controller_fn(controller_inputs), 0.0, 100.0))
             except Exception:
-                hvac_level = 0.0
-            
-            # 4. Actualizar modelo térmico
-            house_state = house.step(
-                temp_outdoor=env_state['temperature_outdoor'],
-                occupancy=env_state['occupancy'],
-                solar_radiation=env_state['solar_radiation'],
-                hvac_level=hvac_level,
+                control_level = 0.0
+
+            device_state = device.step(
+                ambient_temperature=self._resolve_ambient_temperature(sim_cfg.device_key, env_state),
+                occupancy=env_state["occupancy"] if sim_cfg.device_key == "hvac" else 0.0,
+                solar_radiation=env_state["solar_radiation"] if sim_cfg.device_key == "hvac" else 0.0,
+                usage_load=env_state["door_openings"] + 0.35 * env_state["load_level"] if sim_cfg.device_key == "refrigerador" else 0.0,
+                control_level=control_level,
             )
-            
-            # 5. Calcular consumos y costos
-            total_consumption = env_state['base_consumption'] + house_state['hvac_consumption_kw']
-            step_cost = total_consumption * env_state['tariff'] * sim_cfg.time_step_hours
+
+            total_consumption = env_state["base_consumption"] + device_state["device_consumption_kw"]
+            step_cost = total_consumption * env_state["tariff"] * sim_cfg.time_step_hours
             cumulative_cost += step_cost
             cumulative_energy += total_consumption * sim_cfg.time_step_hours
-            
-            # Indicador de confort: 1.0 si está en rango, decrece fuera
-            temp_deviation = abs(house_state['temperature_indoor'] - target_temp)
-            if temp_deviation <= comfort_range:
-                comfort_index = 1.0
-            else:
-                comfort_index = max(0.0, 1.0 - (temp_deviation - comfort_range) / 5.0)
-            
-            # 6. Registrar
+
+            temp_deviation = abs(device_state["device_temperature"] - target_temp)
+            comfort_index = self._compute_comfort_index(temp_deviation, comfort_range)
+
             record = {
-                'step': step,
-                'time_hours': env_state['time_hours'],
-                'hour_of_day': env_state['hour_of_day'],
-                'temperature_outdoor': env_state['temperature_outdoor'],
-                'temperature_indoor': house_state['temperature_indoor'],
-                'temp_error': house_state['temperature_indoor'] - target_temp,
-                'occupancy': env_state['occupancy'],
-                'solar_radiation': env_state['solar_radiation'],
-                'tariff': env_state['tariff'],
-                'tariff_normalized': env_state['tariff_normalized'],
-                'base_consumption_kw': env_state['base_consumption'],
-                'hvac_level': hvac_level,
-                'hvac_power_level': house_state['hvac_power_level'],
-                'hvac_consumption_kw': house_state['hvac_consumption_kw'],
-                'total_consumption_kw': total_consumption,
-                'step_cost': step_cost,
-                'cumulative_cost': cumulative_cost,
-                'cumulative_energy_kwh': cumulative_energy,
-                'comfort_index': comfort_index,
-                'temp_deviation': temp_deviation,
+                "step": step,
+                "time_hours": env_state["time_hours"],
+                "hour_of_day": env_state["hour_of_day"],
+                "device_key": sim_cfg.device_key,
+                "device_display_name": device.config.display_name,
+                "ambient_temperature": self._resolve_ambient_temperature(sim_cfg.device_key, env_state),
+                "temperature_outdoor": env_state["temperature_outdoor"],
+                "room_temperature": env_state["room_temperature"],
+                "humidity": env_state["humidity"],
+                "occupancy": env_state["occupancy"],
+                "solar_radiation": env_state["solar_radiation"],
+                "door_openings": env_state["door_openings"],
+                "load_level": env_state["load_level"],
+                "tariff": env_state["tariff"],
+                "tariff_normalized": env_state["tariff_normalized"],
+                "base_consumption_kw": env_state["base_consumption"],
+                "device_temperature": device_state["device_temperature"],
+                "target_temperature": target_temp,
+                "temp_error": device.get_temp_error(),
+                "control_level": control_level,
+                "device_power_level": device_state["device_power_level"],
+                "device_consumption_kw": device_state["device_consumption_kw"],
+                "total_consumption_kw": total_consumption,
+                "step_cost": step_cost,
+                "cumulative_cost": cumulative_cost,
+                "cumulative_energy_kwh": cumulative_energy,
+                "comfort_index": comfort_index,
+                "temp_deviation": temp_deviation,
+                # Aliases de compatibilidad con la capa existente
+                "temperature_indoor": device_state["device_temperature"],
+                "hvac_level": control_level,
+                "hvac_power_level": device_state["device_power_level"],
+                "hvac_consumption_kw": device_state["device_consumption_kw"],
+                "consumption_normalized": min(env_state["base_consumption"] / max(env_c.base_consumption_max, 0.1), 1.0),
             }
             records.append(record)
-            
-            # Reportar progreso
-            if progress_callback and step % max(1, num_steps // 50) == 0:
-                progress_callback(step, num_steps)
-        
-        # Crear DataFrame
-        df = pd.DataFrame(records)
-        
-        return SimulationResult(df, self.config, label)
+
+            if progress_callback and step % max(1, sim_c.num_steps // 50) == 0:
+                progress_callback(step, sim_c.num_steps)
+
+        return SimulationResult(pd.DataFrame(records), cfg, label)
+
+    def _build_controller_inputs(self, device: ControlledDevice, env_state: Dict[str, float]) -> Dict[str, float]:
+        if self.config.simulation.device_key == "refrigerador":
+            return {
+                "device_temperature": device.temperature,
+                "door_openings": env_state["door_openings"],
+                "load_level": env_state["load_level"],
+                "tariff_normalized": env_state["tariff_normalized"],
+                "tariff": env_state["tariff_normalized"],
+            }
+
+        return {
+            "temp_error": device.get_temp_error(),
+            "humidity": env_state["humidity"],
+            "occupancy": env_state["occupancy"],
+            "tariff_normalized": env_state["tariff_normalized"],
+            "tariff": env_state["tariff_normalized"],
+            "temperature_indoor": device.temperature,
+            "temperature_outdoor": env_state["temperature_outdoor"],
+            "target_temperature": device.config.target_temperature,
+        }
+
+    def _resolve_ambient_temperature(self, device_key: str, env_state: Dict[str, float]) -> float:
+        if device_key == "refrigerador":
+            return float(env_state["room_temperature"])
+        return float(env_state["temperature_outdoor"])
+
+    @staticmethod
+    def _compute_comfort_index(temp_deviation: float, comfort_range: float) -> float:
+        if temp_deviation <= comfort_range:
+            return 1.0
+        return max(0.0, 1.0 - (temp_deviation - comfort_range) / 5.0)
 
 
-def run_baseline_simulation(config: AppConfig,
-                            controller_fn: Callable,
-                            progress_callback: Optional[Callable] = None
-                            ) -> SimulationResult:
-    """Función de conveniencia para ejecutar simulación base."""
-    simulator = Simulator(config)
-    return simulator.run(controller_fn, label="base", progress_callback=progress_callback)
+def run_baseline_simulation(
+    config: AppConfig,
+    controller_fn: Callable,
+    progress_callback: Optional[Callable] = None,
+) -> SimulationResult:
+    return Simulator(config).run(controller_fn, label="base", progress_callback=progress_callback)
 
 
-def run_optimized_simulation(config: AppConfig,
-                              controller_fn: Callable,
-                              progress_callback: Optional[Callable] = None
-                              ) -> SimulationResult:
-    """Función de conveniencia para ejecutar simulación optimizada."""
-    simulator = Simulator(config)
-    return simulator.run(controller_fn, label="optimizado", progress_callback=progress_callback)
+def run_optimized_simulation(
+    config: AppConfig,
+    controller_fn: Callable,
+    progress_callback: Optional[Callable] = None,
+) -> SimulationResult:
+    return Simulator(config).run(controller_fn, label="optimizado", progress_callback=progress_callback)

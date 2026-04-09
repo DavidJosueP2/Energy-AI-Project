@@ -22,7 +22,8 @@ import pandas as pd
 from app.config import AppConfig
 from app.simulation.simulator import SimulationResult
 from app.simulation.metrics import PerformanceMetrics
-from app.visualization import plots
+from app.simulation.metrics import is_higher_better_metric
+from app.visualization import plots, fuzzy_plots
 
 
 def export_csv(result: SimulationResult, output_dir: str, prefix: str = "sim") -> str:
@@ -84,6 +85,8 @@ def generate_html_report(config: AppConfig,
                           opt_metrics: Optional[PerformanceMetrics],
                           ga_fitness_history: Optional[List[float]] = None,
                           ga_avg_history: Optional[List[float]] = None,
+                          base_controller=None,
+                          opt_controller=None,
                           output_path: Optional[str] = None) -> str:
     """
     Genera un reporte HTML profesional con resultados completos.
@@ -108,6 +111,24 @@ def generate_html_report(config: AppConfig,
     if ga_fitness_history:
         images['ga_evolution'] = _fig_to_base64(
             plots.plot_ga_evolution(ga_fitness_history, ga_avg_history))
+
+    if base_controller is not None:
+        images['fuzzy_memberships'] = _fig_to_base64(
+            fuzzy_plots.plot_all_membership_functions(
+                base_controller.input_variables,
+                base_controller.output_variable
+            )
+        )
+
+    if base_controller is not None and opt_controller is not None:
+        primary_input = next(iter(base_controller.input_variables.keys()))
+        images['mf_comparison'] = _fig_to_base64(
+            fuzzy_plots.plot_mf_comparison(
+                primary_input,
+                base_controller.input_variables[primary_input],
+                opt_controller.input_variables[primary_input],
+            )
+        )
     
     if base_result and opt_result:
         images['comparison'] = _fig_to_base64(
@@ -118,7 +139,7 @@ def generate_html_report(config: AppConfig,
             plots.plot_metrics_comparison_bars(base_metrics, opt_metrics))
     
     # Construir HTML
-    html = _build_html(config, base_metrics, opt_metrics, images)
+    html = _build_html(config, base_metrics, opt_metrics, images, base_controller)
     
     if output_path:
         os.makedirs(os.path.dirname(output_path) or '.', exist_ok=True)
@@ -131,7 +152,8 @@ def generate_html_report(config: AppConfig,
 def _build_html(config: AppConfig,
                 base_metrics: Optional[PerformanceMetrics],
                 opt_metrics: Optional[PerformanceMetrics],
-                images: Dict[str, str]) -> str:
+                images: Dict[str, str],
+                base_controller=None) -> str:
     """Construye el HTML del reporte."""
     
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -147,7 +169,9 @@ def _build_html(config: AppConfig,
             opt_val = opt_dict.get(key, '-')
             if isinstance(opt_val, (int, float)) and isinstance(val, (int, float)) and val != 0:
                 change = ((opt_val - val) / abs(val)) * 100
-                change_str = f'<span style="color:{"#66bb6a" if change <= 0 else "#ef5350"}">{change:+.1f}%</span>'
+                improved = change > 0 if is_higher_better_metric(key) else change < 0
+                color = "#66bb6a" if improved else "#ef5350"
+                change_str = f'<span style="color:{color}">{change:+.1f}%</span>'
             else:
                 change_str = '-'
             
@@ -160,7 +184,7 @@ def _build_html(config: AppConfig,
             </tr>"""
         
         metrics_html = f"""
-        <h2>📊 Métricas de Desempeño</h2>
+        <h2>Metricas de Desempeno</h2>
         <table>
             <thead>
                 <tr><th>Métrica</th><th>Base</th><th>Optimizado</th><th>Cambio</th></tr>
@@ -171,15 +195,17 @@ def _build_html(config: AppConfig,
     # Imágenes
     images_html = ""
     img_titles = {
-        'temp_base': '🌡️ Evolución de Temperaturas',
-        'hvac_base': '❄️ Control HVAC',
-        'consumo_base': '⚡ Consumo Eléctrico',
-        'costo_base': '💰 Costo Acumulado',
-        'confort_base': '😊 Confort Térmico',
-        'dist_base': '📈 Distribución de Consumo',
-        'ga_evolution': '🧬 Evolución del Algoritmo Genético',
-        'comparison': '🔄 Comparación Base vs Optimizado',
-        'metrics_bars': '📊 Métricas Comparativas',
+        'temp_base': 'Evolucion de Temperaturas',
+        'hvac_base': 'Control del Dispositivo',
+        'consumo_base': 'Consumo Electrico',
+        'costo_base': 'Costo Acumulado',
+        'confort_base': 'Confort Termico',
+        'dist_base': 'Distribucion de Consumo',
+        'ga_evolution': 'Evolucion del Algoritmo Genetico',
+        'comparison': 'Comparacion Base vs Optimizado',
+        'metrics_bars': 'Metricas Comparativas',
+        'fuzzy_memberships': 'Funciones de Pertenencia del Sistema Difuso',
+        'mf_comparison': 'Comparacion de Membresias Base vs Optimizadas',
     }
     
     for key, title in img_titles.items():
@@ -190,6 +216,23 @@ def _build_html(config: AppConfig,
                 <img src="data:image/png;base64,{images[key]}" alt="{title}">
             </div>"""
     
+    fuzzy_summary_html = ""
+    if base_controller is not None:
+        variables_html = "".join(
+            f"<li><strong>{spec.display_name}:</strong> {', '.join(spec.sets.keys())}</li>"
+            for spec in base_controller.spec.input_variables
+        )
+        output_sets = ", ".join(base_controller.spec.output_variable.sets.keys())
+        fuzzy_summary_html = f"""
+        <h2>Sistema Difuso</h2>
+        <div class="config-box">
+            <p><strong>Dispositivo:</strong> {base_controller.spec.display_name}</p>
+            <p><strong>Descripcion:</strong> {base_controller.spec.explanation}</p>
+            <p><strong>Salida:</strong> {base_controller.spec.output_display_name} -> {output_sets}</p>
+            <p><strong>Numero de reglas:</strong> {base_controller.rule_base.num_rules}</p>
+            <ul>{variables_html}</ul>
+        </div>"""
+
     html = f"""<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -276,23 +319,25 @@ def _build_html(config: AppConfig,
     </style>
 </head>
 <body>
-    <h1>🏠 Sistema Inteligente de Gestión Energética Residencial</h1>
+    <h1>Sistema Inteligente de Gestion Energetica Residencial</h1>
     <p class="subtitle">Reporte generado el {now}</p>
 
-    <h2>⚙️ Configuración del Experimento</h2>
+    <h2>Configuracion del Experimento</h2>
     <div class="config-box">
-        <p><strong>Duración:</strong> {config.simulation.horizon_hours} horas</p>
+        <p><strong>Duracion:</strong> {config.simulation.horizon_hours} horas</p>
         <p><strong>Escenario:</strong> {config.simulation.scenario_type}</p>
-        <p><strong>Temperatura objetivo:</strong> {config.simulation.target_temperature}°C ± {config.simulation.comfort_range}°C</p>
+        <p><strong>Dispositivo:</strong> {config.simulation.device_key}</p>
+        <p><strong>Temperatura objetivo:</strong> {config.simulation.target_temperature} C +/- {config.simulation.comfort_range} C</p>
         <p><strong>Semilla:</strong> {config.simulation.random_seed}</p>
         <p><strong>Paso temporal:</strong> {config.simulation.time_step_hours} horas</p>
-        <p><strong>Población GA:</strong> {config.genetic.population_size} individuos</p>
+        <p><strong>Poblacion GA:</strong> {config.genetic.population_size} individuos</p>
         <p><strong>Generaciones GA:</strong> {config.genetic.num_generations}</p>
     </div>
 
     {metrics_html}
+    {fuzzy_summary_html}
 
-    <h2>📈 Gráficos de Resultados</h2>
+    <h2>Graficos de Resultados</h2>
     {images_html}
 
     <div class="footer">

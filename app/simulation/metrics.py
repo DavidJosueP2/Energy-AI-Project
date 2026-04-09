@@ -1,238 +1,169 @@
-# ==============================================================================
-# metrics.py - Cálculo de métricas de evaluación
-# ==============================================================================
 """
-Calcula métricas de desempeño para evaluar la calidad del controlador:
-- Consumo energético total (kWh)
-- Costo total ($)
-- Tiempo en zona de confort (%)
-- Pico de demanda máxima (kW)
-- Suavidad/variabilidad del control
-- Score global de fitness multiobjetivo
+Calculo de metricas de desempeno para simulaciones del controlador difuso.
+"""
 
-Las métricas se normalizan para permitir comparación justa entre
-controladores y para su uso en la función de fitness del GA.
-"""
+from dataclasses import dataclass
+from typing import Dict
 
 import numpy as np
 import pandas as pd
-from typing import Dict, Optional
-from dataclasses import dataclass
+
 from app.config import MetricsConfig, SimulationConfig
+
+
+HIGHER_IS_BETTER_METRICS = {
+    "Confort (%)",
+    "Indice de Confort Promedio",
+    "Fitness Score",
+}
 
 
 @dataclass
 class PerformanceMetrics:
-    """Métricas completas de desempeño de una simulación."""
-    
-    # Energía
+    """Metricas sinteticas comparables entre dispositivo base y optimizado."""
+
     total_energy_kwh: float = 0.0
-    hvac_energy_kwh: float = 0.0
+    device_energy_kwh: float = 0.0
     base_energy_kwh: float = 0.0
     avg_consumption_kw: float = 0.0
-    
-    # Costo
     total_cost: float = 0.0
     avg_hourly_cost: float = 0.0
-    
-    # Demanda
     peak_demand_kw: float = 0.0
     avg_demand_kw: float = 0.0
-    
-    # Confort
-    comfort_percentage: float = 0.0  # % del tiempo en zona de confort
+    comfort_percentage: float = 0.0
     avg_comfort_index: float = 0.0
     avg_temp_deviation: float = 0.0
     max_temp_deviation: float = 0.0
-    
-    # Control
-    avg_hvac_level: float = 0.0
-    control_variability: float = 0.0  # desviación estándar de cambios en HVAC
-    hvac_active_percentage: float = 0.0  # % del tiempo con HVAC encendido
-    
-    # Score global
+    avg_control_level: float = 0.0
+    control_variability: float = 0.0
+    control_active_percentage: float = 0.0
     fitness_score: float = 0.0
-    
+
     def to_dict(self) -> Dict[str, float]:
-        """Convierte métricas a diccionario."""
         return {
-            'Energía Total (kWh)': round(self.total_energy_kwh, 2),
-            'Energía HVAC (kWh)': round(self.hvac_energy_kwh, 2),
-            'Energía Base (kWh)': round(self.base_energy_kwh, 2),
-            'Consumo Promedio (kW)': round(self.avg_consumption_kw, 3),
-            'Costo Total ($)': round(self.total_cost, 2),
-            'Costo Promedio/Hora ($)': round(self.avg_hourly_cost, 4),
-            'Pico Demanda (kW)': round(self.peak_demand_kw, 3),
-            'Demanda Promedio (kW)': round(self.avg_demand_kw, 3),
-            'Confort (%)': round(self.comfort_percentage, 1),
-            'Índice Confort Promedio': round(self.avg_comfort_index, 3),
-            'Desviación Temp Promedio (°C)': round(self.avg_temp_deviation, 2),
-            'Desviación Temp Máxima (°C)': round(self.max_temp_deviation, 2),
-            'Nivel HVAC Promedio (%)': round(self.avg_hvac_level, 1),
-            'Variabilidad Control': round(self.control_variability, 3),
-            'HVAC Activo (%)': round(self.hvac_active_percentage, 1),
-            'Fitness Score': round(self.fitness_score, 4),
+            "Energia Total (kWh)": round(self.total_energy_kwh, 2),
+            "Energia del Dispositivo (kWh)": round(self.device_energy_kwh, 2),
+            "Energia Base (kWh)": round(self.base_energy_kwh, 2),
+            "Consumo Promedio (kW)": round(self.avg_consumption_kw, 3),
+            "Costo Total ($)": round(self.total_cost, 2),
+            "Costo Promedio/Hora ($)": round(self.avg_hourly_cost, 4),
+            "Pico Demanda (kW)": round(self.peak_demand_kw, 3),
+            "Demanda Promedio (kW)": round(self.avg_demand_kw, 3),
+            "Confort (%)": round(self.comfort_percentage, 1),
+            "Indice de Confort Promedio": round(self.avg_comfort_index, 3),
+            "Desviacion Promedio (C)": round(self.avg_temp_deviation, 2),
+            "Desviacion Maxima (C)": round(self.max_temp_deviation, 2),
+            "Nivel de Control Promedio (%)": round(self.avg_control_level, 1),
+            "Variabilidad del Control": round(self.control_variability, 3),
+            "Control Activo (%)": round(self.control_active_percentage, 1),
+            "Fitness Score": round(self.fitness_score, 4),
         }
 
 
-def calculate_metrics(df: pd.DataFrame, 
-                       sim_config: SimulationConfig,
-                       metrics_config: MetricsConfig) -> PerformanceMetrics:
-    """
-    Calcula todas las métricas de desempeño a partir de los datos de simulación.
-    
-    Args:
-        df: DataFrame con resultados de simulación.
-        sim_config: Configuración de simulación.
-        metrics_config: Configuración de métricas y pesos.
-        
-    Returns:
-        PerformanceMetrics con todos los indicadores calculados.
-    """
-    dt = sim_config.time_step_hours
-    m = PerformanceMetrics()
-    
+def calculate_metrics(df: pd.DataFrame, sim_config: SimulationConfig, metrics_config: MetricsConfig) -> PerformanceMetrics:
+    metrics = PerformanceMetrics()
     if df.empty:
-        return m
-    
-    # === MÉTRICAS DE ENERGÍA ===
-    m.total_energy_kwh = float(df['total_consumption_kw'].sum() * dt)
-    m.hvac_energy_kwh = float(df['hvac_consumption_kw'].sum() * dt)
-    m.base_energy_kwh = float(df['base_consumption_kw'].sum() * dt)
-    m.avg_consumption_kw = float(df['total_consumption_kw'].mean())
-    
-    # === MÉTRICAS DE COSTO ===
-    m.total_cost = float(df['step_cost'].sum())
-    duration_hours = sim_config.horizon_hours
-    m.avg_hourly_cost = m.total_cost / max(duration_hours, 1)
-    
-    # === MÉTRICAS DE DEMANDA ===
-    m.peak_demand_kw = float(df['total_consumption_kw'].max())
-    m.avg_demand_kw = float(df['total_consumption_kw'].mean())
-    
-    # === MÉTRICAS DE CONFORT ===
-    comfort_min = metrics_config.comfort_min
-    comfort_max = metrics_config.comfort_max
-    in_comfort = ((df['temperature_indoor'] >= comfort_min) & 
-                  (df['temperature_indoor'] <= comfort_max))
-    m.comfort_percentage = float(in_comfort.sum() / len(df) * 100)
-    m.avg_comfort_index = float(df['comfort_index'].mean())
-    m.avg_temp_deviation = float(df['temp_deviation'].mean())
-    m.max_temp_deviation = float(df['temp_deviation'].max())
-    
-    # === MÉTRICAS DE CONTROL ===
-    m.avg_hvac_level = float(df['hvac_level'].mean())
-    
-    # Variabilidad: desviación estándar de los cambios en el nivel HVAC
-    hvac_changes = df['hvac_level'].diff().dropna()
-    m.control_variability = float(hvac_changes.std()) if len(hvac_changes) > 0 else 0.0
-    
-    # Porcentaje del tiempo con HVAC activo (nivel > 5%)
-    m.hvac_active_percentage = float((df['hvac_level'] > 5.0).sum() / len(df) * 100)
-    
-    # === FITNESS SCORE ===
-    m.fitness_score = calculate_fitness(df, sim_config, metrics_config)
-    
-    return m
+        return metrics
+
+    dt = sim_config.time_step_hours
+    metrics.total_energy_kwh = float(df["total_consumption_kw"].sum() * dt)
+    metrics.device_energy_kwh = float(df["device_consumption_kw"].sum() * dt)
+    metrics.base_energy_kwh = float(df["base_consumption_kw"].sum() * dt)
+    metrics.avg_consumption_kw = float(df["total_consumption_kw"].mean())
+    metrics.total_cost = float(df["step_cost"].sum())
+    metrics.avg_hourly_cost = metrics.total_cost / max(sim_config.horizon_hours, 1)
+    metrics.peak_demand_kw = float(df["total_consumption_kw"].max())
+    metrics.avg_demand_kw = float(df["total_consumption_kw"].mean())
+
+    target_temp = float(df["target_temperature"].iloc[0])
+    comfort_range = _resolve_comfort_range(df, sim_config)
+    in_comfort = (
+        (df["device_temperature"] >= target_temp - comfort_range)
+        & (df["device_temperature"] <= target_temp + comfort_range)
+    )
+    metrics.comfort_percentage = float(in_comfort.sum() / len(df) * 100)
+    metrics.avg_comfort_index = float(df["comfort_index"].mean())
+    metrics.avg_temp_deviation = float(df["temp_deviation"].mean())
+    metrics.max_temp_deviation = float(df["temp_deviation"].max())
+
+    metrics.avg_control_level = float(df["control_level"].mean())
+    control_changes = df["control_level"].diff().dropna()
+    metrics.control_variability = float(control_changes.std()) if len(control_changes) > 0 else 0.0
+    metrics.control_active_percentage = float((df["control_level"] > 5.0).sum() / len(df) * 100)
+    metrics.fitness_score = calculate_fitness(df, sim_config, metrics_config)
+    return metrics
 
 
-def calculate_fitness(df: pd.DataFrame,
-                       sim_config: SimulationConfig,
-                       metrics_config: MetricsConfig) -> float:
-    """
-    Calcula el score de fitness multiobjetivo.
-    
-    La función combina múltiples objetivos normalizados:
-    
-    fitness = w1·confort_norm + w2·(1 - energia_norm) + w3·(1 - costo_norm)
-              - w4·pico_norm - w5·variabilidad_norm
-    
-    Normalización:
-    - confort_norm: promedio del índice de confort [0, 1]
-    - energia_norm: energía HVAC relativa al máximo teórico
-    - costo_norm: costo relativo al máximo teórico
-    - pico_norm: pico de demanda relativo a la capacidad máxima
-    - variabilidad_norm: variabilidad del control normalizada
-    
-    Args:
-        df: DataFrame con resultados de simulación.
-        sim_config: Configuración de simulación.
-        metrics_config: Configuración con pesos de fitness.
-        
-    Returns:
-        Score de fitness (mayor es mejor).
-    """
+def calculate_fitness(df: pd.DataFrame, sim_config: SimulationConfig, metrics_config: MetricsConfig) -> float:
     if df.empty:
         return 0.0
-    
-    dt = sim_config.time_step_hours
-    mcfg = metrics_config
-    
-    # --- Componente de confort ---
-    # Promedio del índice de confort [0, 1]
-    comfort_norm = float(df['comfort_index'].mean())
-    
-    # --- Componente de energía ---
-    # Normalizar respecto al consumo máximo teórico (HVAC al 100% todo el tiempo)
-    # Esto permite comparar diferentes duraciones de simulación
-    max_hvac_energy = 3.5 / 3.2 * sim_config.horizon_hours  # kWh a potencia máxima
-    hvac_energy = float(df['hvac_consumption_kw'].sum() * dt)
-    energy_norm = min(hvac_energy / max(max_hvac_energy, 0.1), 1.0)
-    
-    # --- Componente de costo ---
-    max_cost = (3.5 / 3.2 + 2.0) * 0.30 * sim_config.horizon_hours  # Escenario peor
-    total_cost = float(df['step_cost'].sum())
-    cost_norm = min(total_cost / max(max_cost, 0.1), 1.0)
-    
-    # --- Componente de pico de demanda ---
-    peak = float(df['total_consumption_kw'].max())
-    max_possible_peak = 3.5 / 3.2 + 2.0 + 0.15  # HVAC max + base max + standby
-    peak_norm = min(peak / max(max_possible_peak, 0.1), 1.0)
-    
-    # --- Componente de variabilidad ---
-    hvac_changes = df['hvac_level'].diff().dropna().abs()
-    variability = float(hvac_changes.mean()) if len(hvac_changes) > 0 else 0.0
-    # Normalizar: un cambio medio de 50% sería variabilidad = 1.0
-    variability_norm = min(variability / 50.0, 1.0)
-    
-    # --- Combinar con pesos ---
-    fitness = (
-        mcfg.weight_comfort * comfort_norm
-        + mcfg.weight_energy * (1.0 - energy_norm)
-        + mcfg.weight_cost * (1.0 - cost_norm)
-        - mcfg.weight_peak * peak_norm
-        - mcfg.weight_variability * variability_norm
+
+    target_temp = float(df["target_temperature"].iloc[0])
+    comfort_range = _resolve_comfort_range(df, sim_config)
+    in_comfort = (
+        (df["device_temperature"] >= target_temp - comfort_range)
+        & (df["device_temperature"] <= target_temp + comfort_range)
     )
-    
+    comfort_band_norm = float(in_comfort.mean())
+    comfort_quality_norm = float(df["comfort_index"].mean())
+    comfort_norm = 0.7 * comfort_band_norm + 0.3 * comfort_quality_norm
+    dt = sim_config.time_step_hours
+    device_max_power = 0.25 if sim_config.device_key == "refrigerador" else 3.5
+    device_cop = 2.3 if sim_config.device_key == "refrigerador" else 3.2
+    base_peak = float(df["base_consumption_kw"].max()) if "base_consumption_kw" in df else 2.0
+
+    max_device_energy = device_max_power / max(device_cop, 0.1) * sim_config.horizon_hours
+    device_energy = float(df["device_consumption_kw"].sum() * dt)
+    energy_norm = min(device_energy / max(max_device_energy, 0.1), 1.0)
+
+    worst_case_cost = (device_max_power / max(device_cop, 0.1) + base_peak) * 0.30 * sim_config.horizon_hours
+    total_cost = float(df["step_cost"].sum())
+    cost_norm = min(total_cost / max(worst_case_cost, 0.1), 1.0)
+
+    peak_norm = min(float(df["total_consumption_kw"].max()) / max(device_max_power / max(device_cop, 0.1) + base_peak, 0.1), 1.0)
+    variability = float(df["control_level"].diff().dropna().abs().mean()) if len(df) > 1 else 0.0
+    variability_norm = min(variability / 50.0, 1.0)
+    avg_dev_norm = min(float(df["temp_deviation"].mean()) / max(comfort_range * 2.5, 0.1), 1.0)
+    max_dev_norm = min(float(df["temp_deviation"].max()) / max(comfort_range * 4.0, 0.1), 1.0)
+
+    fitness = (
+        metrics_config.weight_comfort * comfort_norm
+        + metrics_config.weight_energy * (1.0 - energy_norm)
+        + metrics_config.weight_cost * (1.0 - cost_norm)
+        - metrics_config.weight_peak * peak_norm
+        - metrics_config.weight_variability * variability_norm
+        - 0.08 * avg_dev_norm
+        - 0.05 * max_dev_norm
+    )
     return float(fitness)
 
 
-def compare_metrics(base: PerformanceMetrics, 
-                     optimized: PerformanceMetrics) -> Dict[str, Dict[str, float]]:
-    """
-    Compara métricas entre controlador base y optimizado.
-    
-    Returns:
-        Diccionario con valores base, optimizado y mejora porcentual.
-    """
-    comparison = {}
+def compare_metrics(base: PerformanceMetrics, optimized: PerformanceMetrics) -> Dict[str, Dict[str, float]]:
+    comparison: Dict[str, Dict[str, float]] = {}
     base_dict = base.to_dict()
-    opt_dict = optimized.to_dict()
-    
-    for key in base_dict:
-        base_val = base_dict[key]
-        opt_val = opt_dict[key]
-        
-        # Calcular mejora porcentual
-        if base_val != 0:
-            improvement = ((opt_val - base_val) / abs(base_val)) * 100
+    optimized_dict = optimized.to_dict()
+    for key, base_value in base_dict.items():
+        optimized_value = optimized_dict[key]
+        if base_value != 0:
+            raw_change = ((optimized_value - base_value) / abs(base_value)) * 100
         else:
-            improvement = 0.0
-        
+            raw_change = 0.0
+        benefit_change = raw_change if is_higher_better_metric(key) else -raw_change
         comparison[key] = {
-            'base': base_val,
-            'optimizado': opt_val,
-            'cambio_%': round(improvement, 2),
+            "base": base_value,
+            "optimizado": optimized_value,
+            "cambio_%": round(raw_change, 2),
+            "mejora_%": round(benefit_change, 2),
         }
-    
     return comparison
+
+
+def _resolve_comfort_range(df: pd.DataFrame, sim_config: SimulationConfig) -> float:
+    device_key = df["device_key"].iloc[0] if "device_key" in df else sim_config.device_key
+    if device_key == "refrigerador":
+        return 1.5
+    return sim_config.comfort_range
+
+
+def is_higher_better_metric(metric_name: str) -> bool:
+    return metric_name in HIGHER_IS_BETTER_METRICS

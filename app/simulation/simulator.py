@@ -115,6 +115,7 @@ class Simulator:
             
             controller_inputs = {
                 'temp_error': temp_error,
+                'humidity': env_state.get('humidity', 0.5),
                 'temperature_indoor': house.temperature_indoor,
                 'temperature_outdoor': env_state['temperature_outdoor'],
                 'occupancy': env_state['occupancy'],
@@ -159,6 +160,7 @@ class Simulator:
                 'temperature_outdoor': env_state['temperature_outdoor'],
                 'temperature_indoor': house_state['temperature_indoor'],
                 'temp_error': house_state['temperature_indoor'] - target_temp,
+                'humidity': env_state.get('humidity', 0.5),
                 'occupancy': env_state['occupancy'],
                 'solar_radiation': env_state['solar_radiation'],
                 'tariff': env_state['tariff'],
@@ -168,6 +170,8 @@ class Simulator:
                 'hvac_power_level': house_state['hvac_power_level'],
                 'hvac_consumption_kw': house_state['hvac_consumption_kw'],
                 'total_consumption_kw': total_consumption,
+                'consumption_normalized': consumption_normalized,
+                'target_temperature': target_temp,
                 'step_cost': step_cost,
                 'cumulative_cost': cumulative_cost,
                 'cumulative_energy_kwh': cumulative_energy,

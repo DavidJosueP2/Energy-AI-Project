@@ -104,7 +104,7 @@ class ComparativeEvaluation:
         
         for metric_name, values in self.comparison.items():
             change = values['cambio_%']
-            arrow = "↑" if change > 0 else "↓" if change < 0 else "="
+            arrow = "+" if change > 0 else "-" if change < 0 else "="
             lines.append(
                 f"  {metric_name:<35} "
                 f"Base: {values['base']:>10.3f}  "

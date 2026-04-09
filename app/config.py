@@ -103,39 +103,31 @@ class EnvironmentConfig:
     """Parámetros para la generación de perfiles ambientales."""
     
     # --- Temperatura exterior ---
-    # Temperatura media del día (°C)
     temp_mean: float = 30.0
-    # Amplitud de la variación sinusoidal diaria (°C)
     temp_amplitude: float = 7.0
-    # Hora del pico de temperatura (0-23)
     temp_peak_hour: float = 15.0
-    # Desviación estándar del ruido gaussiano agregado (°C)
     temp_noise_std: float = 0.8
     
+    # --- Humedad relativa ---
+    humidity_mean: float = 0.55
+    humidity_amplitude: float = 0.20
+    humidity_noise_std: float = 0.05
+    
     # --- Radiación solar ---
-    # Radiación solar máxima al mediodía (W/m²)
     solar_max: float = 850.0
-    # Hora de salida del sol
     sunrise_hour: float = 6.5
-    # Hora de puesta del sol
     sunset_hour: float = 19.5
     
     # --- Ocupación ---
-    # Número máximo de ocupantes
     max_occupants: int = 4
     
     # --- Tarifa eléctrica ($/kWh) ---
-    # Tarifa valle (horas nocturnas y madrugada)
     tariff_off_peak: float = 0.08
-    # Tarifa llano (horas intermedias)
     tariff_mid_peak: float = 0.15
-    # Tarifa punta (horas de máxima demanda)
     tariff_on_peak: float = 0.28
     
     # --- Consumo base ---
-    # Consumo base mínimo del hogar sin HVAC (kW)
     base_consumption_min: float = 0.4
-    # Consumo base máximo (picos de mañana y noche) (kW)
     base_consumption_max: float = 1.8
 
 
@@ -154,19 +146,11 @@ class FuzzyConfig:
     universe_resolution: int = 200
     
     # --- Universos de discurso ---
-    # Error de temperatura: T_interior - T_objetivo (°C)
     temp_error_range: Tuple[float, float] = (-10.0, 15.0)
-    
-    # Ocupación (personas)
+    humidity_range: Tuple[float, float] = (0.0, 1.0)
     occupancy_range: Tuple[float, float] = (0.0, 6.0)
-    
-    # Tarifa eléctrica normalizada [0, 1]
     tariff_range: Tuple[float, float] = (0.0, 1.0)
-    
-    # Consumo actual normalizado [0, 1]  
     consumption_range: Tuple[float, float] = (0.0, 1.0)
-    
-    # Salida: nivel de climatización [0, 100]
     output_range: Tuple[float, float] = (0.0, 100.0)
     
     # --- Parámetros de funciones de pertenencia (triangulares: [a, b, c]) ---
@@ -180,7 +164,14 @@ class FuzzyConfig:
         'muy_caliente':  [ 7.0,  11.0,  15.0],
     })
     
-    # Ocupación
+    # Humedad relativa normalizada [0, 1]
+    humidity_sets: Dict[str, List[float]] = field(default_factory=lambda: {
+        'baja':  [0.0, 0.0,  0.35],
+        'media': [0.25, 0.50, 0.75],
+        'alta':  [0.65, 1.0,  1.0],
+    })
+    
+    # Ocupacion
     occupancy_sets: Dict[str, List[float]] = field(default_factory=lambda: {
         'vacia': [0.0, 0.0, 1.0],
         'baja':  [0.5, 1.5, 2.5],
@@ -188,7 +179,7 @@ class FuzzyConfig:
         'alta':  [3.0, 5.0, 6.0],
     })
     
-    # Tarifa eléctrica normalizada
+    # Tarifa electrica normalizada
     tariff_sets: Dict[str, List[float]] = field(default_factory=lambda: {
         'barata':  [0.0, 0.0,  0.35],
         'media':   [0.2, 0.45, 0.70],
@@ -261,7 +252,7 @@ class MetricsConfig:
     """Pesos y parámetros para la función de fitness multiobjetivo."""
     
     # Peso para el score de confort (mayor = más importancia al confort)
-    weight_comfort: float = 0.35
+    weight_comfort: float = 0.40
     
     # Peso para el ahorro energético
     weight_energy: float = 0.25
@@ -273,7 +264,7 @@ class MetricsConfig:
     weight_peak: float = 0.10
     
     # Peso (penalización) para la variabilidad del control
-    weight_variability: float = 0.10
+    weight_variability: float = 0.05
     
     # Temperatura confort mínima y máxima para cálculo de confort
     comfort_min: float = 20.0

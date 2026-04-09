@@ -55,6 +55,7 @@ class ChromosomeEncoder:
         cfg = self.config
         specs = [
             ('temp_error', 'input', cfg.temp_error_sets, cfg.temp_error_range),
+            ('humidity', 'input', cfg.humidity_sets, cfg.humidity_range),
             ('occupancy', 'input', cfg.occupancy_sets, cfg.occupancy_range),
             ('tariff', 'input', cfg.tariff_sets, cfg.tariff_range),
             ('consumption', 'input', cfg.consumption_sets, cfg.consumption_range),

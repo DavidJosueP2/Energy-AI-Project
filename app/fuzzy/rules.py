@@ -273,7 +273,52 @@ def create_default_rule_base() -> RuleBase:
     rb.add_rule(
         [('temp_error', 'caliente'), ('consumption', 'bajo'), ('tariff', 'barata')],
         ('hvac_output', 'muy_alta'), 1.0,
-        "Caliente, consumo bajo, barata → máximo aprovechamiento"
+        "Caliente, consumo bajo, barata -> maximo aprovechamiento"
+    )
+    
+    # ===================================================================
+    # GRUPO 7: Reglas de humedad - la humedad alta amplifica la
+    # necesidad de climatizacion para mantener confort
+    # ===================================================================
+    rb.add_rule(
+        [('temp_error', 'calido'), ('humidity', 'alta'), ('occupancy', 'media')],
+        ('hvac_output', 'alta'), 0.95,
+        "Calido con humedad alta y media ocupacion -> alto"
+    )
+    rb.add_rule(
+        [('temp_error', 'calido'), ('humidity', 'alta'), ('occupancy', 'alta')],
+        ('hvac_output', 'muy_alta'), 1.0,
+        "Calido con humedad alta y alta ocupacion -> maximo"
+    )
+    rb.add_rule(
+        [('temp_error', 'caliente'), ('humidity', 'alta')],
+        ('hvac_output', 'muy_alta'), 1.0,
+        "Caliente con humedad alta -> maximo (sensacion termica critica)"
+    )
+    rb.add_rule(
+        [('temp_error', 'confortable'), ('humidity', 'alta'), ('occupancy', 'alta')],
+        ('hvac_output', 'media'), 0.85,
+        "Confortable pero humedad alta con gente -> medio (deshumidificar)"
+    )
+    rb.add_rule(
+        [('temp_error', 'calido'), ('humidity', 'baja')],
+        ('hvac_output', 'baja'), 0.8,
+        "Calido pero humedad baja -> bajo (sensacion termica tolerable)"
+    )
+    rb.add_rule(
+        [('temp_error', 'confortable'), ('humidity', 'baja')],
+        ('hvac_output', 'muy_baja'), 1.0,
+        "Confortable y humedad baja -> minimo"
+    )
+    rb.add_rule(
+        [('temp_error', 'muy_caliente'), ('humidity', 'alta'), ('occupancy', 'alta')],
+        ('hvac_output', 'muy_alta'), 1.0,
+        "Muy caliente, humedad alta, mucha gente -> emergencia termica"
+    )
+    rb.add_rule(
+        [('temp_error', 'caliente'), ('humidity', 'media'), ('tariff', 'cara')],
+        ('hvac_output', 'media'), 0.85,
+        "Caliente, humedad media, tarifa cara -> medio (compromiso humedad-costo)"
     )
     
     return rb

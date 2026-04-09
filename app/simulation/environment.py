@@ -36,6 +36,7 @@ class EnvironmentProfile:
 
         # Generar todos los perfiles
         self.temperature_outdoor = self._generate_outdoor_temperature()
+        self.humidity = self._generate_humidity()
         self.solar_radiation = self._generate_solar_radiation()
         self.occupancy = self._generate_occupancy()
         self.tariff = self._generate_tariff()
@@ -97,6 +98,19 @@ class EnvironmentProfile:
         radiation *= np.clip(cloud_factor, 0.0, None)
         
         return radiation
+
+    def _generate_humidity(self) -> np.ndarray:
+        """
+        Genera perfil de humedad relativa [0, 1].
+        Modelo: inverso a la temperatura (humedad mas alta de noche y madrugada).
+        H(t) = H_media - A_h * sin(2pi(t - t_pico + 6)/24) + ruido
+        """
+        cfg = self.env_config
+        hour_of_day = self.time_hours % 24
+        phase = 2 * np.pi * (hour_of_day - cfg.temp_peak_hour + 6) / 24
+        humidity_base = cfg.humidity_mean - cfg.humidity_amplitude * np.sin(phase)
+        noise = self.rng.normal(0, cfg.humidity_noise_std, self.num_steps)
+        return np.clip(humidity_base + noise, 0.05, 0.99)
 
     def _generate_occupancy(self) -> np.ndarray:
         """
@@ -249,6 +263,7 @@ class EnvironmentProfile:
             'time_hours': self.time_hours[step],
             'hour_of_day': self.time_hours[step] % 24,
             'temperature_outdoor': self.temperature_outdoor[step],
+            'humidity': self.humidity[step],
             'solar_radiation': self.solar_radiation[step],
             'occupancy': self.occupancy[step],
             'tariff': self.tariff[step],

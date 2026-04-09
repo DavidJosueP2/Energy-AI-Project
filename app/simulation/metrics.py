@@ -111,8 +111,11 @@ def calculate_metrics(df: pd.DataFrame,
     m.avg_demand_kw = float(df['total_consumption_kw'].mean())
     
     # === MÉTRICAS DE CONFORT ===
-    comfort_min = metrics_config.comfort_min
-    comfort_max = metrics_config.comfort_max
+    target_temp = sim_config.target_temperature
+    comfort_range = sim_config.comfort_range
+    comfort_min = target_temp - comfort_range
+    comfort_max = target_temp + comfort_range
+    
     in_comfort = ((df['temperature_indoor'] >= comfort_min) & 
                   (df['temperature_indoor'] <= comfort_max))
     m.comfort_percentage = float(in_comfort.sum() / len(df) * 100)

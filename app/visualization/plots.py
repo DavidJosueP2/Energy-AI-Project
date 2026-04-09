@@ -96,6 +96,28 @@ def plot_temperatures(df: pd.DataFrame, target_temp: float = 22.0,
     return fig
 
 
+def plot_humidity(df: pd.DataFrame) -> Figure:
+    """Gráfico de Humedad simulada."""
+    apply_style()
+    fig, ax = plt.subplots(figsize=(12, 4))
+    
+    time = df['time_hours']
+    
+    if 'humidity' in df.columns:
+        # Humidity is 0 to 1, plot as percentage
+        humidity_pct = df['humidity'] * 100
+        ax.fill_between(time, 0, humidity_pct, alpha=0.3, color=COLORS['cool'])
+        ax.plot(time, humidity_pct, color=COLORS['cool'], linewidth=2, label='Humedad')
+    
+    ax.set_xlabel('Tiempo (horas)')
+    ax.set_ylabel('Humedad (%)')
+    ax.set_title('Evolución de Humedad Ambiental', fontsize=14, fontweight='bold')
+    ax.set_ylim(0, 100)
+    ax.grid(True, alpha=0.3)
+    fig.tight_layout()
+    return fig
+
+
 def plot_hvac_level(df: pd.DataFrame) -> Figure:
     """Gráfico 2: Nivel de climatización a lo largo del tiempo."""
     apply_style()
@@ -235,11 +257,11 @@ def plot_comparison(df_base: pd.DataFrame,
             linewidth=1.8, label='T. Interior (Base)', alpha=0.85)
     ax.plot(time, df_opt['temperature_indoor'], color=COLORS['optimized'],
             linewidth=1.8, label='T. Interior (Optimizado)', alpha=0.85)
-    ax.plot(time, df_base['temperature_outdoor'], color=COLORS['warm'],
-            linewidth=1, alpha=0.5, linestyle=':', label='T. Exterior')
+    ax.plot(time, df_base['temperature_outdoor'], color='#f5a623',
+            linewidth=2.0, alpha=0.85, linestyle='--', label='T. Exterior')
     ax.set_ylabel('Temperatura (°C)')
     ax.set_title('Comparación Base vs Optimizado', fontsize=14, fontweight='bold')
-    ax.legend(loc='upper right', fontsize=8)
+    ax.legend(loc='upper left', fontsize=9)
     ax.grid(True, alpha=0.3)
     
     # Panel 2: HVAC Level

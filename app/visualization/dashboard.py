@@ -134,9 +134,12 @@ def create_comparison_dashboard(df_base: pd.DataFrame,
     ax.axhspan(target_temp - comfort_range, target_temp + comfort_range,
                alpha=0.10, color=COLORS['green'])
     ax.plot(time, df_base['temperature_indoor'], color=COLORS['base'],
-            linewidth=1.5, alpha=0.8, label='Base')
+            linewidth=1.5, alpha=0.8, label='T. Interior (Base)')
     ax.plot(time, df_opt['temperature_indoor'], color=COLORS['optimized'],
-            linewidth=1.5, alpha=0.8, label='Optimizado')
+            linewidth=1.5, alpha=0.8, label='T. Interior (Opt)')
+    if 'temperature_outdoor' in df_base.columns:
+        ax.plot(time, df_base['temperature_outdoor'], color='#f5a623',
+                linewidth=2.0, alpha=0.85, linestyle='--', label='T. Exterior')
     ax.set_ylabel('T. Interior (°C)')
     ax.set_title('Temperatura Interior', fontweight='bold')
     ax.legend(fontsize=8)

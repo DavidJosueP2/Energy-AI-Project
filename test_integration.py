@@ -6,7 +6,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from app.config import AppConfig
 from app.fuzzy.controller import FuzzyController
 from app.fuzzy.linguistic import LinguisticInput, LinguisticOutput
-from app.simulation.devices import get_hvac_config, get_refrigerator_config, ControlledDevice
+from app.simulation.devices import (
+    ControlledDevice,
+    build_device_definition,
+)
 
 # Test 1: Linguistic input/output
 print("=== Test 1: Linguistic Input/Output ===")
@@ -45,10 +48,18 @@ print(f"  Aggregated shape: {detail.aggregated_output.shape}")
 
 # Test 4: Devices
 print("\n=== Test 4: Controlled Devices ===")
-hvac = ControlledDevice(get_hvac_config())
-fridge = ControlledDevice(get_refrigerator_config())
-print(f"  HVAC: {hvac.display_name}, target={hvac.config.target_temperature}C")
-print(f"  Fridge: {fridge.display_name}, target={fridge.config.target_temperature}C")
+hvac = ControlledDevice(
+    definition=build_device_definition("hvac"),
+    target_temperature=22.0,
+    comfort_range=2.0,
+)
+fridge = ControlledDevice(
+    definition=build_device_definition("refrigerador"),
+    target_temperature=4.0,
+    comfort_range=1.5,
+)
+print(f"  HVAC: {hvac.display_name}, target={hvac.target_temperature}C")
+print(f"  Fridge: {fridge.display_name}, target={fridge.target_temperature}C")
 
 # Step device
 state = hvac.step(35.0, 3, 500, 75.0)

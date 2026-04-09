@@ -149,9 +149,14 @@ class GeneticOptimizer:
                 progress_callback(gen, ga.num_generations, stats.best_fitness)
         
         # 4. Compilar resultado final
-        best_idx = np.argmax(fitnesses)
-        result.best_chromosome = population[best_idx].copy()
-        result.best_fitness = fitnesses[best_idx]
+        best_candidate = self.evaluator.get_best_candidate()
+        if best_candidate is not None:
+            result.best_chromosome = best_candidate.chromosome.copy()
+            result.best_fitness = best_candidate.optimization_score
+        else:
+            best_idx = np.argmax(fitnesses)
+            result.best_chromosome = population[best_idx].copy()
+            result.best_fitness = fitnesses[best_idx]
         result.total_evaluations = self.evaluator.evaluations_count
         result.total_time_seconds = time.time() - start_time
         

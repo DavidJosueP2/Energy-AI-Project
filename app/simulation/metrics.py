@@ -159,9 +159,8 @@ def compare_metrics(base: PerformanceMetrics, optimized: PerformanceMetrics) -> 
 
 
 def _resolve_comfort_range(df: pd.DataFrame, sim_config: SimulationConfig) -> float:
-    device_key = df["device_key"].iloc[0] if "device_key" in df else sim_config.device_key
-    if device_key == "refrigerador":
-        return 1.5
+    if "comfort_range" in df.columns and not df.empty:
+        return float(df["comfort_range"].iloc[0])
     return sim_config.comfort_range
 
 

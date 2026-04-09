@@ -9,10 +9,10 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 
 from app.config import FuzzyConfig
-from app.fuzzy.device_specs import DeviceFuzzySpec, VariableSpec, build_device_spec
 from app.fuzzy.inference import MamdaniInference
 from app.fuzzy.membership import FuzzyVariable
 from app.fuzzy.rules import FuzzyRule, RuleBase, create_default_rule_base
+from app.simulation.devices import DeviceFuzzySpec, VariableSpec, build_device_spec
 
 
 @dataclass
@@ -120,7 +120,24 @@ class FuzzyController:
             elif variable_spec.name == "tariff" and "tariff" in inputs:
                 normalized[variable_spec.name] = inputs["tariff"]
 
+        self._apply_runtime_adjustments(normalized, inputs)
         return normalized
+
+    def _apply_runtime_adjustments(self, normalized: Dict[str, float], raw_inputs: Dict[str, float]):
+        """Ajusta entradas segun el contexto runtime del dispositivo."""
+        if self.device_key != "hvac" or "temp_error" not in normalized:
+            return
+
+        reference_range = max(self.spec.descriptor.default_comfort_range, 1e-6)
+        comfort_range = max(float(raw_inputs.get("comfort_range", reference_range)), 1e-6)
+        raw_error = float(normalized["temp_error"])
+        scaled_error = raw_error * (reference_range / comfort_range)
+
+        temp_error_spec = self.spec.get_variable("temp_error")
+        low, high = temp_error_spec.universe_range
+        normalized["temp_error"] = float(np.clip(scaled_error, low, high))
+        normalized["comfort_range"] = comfort_range
+        normalized["raw_temp_error"] = raw_error
 
     def evaluate(self, inputs: Dict[str, float]) -> float:
         controller_inputs = self.normalize_inputs(inputs)
@@ -165,13 +182,24 @@ class FuzzyController:
         rule, strength = detail.top_rules[0]
         readable_inputs = ", ".join(
             f"{name}={value:.2f}" for name, value in detail.crisp_inputs.items()
+            if name != "raw_temp_error"
         )
+        comfort_note = ""
+        raw_error = detail.crisp_inputs.get("raw_temp_error")
+        comfort_range = detail.crisp_inputs.get("comfort_range")
+        scaled_error = detail.crisp_inputs.get("temp_error")
+        if self.device_key == "hvac" and raw_error is not None and comfort_range is not None and scaled_error is not None:
+            comfort_note = (
+                f" El error termico bruto fue {raw_error:.2f} y se ajusto a "
+                f"{scaled_error:.2f} usando rango de confort {comfort_range:.2f}."
+            )
         return (
             f"Entradas evaluadas: {readable_inputs}. "
             f"La regla dominante fue '{rule.description or str(rule)}' "
             f"con activacion {strength:.3f}. "
             f"La salida dominante es '{detail.output_label.replace('_', ' ')}' "
             f"con valor defuzzificado {detail.centroid_value:.2f}."
+            f"{comfort_note}"
         )
 
     def get_controller_function(self):

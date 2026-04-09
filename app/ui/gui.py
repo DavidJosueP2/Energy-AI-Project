@@ -48,7 +48,7 @@ from app.fuzzy.linguistic import LinguisticInput, LinguisticOutput
 from app.simulation.simulator import Simulator, SimulationResult
 from app.simulation.metrics import calculate_metrics, PerformanceMetrics, is_higher_better_metric
 from app.simulation.scenario_generator import AVAILABLE_SCENARIOS
-from app.simulation.devices import AVAILABLE_DEVICES, get_hvac_config, get_refrigerator_config
+from app.simulation.devices import build_device_definition
 from app.genetic.optimizer import GeneticOptimizer, OptimizationResult
 from app.visualization import plots
 from app.visualization import fuzzy_plots
@@ -675,22 +675,34 @@ class MainWindow(QMainWindow):
     def _on_device_changed(self, index):
         """Cambia el dispositivo controlado."""
         if index == 0:
-            cfg = get_hvac_config()
-            self.spin_target.setValue(22.0)
-            self.spin_comfort.setValue(2.0)
+            definition = build_device_definition('hvac')
             self.config.simulation.device_key = 'hvac'
-            self._log("Dispositivo: HVAC (Climatizacion) seleccionado")
+            self._log(f"Dispositivo: {definition.descriptor.display_name} seleccionado")
         else:
-            cfg = get_refrigerator_config()
-            self.spin_target.setValue(4.0)
-            self.spin_comfort.setValue(1.5)
+            definition = build_device_definition('refrigerador')
             self.config.simulation.device_key = 'refrigerador'
-            self._log("Dispositivo: Refrigerador seleccionado")
+            self._log(f"Dispositivo: {definition.descriptor.display_name} seleccionado")
 
-        self.config.house.initial_temperature = cfg.initial_temperature
-        self.config.house.hvac_max_power_kw = cfg.max_power_kw
-        self.config.house.hvac_cop = cfg.cop
-        self.config.house.hvac_standby_kw = cfg.standby_kw
+        descriptor = definition.descriptor
+        dynamics = definition.dynamics
+
+        self.spin_target.blockSignals(True)
+        self.spin_comfort.blockSignals(True)
+        self.spin_target.setRange(descriptor.target_min, descriptor.target_max)
+        self.spin_comfort.setRange(descriptor.comfort_min, descriptor.comfort_max)
+        self.spin_target.setValue(descriptor.default_target_temperature)
+        self.spin_comfort.setValue(descriptor.default_comfort_range)
+        self.spin_target.blockSignals(False)
+        self.spin_comfort.blockSignals(False)
+
+        self.config.house.initial_temperature = dynamics.initial_temperature
+        self.config.house.alpha = dynamics.ambient_coupling
+        self.config.house.beta = dynamics.occupancy_gain
+        self.config.house.gamma = dynamics.solar_gain
+        self.config.house.delta = dynamics.control_gain
+        self.config.house.hvac_max_power_kw = dynamics.max_power_kw
+        self.config.house.hvac_cop = dynamics.cop
+        self.config.house.hvac_standby_kw = dynamics.standby_kw
         if hasattr(self, "base_controller") and self.base_controller is not None:
             self._init_controller()
             self.optimized_controller = None
@@ -715,7 +727,9 @@ class MainWindow(QMainWindow):
             row = df_hour.iloc[0]
             
             controller = self.optimized_controller if self.optimized_controller else self.base_controller
-            crisp_inputs = controller.normalize_inputs(row.to_dict())
+            raw_inputs = row.to_dict()
+            raw_inputs.setdefault("comfort_range", self.spin_comfort.value())
+            crisp_inputs = controller.normalize_inputs(raw_inputs)
             self.lbl_fuzzy_inputs.setText(self._format_case_text(crisp_inputs, row.to_dict(), source="simulacion"))
             output_val, detail = controller.evaluate_with_detail(crisp_inputs)
             self.linguistic_output.set_controller(controller)
@@ -832,6 +846,7 @@ class MainWindow(QMainWindow):
                 for variable_name, spin in self.manual_numeric_inputs.items()
             }
 
+        crisp_inputs["comfort_range"] = self.spin_comfort.value()
         base_output, base_detail = self.base_controller.evaluate_with_detail(crisp_inputs)
         base_dual = self.linguistic_output.get_dual_output(base_output)
         message = [
@@ -867,6 +882,11 @@ class MainWindow(QMainWindow):
     def _on_run_base(self):
         self._update_config()
         self._init_controller()
+        if self.config.simulation.device_key == 'hvac' and self.config.simulation.scenario_type == 'invierno':
+            self._log(
+                "Nota: el modelo HVAC actual representa enfriamiento. "
+                "En invierno no puede calentar; solo reducira o anulara su accion."
+            )
         self._set_buttons_enabled(False)
         self.progress_bar.setValue(0)
         self._log("Iniciando simulacion base...")
@@ -904,6 +924,11 @@ class MainWindow(QMainWindow):
 
     def _on_run_ga(self):
         self._update_config()
+        if self.config.simulation.device_key == 'hvac' and self.config.simulation.scenario_type == 'invierno':
+            self._log(
+                "Nota: el modelo HVAC actual representa enfriamiento. "
+                "La optimizacion GA no agregara capacidad de calefaccion."
+            )
         self._set_buttons_enabled(False)
         self.progress_bar.setValue(0)
         self._log(f"Iniciando optimizacion GA: {self.config.genetic.population_size} ind x "

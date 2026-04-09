@@ -279,7 +279,38 @@ Este proyecto está diseñado para ser presentado como proyecto universitario de
 - Interfaz gráfica funcional para demostración en vivo
 - Exportación de reportes para documentación
 
+## Documentación Interna
+
+Para una explicación detallada del flujo real del proyecto, consultar:
+
+- `docs/flujo_completo/README.md`
+- `docs/flujo_completo/arquitectura/README.md`
+- `docs/flujo_completo/logica_difusa/README.md`
+- `docs/flujo_completo/algoritmo_genetico/README.md`
+- `docs/flujo_completo/simulacion_y_dataframe/README.md`
+- `docs/flujo_completo/gui_y_graficos/README.md`
+
 ---
+
+## Documentación Interna
+
+Para entender el flujo completo del proyecto y defenderlo técnicamente, se agregó documentación interna detallada en:
+
+- [Flujo Completo](docs/flujo_completo/README.md)
+- [Arquitectura General](docs/flujo_completo/arquitectura/README.md)
+- [Lógica Difusa](docs/flujo_completo/logica_difusa/README.md)
+- [Algoritmo Genético](docs/flujo_completo/algoritmo_genetico/README.md)
+- [Simulación y DataFrame](docs/flujo_completo/simulacion_y_dataframe/README.md)
+- [GUI y Gráficos](docs/flujo_completo/gui_y_graficos/README.md)
+
+Estas guías explican:
+
+- cómo entra la información desde la interfaz;
+- cómo funciona el controlador difuso;
+- cómo se ejecuta la simulación;
+- cómo se construye el `DataFrame`;
+- cómo se generan los gráficos;
+- y cómo actúa el algoritmo genético sobre las membresías del sistema difuso.
 
 ## Licencia
 

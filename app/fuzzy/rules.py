@@ -94,9 +94,9 @@ def create_hvac_rule_base(output_name: str = "control_output") -> RuleBase:
     )
     rb.add_rule(
         [("temp_error", "baja"), ("humidity", "alta"), ("occupancy", "alta")],
-        (output_name, "baja"),
-        0.80,
-        "Ligera deshumidificacion con alta ocupacion.",
+        (output_name, "muy_baja"),
+        0.60,
+        "Ambiente por debajo de la meta: se evita enfriar de mas aun con alta ocupacion.",
     )
 
     # Temperatura alta

@@ -5,7 +5,7 @@ Conversion entre representaciones linguistico-difusas y valores numericos.
 from typing import Dict, List, Optional
 
 from app.fuzzy.controller import FuzzyController
-from app.fuzzy.device_specs import DeviceFuzzySpec, build_device_spec
+from app.simulation.devices import DeviceFuzzySpec, build_device_spec
 
 
 class LinguisticInput:

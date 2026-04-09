@@ -163,6 +163,24 @@ class TestFuzzyController:
         })
         assert abs(original_result - clone_result) < 1e-10
 
+    def test_narrower_comfort_range_increases_hvac_response(self):
+        """Un rango de confort mas estrecho debe endurecer la respuesta ante el mismo error."""
+        wide = self.controller.evaluate({
+            'temp_error': 1.0,
+            'occupancy': 2.0,
+            'humidity': 0.5,
+            'tariff_normalized': 0.5,
+            'comfort_range': 3.5,
+        })
+        narrow = self.controller.evaluate({
+            'temp_error': 1.0,
+            'occupancy': 2.0,
+            'humidity': 0.5,
+            'tariff_normalized': 0.5,
+            'comfort_range': 0.5,
+        })
+        assert narrow > wide, f"Rango estrecho ({narrow}) deberia exigir mas control que rango amplio ({wide})"
+
     def test_get_set_params(self):
         """Debe poder obtener y establecer parámetros."""
         params = self.controller.get_membership_params()

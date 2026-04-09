@@ -179,6 +179,61 @@ class TestSimulator:
         assert metrics.total_cost > 0
         assert 0 <= metrics.comfort_percentage <= 100
 
+    def test_simulator_uses_runtime_target_temperature(self):
+        """La temperatura objetivo de la GUI/simulación debe propagarse al dispositivo."""
+        config = AppConfig()
+        config.simulation.horizon_hours = 24
+        config.simulation.target_temperature = 30.0
+        config.simulation.comfort_range = 1.5
+
+        from app.fuzzy.controller import FuzzyController
+        controller = FuzzyController(config.fuzzy, device_key='hvac')
+        result = Simulator(config).run(controller.get_controller_function())
+
+        assert float(result.data['target_temperature'].iloc[0]) == pytest.approx(30.0)
+        assert result.data['temp_error'].iloc[0] == pytest.approx(
+            result.data['temperature_indoor'].iloc[0] - 30.0,
+            abs=1e-3,
+        )
+
+    def test_higher_hvac_target_reduces_cooling_demand(self):
+        """Si la meta sube, el HVAC debe enfriar menos en el mismo escenario."""
+        from app.fuzzy.controller import FuzzyController
+
+        low_target_cfg = AppConfig()
+        low_target_cfg.simulation.horizon_hours = 24
+        low_target_cfg.simulation.scenario_type = 'verano'
+        low_target_cfg.simulation.target_temperature = 22.0
+        low_target_controller = FuzzyController(low_target_cfg.fuzzy, device_key='hvac')
+        low_target_result = Simulator(low_target_cfg).run(low_target_controller.get_controller_function())
+
+        high_target_cfg = AppConfig()
+        high_target_cfg.simulation.horizon_hours = 24
+        high_target_cfg.simulation.scenario_type = 'verano'
+        high_target_cfg.simulation.target_temperature = 30.0
+        high_target_controller = FuzzyController(high_target_cfg.fuzzy, device_key='hvac')
+        high_target_result = Simulator(high_target_cfg).run(high_target_controller.get_controller_function())
+
+        assert high_target_result.data['control_level'].mean() < low_target_result.data['control_level'].mean()
+
+    def test_summer_and_winter_change_environment_profile(self):
+        """El escenario seleccionado debe modificar realmente la temperatura exterior."""
+        from app.fuzzy.controller import FuzzyController
+
+        summer_cfg = AppConfig()
+        summer_cfg.simulation.horizon_hours = 24
+        summer_cfg.simulation.scenario_type = 'verano'
+        summer_controller = FuzzyController(summer_cfg.fuzzy, device_key='hvac')
+        summer_result = Simulator(summer_cfg).run(summer_controller.get_controller_function())
+
+        winter_cfg = AppConfig()
+        winter_cfg.simulation.horizon_hours = 24
+        winter_cfg.simulation.scenario_type = 'invierno'
+        winter_controller = FuzzyController(winter_cfg.fuzzy, device_key='hvac')
+        winter_result = Simulator(winter_cfg).run(winter_controller.get_controller_function())
+
+        assert summer_result.data['temperature_outdoor'].mean() > winter_result.data['temperature_outdoor'].mean()
+
 
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])

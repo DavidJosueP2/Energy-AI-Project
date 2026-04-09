@@ -2,13 +2,14 @@
 Motor de simulacion temporal multi-dispositivo.
 """
 
+from dataclasses import replace
 from typing import Callable, Dict, List, Optional
 
 import numpy as np
 import pandas as pd
 
 from app.config import AppConfig
-from app.simulation.devices import AVAILABLE_DEVICES, ControlledDevice
+from app.simulation.devices import ControlledDevice, build_device_definition, build_runtime_dynamics_config
 from app.simulation.environment import EnvironmentProfile
 from app.simulation.scenario_generator import get_scenario_configs
 
@@ -56,10 +57,17 @@ class Simulator:
         sim_c.time_step_hours = sim_cfg.time_step_hours
         environment = EnvironmentProfile(sim_c, env_c)
 
-        device_factory = AVAILABLE_DEVICES.get(sim_cfg.device_key, AVAILABLE_DEVICES["hvac"])
-        device = ControlledDevice(device_factory(), dt=sim_cfg.time_step_hours)
-        target_temp = device.config.target_temperature
-        comfort_range = device.config.comfort_range
+        definition = build_device_definition(sim_cfg.device_key)
+        dynamics_config = build_runtime_dynamics_config(sim_cfg.device_key, self.config.house)
+        device = ControlledDevice(
+            definition=definition,
+            target_temperature=sim_cfg.target_temperature,
+            comfort_range=sim_cfg.comfort_range,
+            dt=sim_cfg.time_step_hours,
+            dynamics_config=dynamics_config,
+        )
+        target_temp = device.target_temperature
+        comfort_range = device.comfort_range
 
         records: List[Dict] = []
         cumulative_cost = 0.0
@@ -95,7 +103,7 @@ class Simulator:
                 "time_hours": env_state["time_hours"],
                 "hour_of_day": env_state["hour_of_day"],
                 "device_key": sim_cfg.device_key,
-                "device_display_name": device.config.display_name,
+                "device_display_name": device.display_name,
                 "ambient_temperature": self._resolve_ambient_temperature(sim_cfg.device_key, env_state),
                 "temperature_outdoor": env_state["temperature_outdoor"],
                 "room_temperature": env_state["room_temperature"],
@@ -109,6 +117,7 @@ class Simulator:
                 "base_consumption_kw": env_state["base_consumption"],
                 "device_temperature": device_state["device_temperature"],
                 "target_temperature": target_temp,
+                "comfort_range": comfort_range,
                 "temp_error": device.get_temp_error(),
                 "control_level": control_level,
                 "device_power_level": device_state["device_power_level"],
@@ -145,13 +154,14 @@ class Simulator:
 
         return {
             "temp_error": device.get_temp_error(),
+            "comfort_range": device.comfort_range,
             "humidity": env_state["humidity"],
             "occupancy": env_state["occupancy"],
             "tariff_normalized": env_state["tariff_normalized"],
             "tariff": env_state["tariff_normalized"],
             "temperature_indoor": device.temperature,
             "temperature_outdoor": env_state["temperature_outdoor"],
-            "target_temperature": device.config.target_temperature,
+            "target_temperature": device.target_temperature,
         }
 
     def _resolve_ambient_temperature(self, device_key: str, env_state: Dict[str, float]) -> float:

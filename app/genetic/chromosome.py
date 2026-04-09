@@ -9,7 +9,7 @@ import numpy as np
 
 from app.config import FuzzyConfig
 from app.fuzzy.controller import FuzzyController
-from app.fuzzy.device_specs import DeviceFuzzySpec, build_device_spec
+from app.simulation.devices import DeviceFuzzySpec, build_device_spec
 
 
 class ChromosomeEncoder:

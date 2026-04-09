@@ -46,6 +46,24 @@ STYLE_CONFIG = {
     'font.family': 'sans-serif',
 }
 
+
+def _device_name(df: pd.DataFrame) -> str:
+    if "device_display_name" in df.columns and not df.empty:
+        return str(df["device_display_name"].iloc[0])
+    return "Dispositivo"
+
+
+def _control_series(df: pd.DataFrame) -> pd.Series:
+    if "control_level" in df.columns:
+        return df["control_level"]
+    return df["hvac_level"]
+
+
+def _device_consumption_series(df: pd.DataFrame) -> pd.Series:
+    if "device_consumption_kw" in df.columns:
+        return df["device_consumption_kw"]
+    return df["hvac_consumption_kw"]
+
 COLORS = {
     'primary': '#e94560',
     'secondary': '#0f3460',
@@ -96,18 +114,42 @@ def plot_temperatures(df: pd.DataFrame, target_temp: float = 22.0,
     return fig
 
 
-def plot_hvac_level(df: pd.DataFrame) -> Figure:
-    """Gráfico 2: Nivel de climatización a lo largo del tiempo."""
+def plot_humidity(df: pd.DataFrame) -> Figure:
+    """Gráfico de Humedad simulada."""
     apply_style()
     fig, ax = plt.subplots(figsize=(12, 4))
     
     time = df['time_hours']
-    ax.fill_between(time, 0, df['hvac_level'], alpha=0.4, color=COLORS['accent'])
-    ax.plot(time, df['hvac_level'], color=COLORS['accent'], linewidth=1.5)
+    
+    if 'humidity' in df.columns:
+        # Humidity is 0 to 1, plot as percentage
+        humidity_pct = df['humidity'] * 100
+        ax.fill_between(time, 0, humidity_pct, alpha=0.3, color=COLORS['cool'])
+        ax.plot(time, humidity_pct, color=COLORS['cool'], linewidth=2, label='Humedad')
     
     ax.set_xlabel('Tiempo (horas)')
-    ax.set_ylabel('Nivel HVAC (%)')
-    ax.set_title('Señal de Control del Climatizador', fontsize=14, fontweight='bold')
+    ax.set_ylabel('Humedad (%)')
+    ax.set_title('Evolución de Humedad Ambiental', fontsize=14, fontweight='bold')
+    ax.set_ylim(0, 100)
+    ax.grid(True, alpha=0.3)
+    fig.tight_layout()
+    return fig
+
+
+def plot_hvac_level(df: pd.DataFrame) -> Figure:
+    """Grafico del nivel de control del dispositivo."""
+    apply_style()
+    fig, ax = plt.subplots(figsize=(12, 4))
+    
+    time = df['time_hours']
+    control = _control_series(df)
+    device_name = _device_name(df)
+    ax.fill_between(time, 0, control, alpha=0.4, color=COLORS['accent'])
+    ax.plot(time, control, color=COLORS['accent'], linewidth=1.5)
+    
+    ax.set_xlabel('Tiempo (horas)')
+    ax.set_ylabel('Nivel de Control (%)')
+    ax.set_title(f'Senal de Control - {device_name}', fontsize=14, fontweight='bold')
     ax.set_ylim(0, 105)
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
@@ -120,10 +162,12 @@ def plot_consumption(df: pd.DataFrame) -> Figure:
     fig, ax = plt.subplots(figsize=(12, 4))
     
     time = df['time_hours']
+    device_name = _device_name(df)
+    device_consumption = _device_consumption_series(df)
     ax.fill_between(time, 0, df['base_consumption_kw'],
                     alpha=0.5, color=COLORS['secondary'], label='Consumo base')
-    ax.fill_between(time, df['base_consumption_kw'], df['total_consumption_kw'],
-                    alpha=0.5, color=COLORS['primary'], label='Consumo HVAC')
+    ax.fill_between(time, df['base_consumption_kw'], df['base_consumption_kw'] + device_consumption,
+                    alpha=0.5, color=COLORS['primary'], label=f'Consumo {device_name}')
     ax.plot(time, df['total_consumption_kw'], color=COLORS['red'],
             linewidth=1.5, label='Total')
     
@@ -231,31 +275,42 @@ def plot_comparison(df_base: pd.DataFrame,
     ax = axes[0]
     ax.axhspan(target_temp - comfort_range, target_temp + comfort_range,
                alpha=0.12, color=COLORS['green'])
+    ax.fill_between(time, target_temp, df_base['temperature_indoor'],
+                    alpha=0.08, color=COLORS['base'])
+    ax.fill_between(time, target_temp, df_opt['temperature_indoor'],
+                    alpha=0.08, color=COLORS['optimized'])
     ax.plot(time, df_base['temperature_indoor'], color=COLORS['base'],
             linewidth=1.8, label='T. Interior (Base)', alpha=0.85)
     ax.plot(time, df_opt['temperature_indoor'], color=COLORS['optimized'],
             linewidth=1.8, label='T. Interior (Optimizado)', alpha=0.85)
-    ax.plot(time, df_base['temperature_outdoor'], color=COLORS['warm'],
-            linewidth=1, alpha=0.5, linestyle=':', label='T. Exterior')
+    ax.plot(time, df_base['temperature_outdoor'], color='#f5a623',
+            linewidth=2.0, alpha=0.85, linestyle='--', label='T. Exterior')
     ax.set_ylabel('Temperatura (°C)')
     ax.set_title('Comparación Base vs Optimizado', fontsize=14, fontweight='bold')
-    ax.legend(loc='upper right', fontsize=8)
+    ax.legend(loc='upper left', fontsize=9)
     ax.grid(True, alpha=0.3)
     
-    # Panel 2: HVAC Level
+    base_control = _control_series(df_base)
+    opt_control = _control_series(df_opt)
+    device_name = _device_name(df_base)
+
+    # Panel 2: nivel de control
     ax = axes[1]
-    ax.fill_between(time, 0, df_base['hvac_level'], alpha=0.3, color=COLORS['base'])
-    ax.fill_between(time, 0, df_opt['hvac_level'], alpha=0.3, color=COLORS['optimized'])
-    ax.plot(time, df_base['hvac_level'], color=COLORS['base'],
-            linewidth=1.5, label='HVAC Base')
-    ax.plot(time, df_opt['hvac_level'], color=COLORS['optimized'],
-            linewidth=1.5, label='HVAC Optimizado')
-    ax.set_ylabel('Nivel HVAC (%)')
+    ax.fill_between(time, 0, base_control, alpha=0.3, color=COLORS['base'])
+    ax.fill_between(time, 0, opt_control, alpha=0.3, color=COLORS['optimized'])
+    ax.plot(time, base_control, color=COLORS['base'],
+            linewidth=1.5, label='Base')
+    ax.plot(time, opt_control, color=COLORS['optimized'],
+            linewidth=1.5, label='Optimizado')
+    ax.set_ylabel('Nivel Control (%)')
+    ax.set_title(device_name)
     ax.legend(loc='upper right', fontsize=8)
     ax.grid(True, alpha=0.3)
     
     # Panel 3: Costo acumulado
     ax = axes[2]
+    ax.fill_between(time, 0, df_base['cumulative_cost'], alpha=0.12, color=COLORS['base'])
+    ax.fill_between(time, 0, df_opt['cumulative_cost'], alpha=0.12, color=COLORS['optimized'])
     ax.plot(time, df_base['cumulative_cost'], color=COLORS['base'],
             linewidth=2, label=f"Base: ${df_base['cumulative_cost'].iloc[-1]:.2f}")
     ax.plot(time, df_opt['cumulative_cost'], color=COLORS['optimized'],
@@ -303,14 +358,14 @@ def plot_metrics_comparison_bars(base_metrics: PerformanceMetrics,
     fig, ax = plt.subplots(figsize=(10, 6))
     
     labels = ['Energía\nTotal\n(kWh)', 'Costo\nTotal\n($)', 'Confort\n(%)',
-              'Pico\nDemanda\n(kW)', 'Nivel HVAC\nPromedio\n(%)', 'Fitness\nScore']
+              'Pico\nDemanda\n(kW)', 'Nivel de\nControl\nPromedio (%)', 'Fitness\nScore']
     
     base_vals = [
         base_metrics.total_energy_kwh,
         base_metrics.total_cost,
         base_metrics.comfort_percentage,
         base_metrics.peak_demand_kw,
-        base_metrics.avg_hvac_level,
+        base_metrics.avg_control_level,
         base_metrics.fitness_score * 100,
     ]
     opt_vals = [
@@ -318,7 +373,7 @@ def plot_metrics_comparison_bars(base_metrics: PerformanceMetrics,
         opt_metrics.total_cost,
         opt_metrics.comfort_percentage,
         opt_metrics.peak_demand_kw,
-        opt_metrics.avg_hvac_level,
+        opt_metrics.avg_control_level,
         opt_metrics.fitness_score * 100,
     ]
     

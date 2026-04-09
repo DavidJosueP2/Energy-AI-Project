@@ -74,7 +74,7 @@ def run_cli(args):
     print(f"\nEscenario: {args.scenario} | Duración: {args.hours}h | Semilla: {args.seed}")
     
     # Controlador base
-    controller = FuzzyController(config.fuzzy)
+    controller = FuzzyController(config.fuzzy, device_key=config.simulation.device_key)
     print(f"Controlador: {controller}")
     
     # Simulación base
@@ -133,8 +133,8 @@ def run_cli(args):
         comparison = compare_metrics(base_metrics, opt_metrics)
         for k, v in comparison.items():
             change = v['cambio_%']
-            arrow = "↑" if change > 0 else "↓" if change < 0 else "="
-            print(f"  {k}: {v['base']} → {v['optimizado']} ({arrow}{abs(change):.1f}%)")
+            arrow = "+" if change > 0 else "-" if change < 0 else "="
+            print(f"  {k}: {v['base']} -> {v['optimizado']} ({arrow}{abs(change):.1f}%)")
     
     # Exportar
     export_path = args.export
@@ -148,16 +148,18 @@ def run_cli(args):
         config, base_result, opt_result,
         base_metrics, opt_metrics,
         ga_hist, ga_avg,
+        base_controller=controller,
+        opt_controller=opt_controller,
         output_path=export_path
     )
-    print(f"\n✅ Reporte HTML generado: {export_path}")
+    print(f"\n[OK] Reporte HTML generado: {export_path}")
     
     # CSV
     csv_dir = config.paths.outputs_dir
     export_csv(base_result, csv_dir)
     if opt_result:
         export_csv(opt_result, csv_dir)
-    print(f"✅ Datos CSV exportados a: {csv_dir}")
+    print(f"[OK] Datos CSV exportados a: {csv_dir}")
     
     print("\n" + "=" * 60)
     print("  Ejecución completada exitosamente.")

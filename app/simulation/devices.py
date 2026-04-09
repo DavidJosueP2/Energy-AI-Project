@@ -1,203 +1,146 @@
-# ==============================================================================
-# devices.py - Modelos genericos de dispositivos controlados
-# ==============================================================================
 """
-Define un modelo abstracto de dispositivo controlado y dos implementaciones
-concretas: HVAC (climatizacion) y Refrigerador.
-
-Cada dispositivo:
-- Tiene parametros termicos propios
-- Usa la misma logica difusa para determinar su nivel de operacion
-- Consume energia de forma diferente
-- Tiene su propio rango de temperatura objetivo
+Modelos dinamicos genericos para HVAC y refrigerador.
 """
 
+from dataclasses import dataclass
 from typing import Dict, Optional
-from dataclasses import dataclass, field
+
 import numpy as np
 
 
 @dataclass
 class DeviceConfig:
-    """Configuracion base de un dispositivo controlado."""
-    name: str = "Dispositivo"
-    display_name: str = "Dispositivo Generico"
+    """Configuracion fisica simplificada de un dispositivo controlado."""
 
-    # Temperatura objetivo del dispositivo
-    target_temperature: float = 22.0
-    comfort_range: float = 2.0
-
-    # Parametros del modelo termico
-    alpha: float = 0.08    # Conductancia termica (algo de intercambio con exterior)
-    beta: float = 0.05     # Calor por ocupante (4 ocupantes = 0.2 C/h)
-    gamma: float = 0.02    # Ganancia solar
-    delta: float = 3.5     # Efecto de enfriamiento del HVAC (a 100% enfría ~3.5 C/h)
-
-    # Parametros electricos
-    max_power_kw: float = 3.5
-
-    cop: float = 3.2
-    standby_kw: float = 0.15
-
-    # Temperatura inicial
-    initial_temperature: float = 26.0
-
-    # Rango de temperatura valido
-    temp_min: float = 10.0
-    temp_max: float = 50.0
+    name: str
+    display_name: str
+    control_display_name: str
+    temperature_display_name: str
+    target_temperature: float
+    comfort_range: float
+    initial_temperature: float
+    min_temperature: float
+    max_temperature: float
+    ambient_coupling: float
+    occupancy_gain: float
+    solar_gain: float
+    usage_gain: float
+    control_gain: float
+    max_power_kw: float
+    standby_kw: float
+    cop: float
 
 
 def get_hvac_config() -> DeviceConfig:
-    """Configuracion para sistema HVAC residencial."""
+    """Configuracion calibrada para climatizacion residencial."""
     return DeviceConfig(
         name="hvac",
         display_name="HVAC (Climatizacion)",
+        control_display_name="Nivel de climatizacion",
+        temperature_display_name="Temperatura interior",
         target_temperature=22.0,
         comfort_range=2.0,
-        alpha=0.08,
-        beta=0.05,
-        gamma=0.02,
-        delta=3.5,
+        initial_temperature=25.5,
+        min_temperature=14.0,
+        max_temperature=45.0,
+        ambient_coupling=0.055,
+        occupancy_gain=0.12,
+        solar_gain=0.008,
+        usage_gain=0.0,
+        control_gain=1.85,
         max_power_kw=3.5,
+        standby_kw=0.12,
         cop=3.2,
-        standby_kw=0.15,
-        initial_temperature=26.0,
-        temp_min=10.0,
-        temp_max=50.0,
     )
 
 
 def get_refrigerator_config() -> DeviceConfig:
-    """
-    Configuracion para refrigerador domestico.
-
-    Modelo simplificado:
-    - Temperatura objetivo: 4 grados (rango de refrigeracion)
-    - Aislamiento mejor que una habitacion (alpha menor)
-    - Sin ocupantes ni ganancia solar directa
-    - Potencia mucho menor que HVAC
-    - COP tipico de refrigerador domestico
-    """
+    """Configuracion para refrigerador domestico."""
     return DeviceConfig(
         name="refrigerador",
         display_name="Refrigerador",
+        control_display_name="Nivel de enfriamiento",
+        temperature_display_name="Temperatura interna del refrigerador",
         target_temperature=4.0,
         comfort_range=1.5,
-        alpha=0.025,      # Mejor aislamiento
-        beta=0.0,          # Sin ocupantes
-        gamma=0.0,         # Sin ganancia solar
-        delta=0.35,        # Mayor efecto por kW (volumen pequeno)
-        max_power_kw=0.25, # Potencia tipica compresor domestico
-        cop=2.5,           # COP menor que HVAC
-        standby_kw=0.03,   # Standby minimo
-        initial_temperature=8.0,
-        temp_min=-5.0,
-        temp_max=30.0,
+        initial_temperature=5.5,
+        min_temperature=-3.0,
+        max_temperature=18.0,
+        ambient_coupling=0.060,
+        occupancy_gain=0.0,
+        solar_gain=0.0,
+        usage_gain=0.85,
+        control_gain=4.60,
+        max_power_kw=0.22,
+        standby_kw=0.02,
+        cop=2.3,
     )
 
 
 AVAILABLE_DEVICES = {
-    'hvac': get_hvac_config,
-    'refrigerador': get_refrigerator_config,
+    "hvac": get_hvac_config,
+    "refrigerador": get_refrigerator_config,
 }
 
 
 class ControlledDevice:
-    """
-    Modelo generico de un dispositivo controlado por logica difusa.
-
-    El dispositivo mantiene una variable de estado (temperatura)
-    y la actualiza segun la ecuacion de transicion termica.
-    """
+    """Dispositivo termico controlado por una salida difusa en [0, 100]."""
 
     def __init__(self, config: DeviceConfig, dt: float = 1.0):
-        """
-        Args:
-            config: Configuracion del dispositivo.
-            dt: Paso temporal en horas.
-        """
         self.config = config
         self.dt = dt
-
-        # Estado actual
-        self.temperature: float = config.initial_temperature
-        self.power_level: float = 0.0
-        self.consumption_kw: float = 0.0
+        self.reset()
 
     def reset(self, initial_temp: Optional[float] = None):
-        """Reinicia el dispositivo al estado inicial."""
-        self.temperature = initial_temp or self.config.initial_temperature
+        self.temperature = initial_temp if initial_temp is not None else self.config.initial_temperature
         self.power_level = 0.0
         self.consumption_kw = 0.0
 
-    def step(self,
-             temp_ambient: float,
-             occupancy: float,
-             solar_radiation: float,
-             control_level: float) -> Dict[str, float]:
-        """
-        Avanza un paso temporal y actualiza el estado.
-
-        Args:
-            temp_ambient: Temperatura del ambiente externo.
-            occupancy: Numero de ocupantes (0 para refrigerador).
-            solar_radiation: Radiacion solar (0 para refrigerador).
-            control_level: Nivel de control ordenado [0, 100].
-
-        Returns:
-            Estado actualizado del dispositivo.
-        """
+    def step(
+        self,
+        ambient_temperature: float,
+        occupancy: float,
+        solar_radiation: float,
+        usage_load: float = 0.0,
+        control_level: Optional[float] = None,
+    ) -> Dict[str, float]:
         cfg = self.config
-        dt = self.dt
-
-        # Normalizar control a [0, 1]
-        ctrl_norm = np.clip(control_level / 100.0, 0.0, 1.0)
+        if control_level is None:
+            control_level = usage_load
+            usage_load = 0.0
+        ctrl_norm = float(np.clip(control_level / 100.0, 0.0, 1.0))
         self.power_level = ctrl_norm
 
-        # Componentes de la transicion termica
-        delta_conduction = cfg.alpha * dt * (temp_ambient - self.temperature)
-        delta_occupants = cfg.beta * dt * occupancy
-        delta_solar = cfg.gamma * dt * (solar_radiation / 1000.0) * 10.0
-        delta_cooling = cfg.delta * dt * ctrl_norm
+        delta_ambient = cfg.ambient_coupling * self.dt * (ambient_temperature - self.temperature)
+        delta_occupancy = cfg.occupancy_gain * self.dt * occupancy
+        delta_solar = cfg.solar_gain * self.dt * (solar_radiation / 1000.0) * 10.0
+        delta_usage = cfg.usage_gain * self.dt * usage_load
+        delta_control = cfg.control_gain * self.dt * ctrl_norm
 
-        # Actualizar temperatura
-        self.temperature += (
-            delta_conduction
-            + delta_occupants
-            + delta_solar
-            - delta_cooling
-        )
+        self.temperature += delta_ambient + delta_occupancy + delta_solar + delta_usage - delta_control
+        self.temperature = float(np.clip(self.temperature, cfg.min_temperature, cfg.max_temperature))
 
-        # Limitar a rango fisico
-        self.temperature = np.clip(self.temperature, cfg.temp_min, cfg.temp_max)
-
-        # Calcular consumo electrico
         if ctrl_norm > 0.01:
-            self.consumption_kw = (
-                cfg.max_power_kw * ctrl_norm / cfg.cop
-                + cfg.standby_kw
-            )
+            self.consumption_kw = cfg.max_power_kw * ctrl_norm / max(cfg.cop, 0.1) + cfg.standby_kw
         else:
             self.consumption_kw = 0.0
 
         return self.get_state()
 
     def get_state(self) -> Dict[str, float]:
-        """Retorna el estado actual del dispositivo."""
         return {
-            'device_temperature': round(self.temperature, 3),
-            'device_power_level': round(self.power_level, 4),
-            'device_consumption_kw': round(self.consumption_kw, 4),
+            "device_temperature": round(self.temperature, 3),
+            "device_power_level": round(self.power_level, 4),
+            "device_consumption_kw": round(self.consumption_kw, 4),
         }
 
     def get_temp_error(self) -> float:
-        """Calcula el error de temperatura respecto al objetivo."""
         return self.temperature - self.config.target_temperature
-
-    @property
-    def name(self) -> str:
-        return self.config.name
 
     @property
     def display_name(self) -> str:
         return self.config.display_name
+
+    @property
+    def name(self) -> str:
+        return self.config.name

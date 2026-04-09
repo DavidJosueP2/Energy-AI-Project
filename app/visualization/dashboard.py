@@ -19,6 +19,18 @@ import pandas as pd
 from typing import Optional
 
 
+def _device_name(df: pd.DataFrame) -> str:
+    if "device_display_name" in df.columns and not df.empty:
+        return str(df["device_display_name"].iloc[0])
+    return "Dispositivo"
+
+
+def _control_series(df: pd.DataFrame) -> pd.Series:
+    if "control_level" in df.columns:
+        return df["control_level"]
+    return df["hvac_level"]
+
+
 def create_simulation_dashboard(df: pd.DataFrame,
                                  target_temp: float = 22.0,
                                  comfort_range: float = 2.0,
@@ -56,12 +68,15 @@ def create_simulation_dashboard(df: pd.DataFrame,
     ax.legend(fontsize=8, loc='upper right')
     ax.grid(True, alpha=0.2)
     
-    # 2. Nivel HVAC
+    control = _control_series(df)
+    device_name = _device_name(df)
+
+    # 2. Nivel de control
     ax = fig.add_subplot(gs[0, 1])
-    ax.fill_between(time, 0, df['hvac_level'], alpha=0.4, color=COLORS['accent'])
-    ax.plot(time, df['hvac_level'], color=COLORS['accent'], linewidth=1.2)
-    ax.set_ylabel('HVAC (%)')
-    ax.set_title('Control HVAC', fontweight='bold')
+    ax.fill_between(time, 0, control, alpha=0.4, color=COLORS['accent'])
+    ax.plot(time, control, color=COLORS['accent'], linewidth=1.2)
+    ax.set_ylabel('Control (%)')
+    ax.set_title(f'Control - {device_name}', fontweight='bold')
     ax.set_ylim(0, 105)
     ax.grid(True, alpha=0.2)
     
@@ -70,7 +85,7 @@ def create_simulation_dashboard(df: pd.DataFrame,
     ax.fill_between(time, 0, df['base_consumption_kw'],
                     alpha=0.5, color=COLORS['secondary'], label='Base')
     ax.fill_between(time, df['base_consumption_kw'], df['total_consumption_kw'],
-                    alpha=0.5, color=COLORS['primary'], label='HVAC')
+                    alpha=0.5, color=COLORS['primary'], label=device_name)
     ax.set_ylabel('Consumo (kW)')
     ax.set_title('Consumo Eléctrico', fontweight='bold')
     ax.legend(fontsize=8)
@@ -133,6 +148,10 @@ def create_comparison_dashboard(df_base: pd.DataFrame,
     ax = fig.add_subplot(gs[0, 0])
     ax.axhspan(target_temp - comfort_range, target_temp + comfort_range,
                alpha=0.10, color=COLORS['green'])
+    ax.fill_between(time, target_temp, df_base['temperature_indoor'],
+                    alpha=0.10, color=COLORS['base'])
+    ax.fill_between(time, target_temp, df_opt['temperature_indoor'],
+                    alpha=0.10, color=COLORS['optimized'])
     ax.plot(time, df_base['temperature_indoor'], color=COLORS['base'],
             linewidth=1.5, alpha=0.8, label='T. Interior (Base)')
     ax.plot(time, df_opt['temperature_indoor'], color=COLORS['optimized'],
@@ -145,19 +164,27 @@ def create_comparison_dashboard(df_base: pd.DataFrame,
     ax.legend(fontsize=8)
     ax.grid(True, alpha=0.2)
     
-    # 2. HVAC comparado
+    base_control = _control_series(df_base)
+    opt_control = _control_series(df_opt)
+    device_name = _device_name(df_base)
+
+    # 2. Control comparado
     ax = fig.add_subplot(gs[0, 1])
-    ax.plot(time, df_base['hvac_level'], color=COLORS['base'],
+    ax.fill_between(time, 0, base_control, alpha=0.20, color=COLORS['base'])
+    ax.fill_between(time, 0, opt_control, alpha=0.20, color=COLORS['optimized'])
+    ax.plot(time, base_control, color=COLORS['base'],
             linewidth=1.2, alpha=0.7, label='Base')
-    ax.plot(time, df_opt['hvac_level'], color=COLORS['optimized'],
+    ax.plot(time, opt_control, color=COLORS['optimized'],
             linewidth=1.2, alpha=0.7, label='Optimizado')
-    ax.set_ylabel('HVAC (%)')
-    ax.set_title('Nivel de Climatización', fontweight='bold')
+    ax.set_ylabel('Control (%)')
+    ax.set_title(f'Nivel de Control - {device_name}', fontweight='bold')
     ax.legend(fontsize=8)
     ax.grid(True, alpha=0.2)
     
     # 3. Consumo comparado
     ax = fig.add_subplot(gs[1, 0])
+    ax.fill_between(time, 0, df_base['total_consumption_kw'], alpha=0.18, color=COLORS['base'])
+    ax.fill_between(time, 0, df_opt['total_consumption_kw'], alpha=0.18, color=COLORS['optimized'])
     ax.plot(time, df_base['total_consumption_kw'], color=COLORS['base'],
             linewidth=1.5, label='Base')
     ax.plot(time, df_opt['total_consumption_kw'], color=COLORS['optimized'],
@@ -169,6 +196,8 @@ def create_comparison_dashboard(df_base: pd.DataFrame,
     
     # 4. Costo comparado
     ax = fig.add_subplot(gs[1, 1])
+    ax.fill_between(time, 0, df_base['cumulative_cost'], alpha=0.14, color=COLORS['base'])
+    ax.fill_between(time, 0, df_opt['cumulative_cost'], alpha=0.14, color=COLORS['optimized'])
     ax.plot(time, df_base['cumulative_cost'], color=COLORS['base'],
             linewidth=2, label=f"Base: ${base_metrics.total_cost:.2f}")
     ax.plot(time, df_opt['cumulative_cost'], color=COLORS['optimized'],
@@ -180,6 +209,8 @@ def create_comparison_dashboard(df_base: pd.DataFrame,
     
     # 5. Confort comparado
     ax = fig.add_subplot(gs[2, 0])
+    ax.fill_between(time, 0, df_base['comfort_index'], alpha=0.16, color=COLORS['base'])
+    ax.fill_between(time, 0, df_opt['comfort_index'], alpha=0.16, color=COLORS['optimized'])
     ax.plot(time, df_base['comfort_index'], color=COLORS['base'],
             linewidth=1.5, alpha=0.7, label=f"Base: {base_metrics.comfort_percentage:.0f}%")
     ax.plot(time, df_opt['comfort_index'], color=COLORS['optimized'],

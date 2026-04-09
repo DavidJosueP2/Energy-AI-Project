@@ -31,7 +31,7 @@ from PyQt5.QtWidgets import (
     QDoubleSpinBox, QComboBox, QGroupBox, QTextEdit, QProgressBar,
     QSplitter, QTableWidget, QTableWidgetItem, QFileDialog,
     QMessageBox, QFrame, QSizePolicy, QStatusBar, QHeaderView,
-    QScrollArea
+    QScrollArea, QSlider
 )
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QFont, QColor, QPalette
@@ -46,7 +46,7 @@ from app.config import AppConfig
 from app.fuzzy.controller import FuzzyController, InferenceDetail
 from app.fuzzy.linguistic import LinguisticInput, LinguisticOutput
 from app.simulation.simulator import Simulator, SimulationResult
-from app.simulation.metrics import calculate_metrics, PerformanceMetrics
+from app.simulation.metrics import calculate_metrics, PerformanceMetrics, is_higher_better_metric
 from app.simulation.scenario_generator import AVAILABLE_SCENARIOS
 from app.simulation.devices import AVAILABLE_DEVICES, get_hvac_config, get_refrigerator_config
 from app.genetic.optimizer import GeneticOptimizer, OptimizationResult
@@ -174,6 +174,8 @@ class MainWindow(QMainWindow):
         self.base_metrics: Optional[PerformanceMetrics] = None
         self.optimized_metrics: Optional[PerformanceMetrics] = None
         self.ga_result: Optional[OptimizationResult] = None
+        self.manual_combo_inputs = {}
+        self.manual_numeric_inputs = {}
 
         # Componentes linguisticos
         self.linguistic_input = LinguisticInput()
@@ -185,6 +187,7 @@ class MainWindow(QMainWindow):
 
         self._apply_dark_theme()
         self._build_ui()
+        self._on_device_changed(self.combo_device.currentIndex())
         self._init_controller()
         self._log("Sistema iniciado. Configure los parametros y ejecute la simulacion.")
 
@@ -533,7 +536,38 @@ class MainWindow(QMainWindow):
         tab = QWidget()
         main_layout = QVBoxLayout(tab)
 
-        # Controles superiores
+        manual_group = QGroupBox("Inferencia Difusa Manual")
+        manual_layout = QVBoxLayout(manual_group)
+
+        mode_layout = QHBoxLayout()
+        mode_layout.addWidget(QLabel("Modo de entrada:"))
+        self.combo_manual_mode = QComboBox()
+        self.combo_manual_mode.addItems(["Linguistico", "Numerico"])
+        mode_layout.addWidget(self.combo_manual_mode)
+        self.btn_infer = QPushButton("Evaluar Caso Manual")
+        self.btn_infer.setObjectName("btn_infer")
+        self.btn_infer.clicked.connect(self._on_run_manual_inference)
+        mode_layout.addWidget(self.btn_infer)
+        mode_layout.addStretch()
+        manual_layout.addLayout(mode_layout)
+
+        self.manual_inputs_widget = QWidget()
+        self.manual_inputs_layout = QGridLayout(self.manual_inputs_widget)
+        manual_layout.addWidget(self.manual_inputs_widget)
+
+        self.lbl_manual_output = QLabel("Seleccione entradas y ejecute la inferencia manual.")
+        self.lbl_manual_output.setWordWrap(True)
+        self.lbl_manual_output.setStyleSheet("font-size: 13px; color: #e0e0e0;")
+        manual_layout.addWidget(self.lbl_manual_output)
+
+        self.lbl_fuzzy_explanation = QLabel("--")
+        self.lbl_fuzzy_explanation.setWordWrap(True)
+        self.lbl_fuzzy_explanation.setStyleSheet("font-size: 12px; color: #aaa;")
+        manual_layout.addWidget(self.lbl_fuzzy_explanation)
+
+        main_layout.addWidget(manual_group)
+
+        # Controles superiores de inspeccion temporal
         control_panel = QWidget()
         control_layout = QHBoxLayout(control_panel)
         control_panel.setMaximumHeight(60)
@@ -543,7 +577,6 @@ class MainWindow(QMainWindow):
         self.lbl_hour.setStyleSheet("color: #53d8fb;")
         control_layout.addWidget(self.lbl_hour)
 
-        from PyQt5.QtWidgets import QSlider
         self.slider_hour = QSlider(Qt.Horizontal)
         self.slider_hour.setMinimum(0)
         self.slider_hour.setMaximum(72)
@@ -606,7 +639,13 @@ class MainWindow(QMainWindow):
     # Inicializacion
     # ------------------------------------------------------------------
     def _init_controller(self):
-        self.base_controller = FuzzyController(self.config.fuzzy)
+        self.base_controller = FuzzyController(
+            self.config.fuzzy,
+            device_key=self.config.simulation.device_key,
+        )
+        self.linguistic_input.set_spec(self.base_controller.spec)
+        self.linguistic_output.set_controller(self.base_controller)
+        self._rebuild_manual_inputs()
         self._log(f"Controlador difuso inicializado: {self.base_controller}")
         # Mostrar funciones de pertenencia iniciales
         self._update_mf_plot()
@@ -618,6 +657,7 @@ class MainWindow(QMainWindow):
         self.config.simulation.target_temperature = self.spin_target.value()
         self.config.simulation.comfort_range = self.spin_comfort.value()
         self.config.simulation.scenario_type = self.combo_scenario.currentText()
+        self.config.simulation.device_key = 'hvac' if self.combo_device.currentIndex() == 0 else 'refrigerador'
 
         self.config.genetic.population_size = self.spin_pop.value()
         self.config.genetic.num_generations = self.spin_gens.value()
@@ -638,21 +678,24 @@ class MainWindow(QMainWindow):
             cfg = get_hvac_config()
             self.spin_target.setValue(22.0)
             self.spin_comfort.setValue(2.0)
+            self.config.simulation.device_key = 'hvac'
             self._log("Dispositivo: HVAC (Climatizacion) seleccionado")
         else:
             cfg = get_refrigerator_config()
             self.spin_target.setValue(4.0)
             self.spin_comfort.setValue(1.5)
+            self.config.simulation.device_key = 'refrigerador'
             self._log("Dispositivo: Refrigerador seleccionado")
 
-        self.config.house.alpha = cfg.alpha
-        self.config.house.beta = cfg.beta
-        self.config.house.gamma = cfg.gamma
-        self.config.house.delta = cfg.delta
         self.config.house.initial_temperature = cfg.initial_temperature
         self.config.house.hvac_max_power_kw = cfg.max_power_kw
         self.config.house.hvac_cop = cfg.cop
         self.config.house.hvac_standby_kw = cfg.standby_kw
+        if hasattr(self, "base_controller") and self.base_controller is not None:
+            self._init_controller()
+            self.optimized_controller = None
+            self.optimized_result = None
+            self.optimized_metrics = None
 
     # ------------------------------------------------------------------
     # Inferencia Difusa Interactiva
@@ -671,40 +714,19 @@ class MainWindow(QMainWindow):
                 return
             row = df_hour.iloc[0]
             
-            # Preparar inputs
-            crisp_inputs = {
-                'temp_error': row['temp_error'],
-                'humidity': row.get('humidity', 0.5),
-                'temperature_indoor': row['temperature_indoor'],
-                'temperature_outdoor': row['temperature_outdoor'],
-                'occupancy': row['occupancy'],
-                'tariff_normalized': row['tariff_normalized'],
-                'consumption_normalized': row.get('consumption_normalized', 0.5),
-                'target_temperature': row.get('target_temperature', 22.0)
-            }
-            
-            # Formatear state text
-            state_text = (
-                f"- T. Objetivo: {crisp_inputs['target_temperature']:.1f} C\n"
-                f"- T. Interior: {crisp_inputs['temperature_indoor']:.1f} C\n"
-                f"- T. Exterior: {crisp_inputs['temperature_outdoor']:.1f} C\n"
-                f"- Error Temp: {crisp_inputs['temp_error']:+.2f} C\n"
-                f"- Humedad: {crisp_inputs['humidity']*100:.1f} %\n"
-                f"- Ocupantes: {crisp_inputs['occupancy']:.0f}\n"
-                f"- Tarifa Norm: {crisp_inputs['tariff_normalized']:.2f}\n"
-                f"- Consumo Norm: {crisp_inputs['consumption_normalized']:.2f}"
-            )
-            self.lbl_fuzzy_inputs.setText(state_text)
-
-            # Usar el controlador apropiado
             controller = self.optimized_controller if self.optimized_controller else self.base_controller
-
-            # Ejecutar inferencia localmente para esa hora
+            crisp_inputs = controller.normalize_inputs(row.to_dict())
+            self.lbl_fuzzy_inputs.setText(self._format_case_text(crisp_inputs, row.to_dict(), source="simulacion"))
             output_val, detail = controller.evaluate_with_detail(crisp_inputs)
-            self.lbl_fuzzy_output.setText(f"Nivel Control HVAC Exigido: {output_val:.1f} %")
+            self.linguistic_output.set_controller(controller)
+            dual = self.linguistic_output.get_dual_output(output_val)
+            self.lbl_fuzzy_output.setText(
+                f"{controller.spec.control_display_name}: {dual['etiqueta_display']} ({dual['porcentaje']})"
+            )
+            self.lbl_fuzzy_explanation.setText(detail.explanation)
             
             self._update_rules_table(detail)
-            self._update_fuzzy_plots(detail)
+            self._update_fuzzy_plots(detail, controller)
         except Exception as e:
             self._log(f"Error evaluando hora: {e}")
 
@@ -730,13 +752,14 @@ class MainWindow(QMainWindow):
                 item.setForeground(QColor('#ef5350'))
             self.rules_table.setItem(row, 1, item)
 
-    def _update_fuzzy_plots(self, detail: InferenceDetail):
+    def _update_fuzzy_plots(self, detail: InferenceDetail, controller: Optional[FuzzyController] = None):
         """Actualiza los graficos de la pestana de inferencia difusa."""
         try:
+            controller = controller or self.base_controller
             # Grafico 1: Funciones de pertenencia con valores marcados
             fig = fuzzy_plots.plot_all_membership_functions(
-                self.base_controller.input_variables,
-                self.base_controller.output_variable,
+                controller.input_variables,
+                controller.output_variable,
                 detail.crisp_inputs
             )
             self.canvas_fuzzy_mf.update_figure(fig)
@@ -744,7 +767,7 @@ class MainWindow(QMainWindow):
             # Grafico 2: Agregacion y centroide
             if detail.aggregated_output is not None:
                 fig = fuzzy_plots.plot_aggregation_defuzzification(
-                    self.base_controller.output_variable,
+                    controller.output_variable,
                     detail.aggregated_output,
                     detail.centroid_value
                 )
@@ -752,6 +775,91 @@ class MainWindow(QMainWindow):
 
         except Exception as e:
             self._log(f"Error en graficos difusos: {e}")
+
+    def _rebuild_manual_inputs(self):
+        while self.manual_inputs_layout.count():
+            item = self.manual_inputs_layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
+
+        self.manual_combo_inputs = {}
+        self.manual_numeric_inputs = {}
+        for row, variable_spec in enumerate(self.base_controller.spec.input_variables):
+            label = QLabel(variable_spec.display_name)
+            combo = QComboBox()
+            combo.addItems(self.linguistic_input.get_labels(variable_spec.name))
+            numeric = QDoubleSpinBox()
+            low, high = variable_spec.universe_range
+            numeric.setRange(low, high)
+            numeric.setDecimals(2)
+            numeric.setSingleStep(max((high - low) / 20.0, 0.05))
+            first_label = combo.currentText()
+            if first_label:
+                numeric.setValue(self.linguistic_input.to_crisp(variable_spec.name, first_label))
+            combo.currentTextChanged.connect(
+                lambda text, name=variable_spec.name, spin=numeric: self._sync_manual_numeric(name, text, spin)
+            )
+            self.manual_inputs_layout.addWidget(label, row, 0)
+            self.manual_inputs_layout.addWidget(combo, row, 1)
+            self.manual_inputs_layout.addWidget(numeric, row, 2)
+            self.manual_combo_inputs[variable_spec.name] = combo
+            self.manual_numeric_inputs[variable_spec.name] = numeric
+
+    def _sync_manual_numeric(self, variable_name: str, label: str, spin: QDoubleSpinBox):
+        if not label:
+            return
+        try:
+            spin.setValue(self.linguistic_input.to_crisp(variable_name, label))
+        except Exception:
+            pass
+
+    def _on_run_manual_inference(self):
+        controller = self.base_controller
+        if controller is None:
+            return
+
+        use_linguistic = self.combo_manual_mode.currentText().lower().startswith("ling")
+        if use_linguistic:
+            selections = {
+                variable_name: combo.currentText()
+                for variable_name, combo in self.manual_combo_inputs.items()
+            }
+            crisp_inputs = self.linguistic_input.to_controller_inputs(selections)
+        else:
+            crisp_inputs = {
+                variable_name: spin.value()
+                for variable_name, spin in self.manual_numeric_inputs.items()
+            }
+
+        base_output, base_detail = self.base_controller.evaluate_with_detail(crisp_inputs)
+        base_dual = self.linguistic_output.get_dual_output(base_output)
+        message = [
+            f"Base: {base_dual['etiqueta_display']} ({base_dual['porcentaje']})"
+        ]
+
+        if self.optimized_controller:
+            self.linguistic_output.set_controller(self.optimized_controller)
+            opt_output, _ = self.optimized_controller.evaluate_with_detail(crisp_inputs)
+            opt_dual = self.linguistic_output.get_dual_output(opt_output)
+            message.append(f"Optimizado: {opt_dual['etiqueta_display']} ({opt_dual['porcentaje']})")
+            self.linguistic_output.set_controller(self.base_controller)
+
+        self.lbl_manual_output.setText(" | ".join(message))
+        self.lbl_fuzzy_inputs.setText(self._format_case_text(crisp_inputs, crisp_inputs, source="manual"))
+        self.lbl_fuzzy_output.setText(
+            f"{controller.spec.control_display_name}: {base_dual['etiqueta_display']} ({base_dual['porcentaje']})"
+        )
+        self.lbl_fuzzy_explanation.setText(base_detail.explanation)
+        self._update_rules_table(base_detail)
+        self._update_fuzzy_plots(base_detail, self.base_controller)
+
+    def _format_case_text(self, normalized_inputs, raw_inputs, source="manual"):
+        lines = [f"Caso evaluado desde {source}:"]
+        for variable_spec in self.base_controller.spec.input_variables:
+            value = normalized_inputs.get(variable_spec.name, raw_inputs.get(variable_spec.input_key, 0.0))
+            lines.append(f"- {variable_spec.display_name}: {value:.2f}")
+        return "\n".join(lines)
 
     # ------------------------------------------------------------------
     # Acciones principales
@@ -867,7 +975,10 @@ class MainWindow(QMainWindow):
                 generate_html_report(
                     self.config, self.base_result, self.optimized_result,
                     self.base_metrics, self.optimized_metrics,
-                    ga_hist, ga_avg, output_path=filepath
+                    ga_hist, ga_avg,
+                    base_controller=self.base_controller,
+                    opt_controller=self.optimized_controller,
+                    output_path=filepath
                 )
                 self._log(f"Reporte exportado: {filepath}")
             except Exception as e:
@@ -939,13 +1050,14 @@ class MainWindow(QMainWindow):
 
         df_base = self.base_result.data
         df_opt = self.optimized_result.data if self.optimized_result else None
-        target = self.config.simulation.target_temperature
-        comfort = self.config.simulation.comfort_range
+        target = float(df_base['target_temperature'].iloc[0])
+        comfort = self.spin_comfort.value()
+        device_name = str(df_base['device_display_name'].iloc[0]) if 'device_display_name' in df_base.columns else "Dispositivo"
 
         try:
             # Dashboard BASE (Nunca comparativo)
             fig = dashboard.create_simulation_dashboard(
-                df_base, target, comfort, "Dashboard - Simulacion Base"
+                df_base, target, comfort, f"Dashboard - {device_name} - Base"
             )
             self.canvas_dashboard.update_figure(fig)
 
@@ -961,7 +1073,7 @@ class MainWindow(QMainWindow):
             # Temperaturas - comparativo
             fig = self._create_comparative_plot(
                 df_base, df_opt, 'temperature_indoor',
-                'Temperatura Interior', 'Temperatura (C)',
+                self.base_controller.spec.temperature_display_name, 'Temperatura (C)',
                 target=target, comfort=comfort, show_outdoor=True
             )
             self.canvas_temp.update_figure(fig)
@@ -979,8 +1091,8 @@ class MainWindow(QMainWindow):
 
             # HVAC - comparativo
             fig = self._create_comparative_plot(
-                df_base, df_opt, 'hvac_level',
-                'Nivel de Control del Dispositivo', 'Nivel (%)',
+                df_base, df_opt, 'control_level',
+                self.base_controller.spec.control_display_name, 'Nivel (%)',
                 fill=True
             )
             self.canvas_hvac.update_figure(fig)
@@ -1004,7 +1116,7 @@ class MainWindow(QMainWindow):
             # Confort - comparativo
             fig = self._create_comparative_plot(
                 df_base, df_opt, 'comfort_index',
-                'Indice de Confort Termico', 'Indice',
+                'Indice de Desempeno', 'Indice',
                 fill=True
             )
             self.canvas_comfort.update_figure(fig)
@@ -1079,10 +1191,11 @@ class MainWindow(QMainWindow):
             return
         try:
             # Mostrar comparacion para temp_error como variable principal
+            primary_input = next(iter(self.base_controller.input_variables.keys()))
             fig = fuzzy_plots.plot_mf_comparison(
-                'temp_error',
-                self.base_controller.input_variables['temp_error'],
-                self.optimized_controller.input_variables['temp_error']
+                primary_input,
+                self.base_controller.input_variables[primary_input],
+                self.optimized_controller.input_variables[primary_input]
             )
             self.canvas_mf.update_figure(fig)
         except Exception as e:
@@ -1103,7 +1216,8 @@ class MainWindow(QMainWindow):
             if isinstance(opt_val, (int, float)) and isinstance(base_val, (int, float)) and base_val != 0:
                 change = ((opt_val - base_val) / abs(base_val)) * 100
                 item = QTableWidgetItem(f"{change:+.1f}%")
-                item.setForeground(QColor('#66bb6a') if change < 0 else QColor('#ef5350'))
+                improved = change > 0 if is_higher_better_metric(key) else change < 0
+                item.setForeground(QColor('#66bb6a') if improved else QColor('#ef5350'))
                 self.metrics_table.setItem(row, 3, item)
             else:
                 self.metrics_table.setItem(row, 3, QTableWidgetItem('-'))

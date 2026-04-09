@@ -74,7 +74,7 @@ def run_cli(args):
     print(f"\nEscenario: {args.scenario} | Duración: {args.hours}h | Semilla: {args.seed}")
     
     # Controlador base
-    controller = FuzzyController(config.fuzzy)
+    controller = FuzzyController(config.fuzzy, device_key=config.simulation.device_key)
     print(f"Controlador: {controller}")
     
     # Simulación base
@@ -148,6 +148,8 @@ def run_cli(args):
         config, base_result, opt_result,
         base_metrics, opt_metrics,
         ga_hist, ga_avg,
+        base_controller=controller,
+        opt_controller=opt_controller,
         output_path=export_path
     )
     print(f"\n[OK] Reporte HTML generado: {export_path}")

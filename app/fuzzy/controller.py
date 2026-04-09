@@ -1,266 +1,266 @@
-# ==============================================================================
-# controller.py - Controlador difuso completo
-# ==============================================================================
 """
-Controlador difuso de alto nivel que integra:
-- Variables de entrada y salida con funciones de pertenencia
-- Base de reglas
-- Motor de inferencia Mamdani
-
-Proporciona una interfaz simple: recibe variables del entorno,
-retorna nivel de climatizacion. Es el componente que se conecta
-directamente con el simulador.
-
-Expone el proceso interno de inferencia para visualizacion:
-- Grados de pertenencia de cada variable
-- Reglas activadas con sus fuerzas
-- Funcion agregada
-- Valor defuzzificado
+Controlador difuso interpretable y multi-dispositivo.
 """
 
-import numpy as np
-from typing import Dict, List, Optional, Tuple
 from copy import deepcopy
 from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Tuple
+
+import numpy as np
 
 from app.config import FuzzyConfig
-from app.fuzzy.membership import FuzzyVariable
-from app.fuzzy.rules import RuleBase, FuzzyRule, create_default_rule_base
+from app.fuzzy.device_specs import DeviceFuzzySpec, VariableSpec, build_device_spec
 from app.fuzzy.inference import MamdaniInference
+from app.fuzzy.membership import FuzzyVariable
+from app.fuzzy.rules import FuzzyRule, RuleBase, create_default_rule_base
+
+
+@dataclass
+class ConsequentActivation:
+    """Representa un consecuente activado y recortado por una regla."""
+
+    set_name: str
+    strength: float
+    source_rule: str
 
 
 @dataclass
 class InferenceDetail:
-    """Detalle completo de un ciclo de inferencia para visualizacion."""
+    """Traza completa de una inferencia puntual."""
+
     crisp_inputs: Dict[str, float] = field(default_factory=dict)
     membership_degrees: Dict[str, Dict[str, float]] = field(default_factory=dict)
     rules_with_strength: List[Tuple[FuzzyRule, float]] = field(default_factory=list)
+    consequent_activations: List[ConsequentActivation] = field(default_factory=list)
     aggregated_output: Optional[np.ndarray] = None
     centroid_value: float = 0.0
     output_label: str = ""
+    output_memberships: Dict[str, float] = field(default_factory=dict)
+    explanation: str = ""
 
     @property
     def active_rules(self) -> List[Tuple[FuzzyRule, float]]:
-        """Retorna solo las reglas con fuerza de disparo > 0."""
-        return [(r, s) for r, s in self.rules_with_strength if s > 0.01]
+        return [(rule, strength) for rule, strength in self.rules_with_strength if strength > 0.01]
 
     @property
     def top_rules(self) -> List[Tuple[FuzzyRule, float]]:
-        """Retorna las reglas mas influyentes ordenadas."""
         active = self.active_rules
-        active.sort(key=lambda x: x[1], reverse=True)
+        active.sort(key=lambda item: item[1], reverse=True)
         return active[:10]
 
 
 class FuzzyController:
     """
-    Controlador difuso para gestion energetica residencial.
+    Controlador Mamdani explicable para HVAC o refrigerador.
 
-    Entradas:
-    - temp_error: diferencia entre T_interior y T_objetivo
-    - humidity: humedad relativa normalizada [0, 1]
-    - occupancy: numero de ocupantes
-    - tariff: tarifa electrica normalizada [0, 1]
-    - consumption: consumo actual normalizado [0, 1]
-
-    Salida:
-    - hvac_output: nivel de climatizacion [0, 100]
+    Mantiene compatibilidad parcial con la firma anterior, pero ahora
+    el comportamiento real queda definido por `DeviceFuzzySpec`.
     """
 
-    def __init__(self, config: Optional[FuzzyConfig] = None,
-                 rule_base: Optional[RuleBase] = None):
-        self.config = config or FuzzyConfig()
-        self.rule_base = rule_base or create_default_rule_base()
+    def __init__(
+        self,
+        config: Optional[FuzzyConfig] = None,
+        rule_base: Optional[RuleBase] = None,
+        device_key: str = "hvac",
+        spec: Optional[DeviceFuzzySpec] = None,
+    ):
+        self.legacy_config = config or FuzzyConfig()
+        self.spec = spec or build_device_spec(device_key)
+        self.device_key = self.spec.device_key
+        self.rule_base = rule_base or create_default_rule_base(
+            device_key=self.device_key,
+            output_name=self.spec.output_name,
+        )
 
-        # Variables difusas
         self.input_variables: Dict[str, FuzzyVariable] = {}
         self.output_variable: Optional[FuzzyVariable] = None
-
-        # Ultimo detalle de inferencia (para visualizacion)
         self.last_inference: Optional[InferenceDetail] = None
 
         self._build_variables()
         self._build_inference_engine()
 
     def _build_variables(self):
-        """Construye las variables difusas con sus funciones de pertenencia."""
-        cfg = self.config
-        res = cfg.universe_resolution
+        resolution = self.legacy_config.universe_resolution
+        self.input_variables = {}
+        for variable_spec in self.spec.input_variables:
+            variable = FuzzyVariable(
+                variable_spec.name,
+                variable_spec.universe_range,
+                resolution,
+            )
+            for set_name, params in variable_spec.sets.items():
+                variable.add_set(set_name, variable_spec.get_mf_type(set_name), params)
+            self.input_variables[variable_spec.name] = variable
 
-        # Variable: Error de temperatura
-        self.input_variables['temp_error'] = FuzzyVariable(
-            'temp_error', cfg.temp_error_range, res
-        )
-        self.input_variables['temp_error'].add_triangular_sets(cfg.temp_error_sets)
-
-        # Variable: Humedad
-        self.input_variables['humidity'] = FuzzyVariable(
-            'humidity', cfg.humidity_range, res
-        )
-        self.input_variables['humidity'].add_triangular_sets(cfg.humidity_sets)
-
-        # Variable: Ocupacion
-        self.input_variables['occupancy'] = FuzzyVariable(
-            'occupancy', cfg.occupancy_range, res
-        )
-        self.input_variables['occupancy'].add_triangular_sets(cfg.occupancy_sets)
-
-        # Variable: Tarifa normalizada
-        self.input_variables['tariff'] = FuzzyVariable(
-            'tariff', cfg.tariff_range, res
-        )
-        self.input_variables['tariff'].add_triangular_sets(cfg.tariff_sets)
-
-        # Variable: Consumo normalizado
-        self.input_variables['consumption'] = FuzzyVariable(
-            'consumption', cfg.consumption_range, res
-        )
-        self.input_variables['consumption'].add_triangular_sets(cfg.consumption_sets)
-
-        # Variable de salida: Nivel de climatizacion
+        output_spec = self.spec.output_variable
         self.output_variable = FuzzyVariable(
-            'hvac_output', cfg.output_range, res
+            output_spec.name,
+            output_spec.universe_range,
+            resolution,
         )
-        self.output_variable.add_triangular_sets(cfg.output_sets)
+        for set_name, params in output_spec.sets.items():
+            self.output_variable.add_set(set_name, output_spec.get_mf_type(set_name), params)
 
     def _build_inference_engine(self):
-        """Construye el motor de inferencia Mamdani."""
         self.inference_engine = MamdaniInference(
             input_variables=self.input_variables,
             output_variable=self.output_variable,
             rule_base=self.rule_base,
         )
 
+    def normalize_inputs(self, inputs: Dict[str, float]) -> Dict[str, float]:
+        """Mapea entradas de simulacion o interfaz a las variables del controlador."""
+        normalized: Dict[str, float] = {}
+        for variable_spec in self.spec.input_variables:
+            source_key = variable_spec.input_key or variable_spec.name
+            if variable_spec.name in inputs:
+                normalized[variable_spec.name] = inputs[variable_spec.name]
+            elif source_key in inputs:
+                normalized[variable_spec.name] = inputs[source_key]
+            elif variable_spec.name == "tariff" and "tariff" in inputs:
+                normalized[variable_spec.name] = inputs["tariff"]
+
+        return normalized
+
     def evaluate(self, inputs: Dict[str, float]) -> float:
-        """
-        Evalua el controlador difuso con las entradas dadas.
-        Guarda el detalle de inferencia para posterior visualizacion.
+        controller_inputs = self.normalize_inputs(inputs)
+        output, _ = self.evaluate_with_detail(controller_inputs)
+        low, high = self.output_variable.universe_range
+        return float(np.clip(output, low, high))
 
-        Args:
-            inputs: Dict con variables del entorno.
+    def evaluate_with_detail(self, controller_inputs: Dict[str, float]) -> Tuple[float, InferenceDetail]:
+        controller_inputs = self.normalize_inputs(controller_inputs)
+        detail = InferenceDetail(crisp_inputs=dict(controller_inputs))
 
-        Returns:
-            Nivel de climatizacion [0, 100].
-        """
-        # Mapear nombres del simulador a nombres del controlador
-        controller_inputs = {
-            'temp_error': inputs.get('temp_error', 0.0),
-            'humidity': inputs.get('humidity', 0.5),
-            'occupancy': inputs.get('occupancy', 0.0),
-            'tariff': inputs.get('tariff_normalized', inputs.get('tariff', 0.5)),
-            'consumption': inputs.get('consumption_normalized', inputs.get('consumption', 0.5)),
-        }
-
-        # Inferencia difusa con detalle completo
-        output, detail = self.evaluate_with_detail(controller_inputs)
-
-        return float(np.clip(output, 0.0, 100.0))
-
-    def evaluate_with_detail(self, controller_inputs: Dict[str, float]
-                              ) -> Tuple[float, InferenceDetail]:
-        """
-        Evalua el controlador y retorna detalle completo de la inferencia.
-        Util para la pestana de visualizacion difusa.
-
-        Args:
-            controller_inputs: Dict con valores de las variables de entrada.
-
-        Returns:
-            Tupla (valor_salida, InferenceDetail).
-        """
-        detail = InferenceDetail()
-        detail.crisp_inputs = dict(controller_inputs)
-
-        # 1. Fuzzificacion
         detail.membership_degrees = self.inference_engine._fuzzify(controller_inputs)
-
-        # 2-3. Evaluacion de reglas
         activated_outputs = self.inference_engine._evaluate_rules(detail.membership_degrees)
         detail.rules_with_strength = self.inference_engine.get_rule_activations(controller_inputs)
-
-        # 4. Agregacion
+        detail.consequent_activations = [
+            ConsequentActivation(
+                set_name=set_name,
+                strength=strength,
+                source_rule=str(rule),
+            )
+            for (rule, strength), (set_name, _) in zip(
+                detail.rules_with_strength,
+                activated_outputs + [("", 0.0)] * max(0, len(detail.rules_with_strength) - len(activated_outputs)),
+            )
+            if strength > 0.01
+        ]
         detail.aggregated_output = self.inference_engine._aggregate(activated_outputs)
-
-        # 5. Desfuzzificacion
         detail.centroid_value = self.inference_engine._defuzzify(detail.aggregated_output)
-
-        # Clasificar salida
-        val = detail.centroid_value
-        if val < 15:
-            detail.output_label = 'Muy Baja'
-        elif val < 35:
-            detail.output_label = 'Baja'
-        elif val < 60:
-            detail.output_label = 'Media'
-        elif val < 80:
-            detail.output_label = 'Alta'
-        else:
-            detail.output_label = 'Muy Alta'
-
-        # Guardar para acceso posterior
+        detail.output_memberships = self.output_variable.fuzzify(detail.centroid_value)
+        detail.output_label = max(
+            detail.output_memberships.items(),
+            key=lambda item: item[1],
+        )[0]
+        detail.explanation = self._build_explanation(detail)
         self.last_inference = detail
-
         return detail.centroid_value, detail
 
+    def _build_explanation(self, detail: InferenceDetail) -> str:
+        if not detail.top_rules:
+            return "No se activaron reglas con peso significativo."
+
+        rule, strength = detail.top_rules[0]
+        readable_inputs = ", ".join(
+            f"{name}={value:.2f}" for name, value in detail.crisp_inputs.items()
+        )
+        return (
+            f"Entradas evaluadas: {readable_inputs}. "
+            f"La regla dominante fue '{rule.description or str(rule)}' "
+            f"con activacion {strength:.3f}. "
+            f"La salida dominante es '{detail.output_label.replace('_', ' ')}' "
+            f"con valor defuzzificado {detail.centroid_value:.2f}."
+        )
+
     def get_controller_function(self):
-        """Retorna una funcion callable para pasar al simulador."""
         return self.evaluate
 
     def get_membership_params(self) -> Dict[str, Dict[str, List[float]]]:
-        """Retorna todos los parametros de funciones de pertenencia."""
-        params = {}
-        for var_name, variable in self.input_variables.items():
-            params[var_name] = {}
-            for set_name, fuzzy_set in variable.sets.items():
-                params[var_name][set_name] = list(fuzzy_set.params)
-
-        params['hvac_output'] = {}
-        for set_name, fuzzy_set in self.output_variable.sets.items():
-            params['hvac_output'][set_name] = list(fuzzy_set.params)
-
+        params: Dict[str, Dict[str, List[float]]] = {}
+        for variable_name, variable in self.input_variables.items():
+            params[variable_name] = {
+                set_name: list(fuzzy_set.params)
+                for set_name, fuzzy_set in variable.sets.items()
+            }
+        params[self.output_variable.name] = {
+            set_name: list(fuzzy_set.params)
+            for set_name, fuzzy_set in self.output_variable.sets.items()
+        }
+        if self.output_variable.name == "control_output":
+            params["hvac_output"] = deepcopy(params[self.output_variable.name])
         return params
 
     def set_membership_params(self, params: Dict[str, Dict[str, List[float]]]):
-        """Establece parametros de funciones de pertenencia (usado por GA)."""
-        for var_name, sets_dict in params.items():
-            if var_name == 'hvac_output':
+        for variable_name, sets_dict in params.items():
+            if variable_name == self.output_variable.name or (
+                variable_name == "hvac_output" and self.output_variable.name == "control_output"
+            ):
                 variable = self.output_variable
-            elif var_name in self.input_variables:
-                variable = self.input_variables[var_name]
             else:
+                variable = self.input_variables.get(variable_name)
+
+            if variable is None:
                 continue
 
             for set_name, new_params in sets_dict.items():
                 if set_name in variable.sets:
                     variable.sets[set_name].params = list(new_params)
 
+        self._sync_spec_from_variables()
         self._build_inference_engine()
 
-    def clone(self) -> 'FuzzyController':
-        """Crea una copia profunda del controlador."""
-        new_config = deepcopy(self.config)
-        new_rb = deepcopy(self.rule_base)
-        new_controller = FuzzyController(new_config, new_rb)
+    def _sync_spec_from_variables(self):
+        for variable_spec in self.spec.input_variables:
+            variable = self.input_variables[variable_spec.name]
+            variable_spec.sets = {
+                set_name: list(fuzzy_set.params)
+                for set_name, fuzzy_set in variable.sets.items()
+            }
+
+        self.spec.output_variable.sets = {
+            set_name: list(fuzzy_set.params)
+            for set_name, fuzzy_set in self.output_variable.sets.items()
+        }
+
+    def clone(self) -> "FuzzyController":
+        new_spec = deepcopy(self.spec)
+        new_rule_base = deepcopy(self.rule_base)
+        new_controller = FuzzyController(
+            config=deepcopy(self.legacy_config),
+            rule_base=new_rule_base,
+            device_key=self.device_key,
+            spec=new_spec,
+        )
         new_controller.set_membership_params(self.get_membership_params())
         return new_controller
 
     def get_variable_info(self) -> Dict[str, dict]:
-        """Retorna informacion de todas las variables para visualizacion."""
-        info = {}
-        for name, var in self.input_variables.items():
-            info[name] = {
-                'range': var.universe_range,
-                'sets': {s: fs.params for s, fs in var.sets.items()},
-                'type': 'input',
+        info: Dict[str, dict] = {}
+        for variable_spec in self.spec.input_variables:
+            info[variable_spec.name] = {
+                "range": variable_spec.universe_range,
+                "sets": deepcopy(variable_spec.sets),
+                "type": "input",
+                "display_name": variable_spec.display_name,
+                "unit": variable_spec.unit,
             }
-        info['hvac_output'] = {
-            'range': self.output_variable.universe_range,
-            'sets': {s: fs.params for s, fs in self.output_variable.sets.items()},
-            'type': 'output',
+        info[self.spec.output_variable.name] = {
+            "range": self.spec.output_variable.universe_range,
+            "sets": deepcopy(self.spec.output_variable.sets),
+            "type": "output",
+            "display_name": self.spec.output_variable.display_name,
+            "unit": self.spec.output_variable.unit,
         }
         return info
 
+    @property
+    def output_name(self) -> str:
+        return self.spec.output_name
+
     def __repr__(self) -> str:
-        n_inputs = len(self.input_variables)
-        n_rules = self.rule_base.num_rules
-        return f"FuzzyController({n_inputs} inputs, {n_rules} rules)"
+        return (
+            f"FuzzyController(device={self.spec.display_name}, "
+            f"inputs={len(self.input_variables)}, rules={self.rule_base.num_rules})"
+        )

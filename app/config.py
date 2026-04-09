@@ -37,6 +37,9 @@ class SimulationConfig:
     
     # Tipo de escenario: 'verano', 'invierno', 'primavera', 'mixto'
     scenario_type: str = 'verano'
+
+    # Dispositivo controlado por el sistema difuso
+    device_key: str = 'hvac'
     
     @property
     def num_steps(self) -> int:
@@ -66,20 +69,20 @@ class HouseConfig:
     # Representa la conductancia térmica normalizada del edificio.
     # Valores típicos: 0.03-0.12 dependiendo del aislamiento.
     # Un valor bajo indica buen aislamiento.
-    alpha: float = 0.065
+    alpha: float = 0.055
     
     # Calor generado por persona (°C por persona por hora)
     # Una persona emite ~80-120W de calor. En una vivienda típica de ~80m²
     # con altura 2.5m (200m³ de aire), esto equivale a ~0.2-0.4°C/persona/hora.
-    beta: float = 0.30
+    beta: float = 0.12
     
     # Coeficiente de ganancia solar (°C por unidad de radiación por hora)
     # Depende del área de ventanas, orientación y factor solar.
-    gamma: float = 0.012
+    gamma: float = 0.008
     
     # Efecto del climatizador (°C por unidad de potencia relativa por hora)
     # Para un sistema HVAC de ~3.5kW (12000 BTU) típico residencial.
-    delta: float = 0.18
+    delta: float = 1.85
     
     # Temperatura interior inicial (°C)
     initial_temperature: float = 26.0
@@ -92,7 +95,7 @@ class HouseConfig:
     hvac_cop: float = 3.2
     
     # Consumo en standby del HVAC cuando está encendido pero al mínimo (kW)
-    hvac_standby_kw: float = 0.15
+    hvac_standby_kw: float = 0.12
 
 
 # ==============================================================================

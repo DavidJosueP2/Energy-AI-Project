@@ -83,7 +83,7 @@ class GeneticOptimizer:
         self.base_controller = base_controller
         
         # Componentes
-        self.encoder = ChromosomeEncoder(config.fuzzy)
+        self.encoder = ChromosomeEncoder(controller=base_controller)
         self.evaluator = FitnessEvaluator(config, base_controller)
         
         # Estado

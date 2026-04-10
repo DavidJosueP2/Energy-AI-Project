@@ -17,13 +17,14 @@ from app.genetic.operators import (
 )
 from app.genetic.fitness import FitnessEvaluator
 from app.genetic.optimizer import GeneticOptimizer
+from app.fuzzy.membership import triangular_mf, trapezoidal_mf
 
 
 class TestChromosomeEncoder:
     """Pruebas para la codificación de cromosomas."""
 
     def setup_method(self):
-        self.encoder = ChromosomeEncoder(FuzzyConfig())
+        self.encoder = ChromosomeEncoder()
 
     def test_chromosome_length(self):
         """El cromosoma debe tener longitud > 0."""
@@ -64,6 +65,26 @@ class TestChromosomeEncoder:
         assert len(ch) == self.encoder.chromosome_length
         assert np.all(np.isfinite(ch))
 
+    def test_repair_preserves_membership_coverage(self):
+        """Las funciones reparadas no deben dejar huecos sin pertenencia."""
+        rng = np.random.RandomState(7)
+        repaired = self.encoder.generate_random(rng)
+        decoded = self.encoder.decode(repaired)
+
+        for variable in self.encoder._variable_specs:
+            universe = np.linspace(variable["range"][0], variable["range"][1], 400)[1:-1]
+            total_membership = np.zeros_like(universe)
+
+            for set_name, params in decoded[variable["name"]].items():
+                if len(params) == 3:
+                    membership = triangular_mf(universe, params)
+                else:
+                    membership = trapezoidal_mf(universe, params)
+                total_membership = np.maximum(total_membership, membership)
+
+            assert np.all(total_membership > 0.0), \
+                f"La variable {variable['name']} quedo con huecos sin cobertura"
+
 
 class TestGeneticOperators:
     """Pruebas para operadores genéticos."""
@@ -90,7 +111,7 @@ class TestGeneticOperators:
     def test_mutation_changes_chromosome(self):
         """Mutación con alta probabilidad debe cambiar el cromosoma."""
         rng = np.random.RandomState(42)
-        encoder = ChromosomeEncoder(FuzzyConfig())
+        encoder = ChromosomeEncoder()
         ch = encoder.encode_default()
         mutated = gaussian_mutation(ch, 1.0, 2.0, encoder, rng)
         # Con prob=1.0, al menos algo debería cambiar

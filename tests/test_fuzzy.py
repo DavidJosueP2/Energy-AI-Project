@@ -93,7 +93,7 @@ class TestFuzzyVariable:
         assert var.validate()
 
 
-class TestRuleBase:
+class TestRuleSet:
     """Pruebas para la base de reglas."""
 
     def test_default_rules_exist(self):

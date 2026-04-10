@@ -21,7 +21,7 @@ class FuzzyRule:
         return f"SI {ant_str} ENTONCES {con_str} (w={self.weight:.2f})"
 
 
-class RuleBase:
+class RuleSet:
     """Contenedor interpretable de reglas difusas."""
 
     def __init__(self):
@@ -33,7 +33,7 @@ class RuleBase:
         consequent: Tuple[str, str],
         weight: float = 1.0,
         description: str = "",
-    ) -> "RuleBase":
+    ) -> "RuleSet":
         self.rules.append(FuzzyRule(antecedents, consequent, weight, description))
         return self
 
@@ -45,19 +45,18 @@ class RuleBase:
         return len(self.rules)
 
     def __repr__(self) -> str:
-        return f"RuleBase({self.num_rules} reglas)"
+        return f"RuleSet({self.num_rules} reglas)"
 
-
-def create_default_rule_base(device_key: str = "hvac", output_name: str = "control_output") -> RuleBase:
+def create_default_rule_base(device_key: str = "hvac", output_name: str = "control_output") -> RuleSet:
     """Retorna la base de reglas por defecto del dispositivo solicitado."""
     if device_key == "refrigerador":
         return create_refrigerator_rule_base(output_name)
     return create_hvac_rule_base(output_name)
 
 
-def create_hvac_rule_base(output_name: str = "control_output") -> RuleBase:
+def create_hvac_rule_base(output_name: str = "control_output") -> RuleSet:
     """Base de reglas HVAC centrada en confort termico interpretable."""
-    rb = RuleBase()
+    rb = RuleSet()
 
     # Zona confortable
     rb.add_rule(
@@ -190,9 +189,9 @@ def create_hvac_rule_base(output_name: str = "control_output") -> RuleBase:
     return rb
 
 
-def create_refrigerator_rule_base(output_name: str = "control_output") -> RuleBase:
+def create_refrigerator_rule_base(output_name: str = "control_output") -> RuleSet:
     """Base de reglas para refrigerador domestico."""
-    rb = RuleBase()
+    rb = RuleSet()
 
     # Temperatura en rango
     rb.add_rule(

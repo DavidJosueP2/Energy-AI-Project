@@ -18,7 +18,7 @@ import numpy as np
 from typing import Dict, List, Tuple, Optional
 
 from app.fuzzy.membership import FuzzyVariable, FuzzySet
-from app.fuzzy.rules import FuzzyRule, RuleBase
+from app.fuzzy.rules import FuzzyRule, RuleSet
 
 
 class MamdaniInference:
@@ -36,7 +36,7 @@ class MamdaniInference:
     def __init__(self, 
                  input_variables: Dict[str, FuzzyVariable],
                  output_variable: FuzzyVariable,
-                 rule_base: RuleBase):
+                 rule_base: RuleSet):
         """
         Args:
             input_variables: Diccionario {nombre: FuzzyVariable} de entradas.

@@ -57,6 +57,16 @@ Si quieres defender específicamente la parte “inteligente”, revisa:
 - [Lógica Difusa](./logica_difusa/README.md)
 - [Algoritmo Genético](./algoritmo_genetico/README.md)
 
+La sección de algoritmo genético incluye ahora:
+
+- codificación cromosómica;
+- espacio de búsqueda;
+- evaluación por simulación completa;
+- operadores genéticos reales del proyecto;
+- explicación detallada del cruce BLX-α;
+- explicación detallada de la mutación gaussiana;
+- costo computacional y tiempo de ejecución.
+
 Si quieres mostrar de dónde salen los gráficos o el `DataFrame`, revisa:
 
 - [Simulación y DataFrame](./simulacion_y_dataframe/README.md)

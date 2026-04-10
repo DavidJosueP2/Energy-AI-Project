@@ -2,14 +2,20 @@
 # operators.py - Operadores genéticos: selección, cruce, mutación
 # ==============================================================================
 """
-Implementa los operadores genéticos fundamentales:
-- Selección por torneo
-- Cruce BLX-α (Blend Crossover)
-- Mutación gaussiana
-- Elitismo
+Operadores genéticos básicos para cromosomas reales.
 
-Estos operadores trabajan sobre vectores de valores reales (cromosomas)
-que codifican parámetros de funciones de pertenencia difusa.
+Este módulo implementa los operadores que transforman una población de
+soluciones candidatas en nuevas variantes dentro del ciclo evolutivo.
+
+En este proyecto los cromosomas no son cadenas binarias. Son vectores de
+valores reales que codifican parámetros de funciones de pertenencia difusa.
+Por eso los operadores implementados aquí están pensados para optimización
+continua:
+
+- selección por torneo para elegir padres prometedores;
+- cruce BLX-α para recombinar genes reales con exploración local;
+- mutación gaussiana para perturbar genes de forma proporcional a su escala;
+- elitismo para no perder soluciones buenas ya encontradas.
 """
 
 import numpy as np
@@ -26,8 +32,16 @@ def tournament_selection(population: np.ndarray,
     """
     Selección por torneo.
     
-    Selecciona un individuo eligiendo aleatoriamente `tournament_size`
-    candidatos y retornando el mejor (mayor fitness).
+    Selecciona un individuo mediante un torneo entre candidatos aleatorios.
+
+    El operador:
+
+    1. elige varios índices al azar;
+    2. compara sus fitness;
+    3. devuelve una copia del cromosoma ganador.
+
+    Este mecanismo aumenta la probabilidad de seleccionar individuos buenos
+    sin volver la selección completamente determinista.
     
     Args:
         population: Matriz de población (n × genes).
@@ -49,17 +63,21 @@ def blx_alpha_crossover(parent1: np.ndarray,
                          alpha: float,
                          rng: np.random.RandomState) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Cruce BLX-α (Blend Crossover).
-    
-    Para cada gen i:
-    - d = |parent1[i] - parent2[i]|
-    - min_val = min(parent1[i], parent2[i]) - α*d
-    - max_val = max(parent1[i], parent2[i]) + α*d
-    - hijo[i] = uniform(min_val, max_val)
-    
-    Este operador permite exploración más allá del rango de los padres
-    (cuando α > 0), lo cual es beneficioso para optimización de parámetros
-    continuos.
+    Cruce BLX-α (Blend Crossover) para genes reales.
+
+    Para cada gen se observa el intervalo definido por ambos padres, se lo
+    expande con el parámetro `alpha` y luego se muestrean los hijos con una
+    distribución uniforme dentro de ese rango ampliado.
+
+    Intuición:
+
+    - si `alpha = 0`, los hijos quedan entre los padres;
+    - si `alpha > 0`, los hijos también pueden explorar ligeramente fuera de
+      ese intervalo.
+
+    Eso vuelve al operador útil para funciones de pertenencia, donde conviene
+    explorar regiones cercanas del espacio continuo sin abandonar del todo la
+    información heredada.
     
     Args:
         parent1, parent2: Cromosomas de los padres.
@@ -94,9 +112,17 @@ def gaussian_mutation(chromosome: np.ndarray,
                       rng: np.random.RandomState) -> np.ndarray:
     """
     Mutación gaussiana gen por gen.
-    
-    Para cada gen, con probabilidad `mutation_prob`, se añade
-    ruido gaussiano N(0, σ) al valor del gen.
+
+    Para cada gen:
+
+    - decide aleatoriamente si se muta;
+    - calcula el rango permitido del gen;
+    - escala `sigma` según ese rango;
+    - suma ruido gaussiano centrado en cero.
+
+    El escalado por rango es importante porque en este proyecto no todos los
+    genes viven en la misma escala numérica. Así se evita mutar con la misma
+    intensidad un parámetro de tarifa en `[0,1]` y uno de salida en `[0,100]`.
     
     Args:
         chromosome: Cromosoma a mutar.
@@ -113,7 +139,7 @@ def gaussian_mutation(chromosome: np.ndarray,
     
     for i in range(len(mutated)):
         if rng.random() < mutation_prob:
-            # Escalar sigma según el rango del gen
+            # La intensidad real de la mutación depende del dominio del gen.
             gene_range = gene_specs[i]['max'] - gene_specs[i]['min']
             scaled_sigma = sigma * (gene_range / 20.0)
             mutated[i] += rng.normal(0, scaled_sigma)
@@ -127,10 +153,16 @@ def apply_elitism(old_population: np.ndarray,
                   new_fitnesses: np.ndarray,
                   elite_count: int) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Aplica elitismo: preserva los mejores individuos de la generación anterior.
-    
-    Reemplaza los peores individuos de la nueva generación con los
-    mejores de la anterior.
+    Preserva élites de la generación anterior dentro de la nueva generación.
+
+    El procedimiento es:
+
+    1. localizar los `elite_count` mejores fitness de la población anterior;
+    2. localizar los `elite_count` peores fitness de la nueva población;
+    3. reemplazar a los peores nuevos por las élites antiguas.
+
+    Esto ayuda a que el algoritmo no pierda soluciones valiosas por efectos
+    aleatorios del cruce y la mutación.
     
     Args:
         old_population, old_fitnesses: Población y fitness anteriores.

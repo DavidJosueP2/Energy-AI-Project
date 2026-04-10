@@ -120,6 +120,7 @@ class Simulator:
                 "comfort_range": comfort_range,
                 "temp_error": device.get_temp_error(),
                 "control_level": control_level,
+                "control_mode": device_state.get("control_mode", "idle"),
                 "device_power_level": device_state["device_power_level"],
                 "device_consumption_kw": device_state["device_consumption_kw"],
                 "total_consumption_kw": total_consumption,
@@ -152,8 +153,10 @@ class Simulator:
                 "tariff": env_state["tariff_normalized"],
             }
 
+        raw_temp_error = device.get_temp_error()
         return {
-            "temp_error": device.get_temp_error(),
+            "temp_error": abs(raw_temp_error),
+            "raw_temp_error": raw_temp_error,
             "comfort_range": device.comfort_range,
             "humidity": env_state["humidity"],
             "occupancy": env_state["occupancy"],

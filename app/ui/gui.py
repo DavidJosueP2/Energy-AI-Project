@@ -125,8 +125,9 @@ class OptimizationWorker(QThread):
 class MplCanvas(QWidget):
     """Widget con figura matplotlib embebida."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, auto_resize_to_figure: bool = False):
         super().__init__(parent)
+        self.auto_resize_to_figure = auto_resize_to_figure
         self.figure = Figure(figsize=(10, 6), facecolor='#1a1a2e')
         self.canvas = FigureCanvas(self.figure)
         self.toolbar = NavigationToolbar(self.canvas, self)
@@ -135,6 +136,22 @@ class MplCanvas(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.toolbar)
         layout.addWidget(self.canvas)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.canvas.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self._apply_canvas_sizing()
+
+    def _apply_canvas_sizing(self):
+        """Aplica tamaño especial solo cuando el widget lo requiera."""
+        if self.auto_resize_to_figure:
+            width = max(640, int(self.figure.get_figwidth() * self.figure.dpi))
+            height = max(360, int(self.figure.get_figheight() * self.figure.dpi))
+            toolbar_height = self.toolbar.sizeHint().height()
+            self.canvas.setMinimumSize(width, height)
+            self.setMinimumSize(width, height + toolbar_height)
+            return
+
+        self.canvas.setMinimumSize(0, 0)
+        self.setMinimumSize(0, 0)
 
     def update_figure(self, new_figure: Figure):
         """Reemplaza la figura actual."""
@@ -147,8 +164,10 @@ class MplCanvas(QWidget):
         self.canvas = FigureCanvas(self.figure)
         self.toolbar = NavigationToolbar(self.canvas, self)
         self.toolbar.setStyleSheet("background: #16213e; color: #ccc;")
+        self.canvas.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         layout.addWidget(self.toolbar)
         layout.addWidget(self.canvas)
+        self._apply_canvas_sizing()
         self.canvas.draw()
 
 
@@ -510,8 +529,13 @@ class MainWindow(QMainWindow):
         self.tabs.addTab(self.canvas_ga, "Optimizacion GA")
 
         # Tab 9: Funciones de Pertenencia
-        self.canvas_mf = MplCanvas()
-        self.tabs.addTab(self.canvas_mf, "Funciones de Pertenencia")
+        self.canvas_mf = MplCanvas(auto_resize_to_figure=True)
+        self.scroll_mf = QScrollArea()
+        self.scroll_mf.setWidget(self.canvas_mf)
+        self.scroll_mf.setWidgetResizable(False)
+        self.scroll_mf.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        self.scroll_mf.setFrameShape(QFrame.NoFrame)
+        self.tabs.addTab(self.scroll_mf, "Funciones de Pertenencia")
 
         # Tab 10: Comparacion global
         self.canvas_compare = MplCanvas()
@@ -534,7 +558,17 @@ class MainWindow(QMainWindow):
         Permite usar un slider para ver hora por hora las reglas activadas.
         """
         tab = QWidget()
-        main_layout = QVBoxLayout(tab)
+        tab_layout = QVBoxLayout(tab)
+        tab_layout.setContentsMargins(0, 0, 0, 0)
+
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QFrame.NoFrame)
+        tab_layout.addWidget(scroll)
+
+        content = QWidget()
+        scroll.setWidget(content)
+        main_layout = QVBoxLayout(content)
 
         manual_group = QGroupBox("Inferencia Difusa Manual")
         manual_layout = QVBoxLayout(manual_group)
@@ -619,19 +653,26 @@ class MainWindow(QMainWindow):
         info_layout.addStretch()
         middle_layout.addWidget(info_group)
 
-        main_layout.addWidget(middle_panel, stretch=1)
+        main_layout.addWidget(middle_panel)
 
         # Graficos
         bottom_panel = QWidget()
-        bottom_layout = QHBoxLayout(bottom_panel)
-        
-        self.canvas_fuzzy_mf = MplCanvas()
-        bottom_layout.addWidget(self.canvas_fuzzy_mf)
-        
-        self.canvas_fuzzy_agg = MplCanvas()
-        bottom_layout.addWidget(self.canvas_fuzzy_agg)
-        
-        main_layout.addWidget(bottom_panel, stretch=2)
+        bottom_layout = QVBoxLayout(bottom_panel)
+
+        mf_group = QGroupBox("Fuzzificación y Funciones de Pertenencia")
+        mf_layout = QVBoxLayout(mf_group)
+        self.canvas_fuzzy_mf = MplCanvas(auto_resize_to_figure=True)
+        mf_layout.addWidget(self.canvas_fuzzy_mf)
+        bottom_layout.addWidget(mf_group)
+
+        agg_group = QGroupBox("Agregación y Desfuzzificación")
+        agg_layout = QVBoxLayout(agg_group)
+        self.canvas_fuzzy_agg = MplCanvas(auto_resize_to_figure=True)
+        agg_layout.addWidget(self.canvas_fuzzy_agg)
+        bottom_layout.addWidget(agg_group)
+
+        main_layout.addWidget(bottom_panel)
+        main_layout.addStretch()
 
         return tab
 
@@ -1215,12 +1256,11 @@ class MainWindow(QMainWindow):
         if not self.base_controller or not self.optimized_controller:
             return
         try:
-            # Mostrar comparacion para temp_error como variable principal
-            primary_input = next(iter(self.base_controller.input_variables.keys()))
-            fig = fuzzy_plots.plot_mf_comparison(
-                primary_input,
-                self.base_controller.input_variables[primary_input],
-                self.optimized_controller.input_variables[primary_input]
+            fig = fuzzy_plots.plot_all_mf_comparisons(
+                self.base_controller.input_variables,
+                self.optimized_controller.input_variables,
+                self.base_controller.output_variable,
+                self.optimized_controller.output_variable,
             )
             self.canvas_mf.update_figure(fig)
         except Exception as e:

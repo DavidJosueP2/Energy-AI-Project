@@ -11,7 +11,7 @@ import numpy as np
 from app.config import FuzzyConfig
 from app.fuzzy.inference import MamdaniInference
 from app.fuzzy.membership import FuzzyVariable
-from app.fuzzy.rules import FuzzyRule, RuleBase, create_default_rule_base
+from app.fuzzy.rules import FuzzyRule, RuleSet, create_default_rule_base
 from app.simulation.devices import DeviceFuzzySpec, VariableSpec, build_device_spec
 
 
@@ -60,7 +60,7 @@ class FuzzyController:
     def __init__(
         self,
         config: Optional[FuzzyConfig] = None,
-        rule_base: Optional[RuleBase] = None,
+        rule_base: Optional[RuleSet] = None,
         device_key: str = "hvac",
         spec: Optional[DeviceFuzzySpec] = None,
     ):
@@ -130,8 +130,9 @@ class FuzzyController:
 
         reference_range = max(self.spec.descriptor.default_comfort_range, 1e-6)
         comfort_range = max(float(raw_inputs.get("comfort_range", reference_range)), 1e-6)
-        raw_error = float(normalized["temp_error"])
-        scaled_error = raw_error * (reference_range / comfort_range)
+        raw_error = float(raw_inputs.get("raw_temp_error", normalized["temp_error"]))
+        control_error = float(normalized["temp_error"])
+        scaled_error = control_error * (reference_range / comfort_range)
 
         temp_error_spec = self.spec.get_variable("temp_error")
         low, high = temp_error_spec.universe_range

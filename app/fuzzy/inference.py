@@ -2,16 +2,41 @@
 # inference.py - Motor de inferencia difusa tipo Mamdani
 # ==============================================================================
 """
-Implementa el ciclo completo de inferencia difusa:
-1. Fuzzificación: convierte valores crisp a grados de pertenencia
-2. Evaluación de reglas: aplica las reglas con operador AND (mínimo)
-3. Activación: recorta los consecuentes según la fuerza de cada regla
-4. Agregación: combina todos los consecuentes activados (máximo)
-5. Desfuzzificación: convierte la función agregada a un valor crisp (centroide)
+Motor de inferencia difusa tipo Mamdani.
 
-Este motor implementa inferencia tipo Mamdani, el más utilizado
-en control difuso por su interpretabilidad y capacidad de capturar
-conocimiento experto.
+Este módulo implementa el núcleo matemático del controlador difuso del
+proyecto. Su responsabilidad no es decidir *qué* variables existen ni *qué*
+reglas deben definirse; su responsabilidad es ejecutar correctamente el
+proceso de inferencia una vez que ya se cuenta con:
+
+- variables de entrada con sus funciones de pertenencia;
+- una variable de salida;
+- una colección interpretable de reglas difusas.
+
+El ciclo implementado es el clásico esquema Mamdani:
+
+1. Fuzzificación
+   Convierte cada entrada numérica en grados de pertenencia sobre sus
+   etiquetas lingüísticas.
+2. Evaluación de reglas
+   Calcula la fuerza de activación de cada regla a partir de sus antecedentes.
+3. Implicación
+   Recorta el consecuente de cada regla según dicha fuerza.
+4. Agregación
+   Combina todos los consecuentes activados en una sola salida difusa.
+5. Desfuzzificación
+   Convierte la salida agregada en un valor crisp mediante centroide.
+
+El objetivo de este diseño es mantener la inferencia separada de:
+
+- la definición semántica del dispositivo;
+- la simulación temporal;
+- la interfaz gráfica;
+- y la optimización genética.
+
+Esa separación permite que el sistema sea defendible académicamente:
+las reglas y las membresías representan el conocimiento; este motor lo
+ejecuta de forma transparente y trazable.
 """
 
 import numpy as np
@@ -23,14 +48,23 @@ from app.fuzzy.rules import FuzzyRule, RuleSet
 
 class MamdaniInference:
     """
-    Motor de inferencia difusa Mamdani.
-    
-    Operaciones:
-    - AND (conjunción): operador mínimo
-    - OR (disyunción): operador máximo
-    - Implicación: operador mínimo (recorte)
-    - Agregación: operador máximo
-    - Desfuzzificación: centroide (centro de gravedad)
+    Ejecuta inferencia Mamdani sobre un conjunto fijo de variables y reglas.
+
+    Este objeto representa la etapa operacional del sistema difuso. En otras
+    palabras, recibe entradas crisp ya normalizadas, consulta sus grados de
+    pertenencia, evalúa reglas y devuelve una salida crisp.
+
+    Convenciones implementadas:
+
+    - conjunción `AND`: mínimo;
+    - disyunción conceptual entre consecuentes: máximo;
+    - implicación: mínimo entre la membresía del consecuente y la fuerza
+      de disparo;
+    - agregación: máximo punto a punto;
+    - desfuzzificación: centroide.
+
+    Estas elecciones corresponden a una implementación Mamdani clásica y
+    priorizan interpretabilidad frente a sofisticación matemática extra.
     """
     
     def __init__(self, 
@@ -49,14 +83,25 @@ class MamdaniInference:
     
     def infer(self, crisp_inputs: Dict[str, float]) -> float:
         """
-        Ejecuta el ciclo completo de inferencia.
-        
+        Ejecuta el pipeline completo de inferencia para un caso puntual.
+
+        Este método es la entrada de más alto nivel del motor. Se usa cuando
+        solo se necesita el valor final de salida y no una traza detallada.
+
+        Flujo interno:
+
+        1. calcula grados de pertenencia de las entradas;
+        2. evalúa reglas y obtiene consecuentes activados;
+        3. agrega la salida difusa;
+        4. aplica centroide sobre la función agregada.
+
         Args:
-            crisp_inputs: Valores crisp de las variables de entrada.
-                         Ejemplo: {'temp_error': 3.5, 'occupancy': 2.0, ...}
-        
+            crisp_inputs: Diccionario con entradas numéricas ya expresadas en
+                las variables del controlador. Ejemplo:
+                `{'temp_error': 3.5, 'occupancy': 2.0, 'tariff': 0.8}`.
+
         Returns:
-            Valor crisp de la salida (nivel de climatización [0, 100]).
+            Valor crisp final de la variable de salida.
         """
         # 1. Fuzzificación
         membership_degrees = self._fuzzify(crisp_inputs)
@@ -74,12 +119,20 @@ class MamdaniInference:
     
     def _fuzzify(self, crisp_inputs: Dict[str, float]) -> Dict[str, Dict[str, float]]:
         """
-        Paso 1: Fuzzificación.
-        Convierte cada valor crisp de entrada a grados de pertenencia
-        en todos los conjuntos difusos de su variable.
-        
+        Convierte entradas crisp en grados de pertenencia.
+
+        Para cada variable de entrada:
+
+        - busca el valor crisp correspondiente;
+        - evalúa todas sus funciones de pertenencia;
+        - y devuelve un diccionario con los grados por etiqueta.
+
+        Si una variable no aparece en `crisp_inputs`, se asume que no aporta
+        evidencia y por tanto todos sus grados se fijan en `0.0`.
+
         Returns:
-            {nombre_variable: {nombre_conjunto: grado_pertenencia}}
+            Estructura del tipo:
+            `{nombre_variable: {nombre_conjunto: grado_pertenencia}}`
         """
         memberships = {}
         for var_name, variable in self.input_variables.items():
@@ -87,7 +140,7 @@ class MamdaniInference:
                 value = crisp_inputs[var_name]
                 memberships[var_name] = variable.fuzzify(value)
             else:
-                # Si no se proporciona, todos los grados son 0
+                # Ausencia de la entrada: la variable no activa ningún conjunto.
                 memberships[var_name] = {s: 0.0 for s in variable.sets}
         return memberships
     
@@ -95,26 +148,34 @@ class MamdaniInference:
                         memberships: Dict[str, Dict[str, float]]
                         ) -> List[Tuple[str, float]]:
         """
-        Paso 2-3: Evaluación de reglas y activación.
-        
-        Para cada regla:
-        - Calcular la fuerza de disparo (AND = mínimo de antecedentes)
-        - Aplicar peso de la regla
-        - Registrar el consecuente activado con su fuerza
-        
+        Evalúa todas las reglas y devuelve sus consecuentes activados.
+
+        Cada regla produce, como máximo, una activación de la forma:
+
+        - conjunto de salida activado;
+        - fuerza de disparo asociada.
+
+        La fuerza se calcula como:
+
+        - mínimo de los antecedentes;
+        - multiplicado por el peso de la regla.
+
+        Solo se conservan reglas con activación positiva efectiva. Esto evita
+        ensuciar la agregación con consecuentes que no aportan nada.
+
         Returns:
-            Lista de (nombre_conjunto_salida, fuerza_de_disparo).
+            Lista de tuplas `(nombre_conjunto_salida, fuerza_de_disparo)`.
         """
         activated = []
         
         for rule in self.rule_base.get_rules():
-            # Calcular fuerza de disparo (AND = mínimo)
+            # En Mamdani clásico, la conjunción se implementa con mínimo.
             firing_strength = self._compute_firing_strength(rule, memberships)
             
-            # Aplicar peso de la regla
+            # El peso permite modular la importancia relativa de una regla.
             firing_strength *= rule.weight
             
-            # Solo considerar reglas con fuerza > 0
+            # Reglas nulas no alteran la salida agregada.
             if firing_strength > 1e-10:
                 output_set_name = rule.consequent[1]
                 activated.append((output_set_name, firing_strength))
@@ -125,8 +186,23 @@ class MamdaniInference:
                                   rule: FuzzyRule,
                                   memberships: Dict[str, Dict[str, float]]) -> float:
         """
-        Calcula la fuerza de disparo de una regla.
-        Operador AND: mínimo de todos los grados de pertenencia de los antecedentes.
+        Calcula la fuerza de disparo de una regla individual.
+
+        La fuerza de disparo resume qué tan compatible es el caso evaluado con
+        los antecedentes de la regla.
+
+        En esta implementación:
+
+        - cada antecedente aporta un grado de pertenencia;
+        - la conjunción `AND` se resuelve con el mínimo;
+        - si falta una variable o conjunto, la regla se considera inactiva.
+
+        Args:
+            rule: Regla difusa a evaluar.
+            memberships: Grados de pertenencia ya fuzzificados.
+
+        Returns:
+            Valor en `[0, 1]` antes de aplicar el peso de la regla.
         """
         strengths = []
         
@@ -134,26 +210,36 @@ class MamdaniInference:
             if var_name in memberships and set_name in memberships[var_name]:
                 strengths.append(memberships[var_name][set_name])
             else:
-                # Si la variable o conjunto no existe, fuerza = 0
+                # Una regla con antecedentes no evaluables no puede dispararse.
                 return 0.0
         
         if not strengths:
             return 0.0
         
-        # AND = mínimo
+        # Mamdani: el antecedente compuesto se modela con el mínimo.
         return min(strengths)
     
     def _aggregate(self, 
                    activated_outputs: List[Tuple[str, float]]) -> np.ndarray:
         """
-        Paso 4: Agregación.
-        Combina todos los consecuentes activados usando operador máximo.
-        
-        Para cada punto del universo de salida, toma el máximo de todos
-        los consecuentes recortados por su fuerza de disparo.
-        
+        Construye la salida difusa agregada del sistema.
+
+        Cada regla activada aporta un consecuente recortado. La agregación toma
+        el máximo punto a punto entre todos esos consecuentes sobre el universo
+        de salida.
+
+        Intuición:
+
+        - cada regla “empuja” parcialmente hacia una etiqueta de salida;
+        - la salida agregada reúne todos esos empujes;
+        - el resultado es una sola función difusa que resume la decisión global.
+
+        Args:
+            activated_outputs: Lista de pares `(conjunto_salida, fuerza)`.
+
         Returns:
-            Array con la función de pertenencia agregada sobre el universo de salida.
+            Array con la función de pertenencia agregada evaluada en el
+            universo de la variable de salida.
         """
         universe = self.output_variable.universe
         aggregated = np.zeros_like(universe)
@@ -164,32 +250,42 @@ class MamdaniInference:
         for set_name, strength in activated_outputs:
             if set_name in self.output_variable.sets:
                 output_set = self.output_variable.sets[set_name]
-                # Evaluar la función de pertenencia del consecuente
+                # Membresía original del consecuente sobre el universo de salida.
                 mf_values = output_set.evaluate(universe)
-                # Recortar por la fuerza de disparo (implicación por mínimo)
+                # Implicación Mamdani: recorte por mínimo.
                 clipped = np.minimum(mf_values, strength)
-                # Agregar por máximo
+                # Agregación: unión difusa vía máximo.
                 aggregated = np.maximum(aggregated, clipped)
         
         return aggregated
     
     def _defuzzify(self, aggregated: np.ndarray) -> float:
         """
-        Paso 5: Desfuzzificación por centroide (centro de gravedad).
-        
-        centroide = ∫ x·μ(x) dx / ∫ μ(x) dx
-        
-        Numéricamente: sum(x * μ(x)) / sum(μ(x))
-        
+        Convierte la salida difusa agregada en un valor crisp por centroide.
+
+        Matemáticamente:
+
+            centroide = integral(x * mu(x)) / integral(mu(x))
+
+        En la implementación discreta:
+
+            sum(universe * aggregated) / sum(aggregated)
+
+        Si el área agregada es prácticamente cero, no hay evidencia suficiente
+        para favorecer una región concreta de la salida. En ese caso se usa
+        el centro geométrico del universo como valor neutro por defecto.
+
+        Args:
+            aggregated: Función agregada de salida.
+
         Returns:
-            Valor crisp de la salida. Si el área es cero, retorna el
-            centro del universo de discurso.
+            Valor crisp final de la inferencia.
         """
         universe = self.output_variable.universe
         total_area = np.sum(aggregated)
         
         if total_area < 1e-10:
-            # Sin activación: retornar valor por defecto (centro del rango)
+            # Sin activación efectiva: usar un punto neutro del universo.
             return (self.output_variable.universe_range[0] + 
                     self.output_variable.universe_range[1]) / 2.0
         
@@ -200,8 +296,21 @@ class MamdaniInference:
                               crisp_inputs: Dict[str, float]
                               ) -> List[Tuple[FuzzyRule, float]]:
         """
-        Retorna la lista de reglas con sus fuerzas de disparo.
-        Útil para análisis y debugging del controlador.
+        Retorna todas las reglas junto con su fuerza de activación.
+
+        Este método existe para trazabilidad y análisis explicable. La GUI y la
+        documentación del proyecto lo usan para mostrar:
+
+        - qué reglas participaron en un caso;
+        - cuáles dominaron la decisión;
+        - y con qué intensidad se activó cada una.
+
+        Args:
+            crisp_inputs: Caso puntual a evaluar.
+
+        Returns:
+            Lista de tuplas `(regla, fuerza)` para toda la base de reglas,
+            incluyendo reglas con activación nula.
         """
         memberships = self._fuzzify(crisp_inputs)
         results = []

@@ -1,6 +1,26 @@
 """
-Evaluacion del algoritmo genetico con enfasis en ahorro
-manteniendo el confort del controlador difuso base.
+Evaluación de fitness para la optimización genética del controlador difuso.
+
+Este módulo define cómo se juzga si un cromosoma representa una mejora real
+respecto al controlador base. La idea central es importante:
+
+- el GA no optimiza directamente temperaturas, costos o reglas aisladas;
+- optimiza parámetros de membresía del sistema difuso;
+- y cada candidato se evalúa ejecutando una simulación completa.
+
+Por eso el fitness aquí no es una fórmula abstracta desconectada del sistema,
+sin la traducción numérica de una comparación operativa entre:
+
+- el controlador difuso base;
+- y una variante difusa construida a partir de un cromosoma.
+
+La política de evaluación prioriza:
+
+- ahorro económico;
+- ahorro energético;
+- mantenimiento del confort;
+- y rechazo de soluciones que, aunque tengan score aparente, sean poco
+  defendibles frente al controlador base.
 """
 
 from dataclasses import dataclass
@@ -36,8 +56,21 @@ class CandidateRecord:
 
 class FitnessEvaluator:
     """
-    Evalua cromosomas buscando ahorro energetico y economico
-    sin degradar el confort del controlador difuso base.
+    Evalúa cromosomas del GA contra una referencia construida con el
+    controlador difuso original.
+
+    Cada cromosoma se interpreta como una parametrización alternativa de las
+    funciones de pertenencia. El proceso de evaluación es:
+
+    1. decodificar el cromosoma;
+    2. reconstruir un controlador difuso candidato;
+    3. correr una simulación temporal completa;
+    4. calcular métricas;
+    5. convertir esas métricas en un score escalar.
+
+    Aunque el GA necesita una puntuación escalar para evolucionar, este
+    evaluador intenta preservar la lógica multiobjetivo del problema:
+    confort, costo, energía y comportamiento operativo.
     """
 
     def __init__(self, config: AppConfig, base_controller: FuzzyController):
@@ -49,6 +82,20 @@ class FitnessEvaluator:
         self.best_candidate: Optional[CandidateRecord] = None
 
     def _build_reference(self) -> OptimizationReference:
+        """
+        Construye la referencia base contra la cual se compararán los candidatos.
+
+        Esta simulación se ejecuta una sola vez al crear el evaluador y sirve
+        para fijar:
+
+        - el nivel de confort del controlador original;
+        - el costo original;
+        - el consumo original;
+        - y un piso de confort aceptable.
+
+        Returns:
+            Objeto con métricas base y umbral mínimo de confort admisible.
+        """
         simulator = Simulator(self.config)
         result = simulator.run(self.base_controller.get_controller_function(), label="ga_reference")
         metrics = calculate_metrics(result.data, self.config.simulation, self.config.metrics)
@@ -56,6 +103,20 @@ class FitnessEvaluator:
         return OptimizationReference(metrics=metrics, comfort_floor=comfort_floor)
 
     def evaluate(self, chromosome: np.ndarray) -> float:
+        """
+        Evalúa un cromosoma individual.
+
+        El cromosoma no se evalúa directamente. Primero se convierte en un
+        controlador difuso candidato y después se lo pone a prueba en la
+        simulación completa del sistema.
+
+        Args:
+            chromosome: Vector real con parámetros de membresía codificados.
+
+        Returns:
+            Score escalar del candidato. Si ocurre un error estructural o de
+            simulación, se retorna una penalización fuerte.
+        """
         self._eval_count += 1
         try:
             controller = self._decode_controller(chromosome)
@@ -68,18 +129,58 @@ class FitnessEvaluator:
             return -5.0
 
     def evaluate_population(self, population: np.ndarray) -> np.ndarray:
+        """
+        Evalúa secuencialmente toda una población.
+
+        Args:
+            population: Matriz `n_individuos x n_genes`.
+
+        Returns:
+            Vector de fitness por individuo.
+        """
         fitnesses = np.zeros(len(population))
         for idx, chromosome in enumerate(population):
             fitnesses[idx] = self.evaluate(chromosome)
         return fitnesses
 
     def _decode_controller(self, chromosome: np.ndarray) -> FuzzyController:
+        """
+        Reconstruye un controlador difuso candidato a partir de un cromosoma.
+
+        Args:
+            chromosome: Vector de genes reales.
+
+        Returns:
+            Clon del controlador base con parámetros de membresía reemplazados.
+        """
         params = self.encoder.decode(chromosome)
         controller = self.base_controller.clone()
         controller.set_membership_params(params)
         return controller
 
     def _optimization_score(self, metrics: PerformanceMetrics) -> float:
+        """
+        Convierte métricas de simulación en un score escalar para el GA.
+
+        La función combina:
+
+        - ahorro de costo;
+        - ahorro de energía;
+        - reducción de picos;
+        - reducción de variabilidad;
+        - penalizaciones por degradación térmica;
+        - y una bonificación mínima por mejora de confort.
+
+        El principio dominante es deliberado: una solución no debe ganar solo
+        porque ahorra un poco si a cambio empeora de forma apreciable el
+        comportamiento térmico.
+
+        Args:
+            metrics: Métricas obtenidas al simular el candidato.
+
+        Returns:
+            Score escalar mayor es mejor.
+        """
         ref = self.reference.metrics
 
         energy_saving = self._relative_improvement(ref.total_energy_kwh, metrics.total_energy_kwh)
@@ -98,15 +199,17 @@ class FitnessEvaluator:
             0.0,
         )
 
-        # Penaliza con fuerza perder confort respecto al controlador base.
+        # Perder confort respecto al baseline es una señal fuerte de mala calidad.
         comfort_penalty = (comfort_drop / 100.0) * 5.0
 
+        # El ahorro económico es la prioridad principal; energía es secundaria.
         savings_core = 0.65 * cost_saving + 0.25 * energy_saving
         operational_bonus = 0.0
         if cost_saving > 0.0 or energy_saving > 0.0:
             operational_bonus = 0.06 * peak_saving + 0.04 * variability_saving
 
-        # Mejora de confort muy levemente premiada solo si no empeora ahorro.
+        # La mejora de confort solo se premia levemente para evitar soluciones
+        # que "compren" confort con más gasto.
         comfort_bonus = 0.0
         if savings_core >= 0.0:
             comfort_bonus = min(max(comfort_delta, 0.0), 1.0) / 500.0
@@ -122,6 +225,18 @@ class FitnessEvaluator:
         return float(score)
 
     def _register_candidate(self, chromosome: np.ndarray, metrics: PerformanceMetrics, score: float):
+        """
+        Registra el mejor candidato observado según criterios de factibilidad.
+
+        El proyecto distingue entre:
+
+        - score numérico;
+        - y solución defendible.
+
+        Por eso se marca como factible a un candidato que al menos no empeora
+        confort, costo y energía frente al baseline. Esa factibilidad participa
+        en el criterio de selección del `best_candidate`.
+        """
         ref = self.reference.metrics
         feasible = (
             metrics.comfort_percentage >= ref.comfort_percentage
@@ -160,6 +275,7 @@ class FitnessEvaluator:
 
     @staticmethod
     def _relative_improvement(reference_value: float, candidate_value: float) -> float:
+        """Calcula mejora relativa; positiva si el candidato mejora respecto a la referencia."""
         if abs(reference_value) < 1e-9:
             return 0.0
         return (reference_value - candidate_value) / abs(reference_value)
@@ -172,4 +288,5 @@ class FitnessEvaluator:
         self._eval_count = 0
 
     def get_best_candidate(self) -> Optional[CandidateRecord]:
+        """Retorna el mejor candidato factible observado durante toda la búsqueda."""
         return self.best_candidate

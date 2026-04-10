@@ -2,8 +2,22 @@
 # evaluation.py - Evaluación comparativa base vs optimizado
 # ==============================================================================
 """
-Ejecuta y compara simulaciones con el controlador base y el optimizado.
-Genera los datos necesarios para gráficos y reportes comparativos.
+Evaluación comparativa entre controlador base y controlador optimizado.
+
+Este módulo existe para la capa de análisis y presentación del proyecto.
+Mientras `fitness.py` se centra en producir un score para el algoritmo
+genético, este módulo se centra en responder una pregunta distinta:
+
+“Una vez terminada la optimización, ¿cómo se comporta el sistema base frente
+al sistema optimizado cuando ambos se comparan con las mismas condiciones?”
+
+Por eso aquí se ejecutan simulaciones completas y se conservan resultados
+listos para:
+
+- tablas comparativas;
+- gráficos base vs optimizado;
+- resúmenes textuales;
+- exportación de reportes.
 """
 
 from typing import Dict, Tuple, Optional
@@ -19,7 +33,14 @@ from app.simulation.metrics import (
 
 class ComparativeEvaluation:
     """
-    Ejecuta y compara simulaciones base vs optimizado.
+    Ejecuta y conserva comparaciones operativas entre dos controladores.
+
+    Este objeto encapsula el flujo de evaluación posterior a la optimización:
+
+    - correr baseline;
+    - correr versión optimizada;
+    - calcular métricas de ambos;
+    - construir estructuras comparables para GUI y reportes.
     """
     
     def __init__(self, config: AppConfig):
@@ -32,7 +53,12 @@ class ComparativeEvaluation:
 
     def run_base(self, controller: FuzzyController,
                  progress_callback=None) -> SimulationResult:
-        """Ejecuta simulación con controlador base."""
+        """
+        Ejecuta la simulación del controlador base y guarda sus métricas.
+
+        Returns:
+            Resultado completo de simulación para el baseline.
+        """
         simulator = Simulator(self.config)
         self.base_result = simulator.run(
             controller.get_controller_function(),
@@ -48,7 +74,12 @@ class ComparativeEvaluation:
 
     def run_optimized(self, controller: FuzzyController,
                       progress_callback=None) -> SimulationResult:
-        """Ejecuta simulación con controlador optimizado."""
+        """
+        Ejecuta la simulación del controlador optimizado y guarda sus métricas.
+
+        Returns:
+            Resultado completo de simulación para el controlador afinado.
+        """
         simulator = Simulator(self.config)
         self.optimized_result = simulator.run(
             controller.get_controller_function(),
@@ -64,10 +95,10 @@ class ComparativeEvaluation:
 
     def compare(self) -> Dict:
         """
-        Compara métricas entre base y optimizado.
-        
+        Construye la comparación métrica final entre ambos controladores.
+
         Returns:
-            Diccionario con comparación detallada.
+            Diccionario con métricas base, optimizadas y cambio porcentual.
         """
         if self.base_metrics is None or self.optimized_metrics is None:
             raise RuntimeError("Debe ejecutar ambas simulaciones antes de comparar.")
@@ -76,7 +107,13 @@ class ComparativeEvaluation:
         return self.comparison
 
     def get_comparison_dataframe(self) -> pd.DataFrame:
-        """Retorna la comparación como DataFrame para visualización."""
+        """
+        Convierte la comparación en una tabla adecuada para visualización.
+
+        Returns:
+            `DataFrame` con una fila por métrica y columnas para base,
+            optimizado y variación porcentual.
+        """
         if self.comparison is None:
             self.compare()
         
@@ -92,7 +129,12 @@ class ComparativeEvaluation:
         return pd.DataFrame(rows)
 
     def get_summary_text(self) -> str:
-        """Genera resumen textual de la comparación."""
+        """
+        Genera un resumen textual legible para consola o reportes simples.
+
+        Returns:
+            Texto multilínea con el resumen comparativo.
+        """
         if self.comparison is None:
             self.compare()
         

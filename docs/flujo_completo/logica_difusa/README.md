@@ -17,15 +17,23 @@ El sistema debe poder responder preguntas del tipo:
 ## Archivos principales
 
 - `app/fuzzy/controller.py`
-- `app/fuzzy/device_specs.py`
+- `app/simulation/devices.py`
 - `app/fuzzy/rules.py`
 - `app/fuzzy/membership.py`
 - `app/fuzzy/inference.py`
 - `app/fuzzy/linguistic.py`
 
-## Qué define `device_specs.py`
+## Documentación complementaria
 
-`app/fuzzy/device_specs.py` define la especificación difusa de cada dispositivo.
+Para explicar con más profundidad la relación entre confort, tarifa y comportamiento térmico, revisa:
+
+- [Confort, Tarifa y Trayectoria Térmica](./confort_tarifa_y_trayectoria_termica.md)
+
+## Qué define la especificación difusa del dispositivo
+
+La especificación difusa de cada dispositivo vive actualmente en:
+
+- `app/simulation/devices.py`
 
 Cada especificación contiene:
 

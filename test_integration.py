@@ -97,7 +97,7 @@ plt.close('all')
 # Test 7: GA chromosome with humidity
 print("\n=== Test 7: GA Chromosome with Humidity ===")
 from app.genetic.chromosome import ChromosomeEncoder
-encoder = ChromosomeEncoder(config.fuzzy)
+encoder = ChromosomeEncoder(controller=fc)
 print(f"  Chromosome length: {encoder.chromosome_length}")
 default = encoder.encode_default()
 print(f"  Default chromosome shape: {default.shape}")

@@ -139,8 +139,8 @@ def plot_all_membership_functions(variables: Dict[str, FuzzyVariable],
         axes_flat[idx].set_visible(False)
 
     fig.suptitle('Funciones de Pertenencia del Sistema Difuso',
-                 fontsize=14, fontweight='bold', y=1.01)
-    fig.tight_layout()
+                 fontsize=14, fontweight='bold', y=0.995)
+    fig.tight_layout(rect=[0.0, 0.0, 1.0, 0.97])
     return fig
 
 
@@ -434,4 +434,65 @@ def plot_mf_comparison(var_name: str,
     fig.suptitle(f'Comparacion de Funciones de Pertenencia: {var_name.replace("_", " ").title()}',
                  fontsize=13, fontweight='bold')
     fig.tight_layout()
+    return fig
+
+
+def plot_all_mf_comparisons(
+    base_variables: Dict[str, FuzzyVariable],
+    optimized_variables: Dict[str, FuzzyVariable],
+    base_output_variable: FuzzyVariable,
+    optimized_output_variable: FuzzyVariable,
+) -> Figure:
+    """
+    Compara todas las funciones de pertenencia optimizadas vs originales.
+
+    Se construye una grilla con dos columnas:
+    - izquierda: base/original
+    - derecha: optimizado
+
+    Cada fila corresponde a una variable de entrada o a la salida.
+    """
+    apply_style()
+
+    variable_names = list(base_variables.keys()) + ["__output__"]
+    rows = len(variable_names)
+    fig, axes = plt.subplots(rows, 2, figsize=(16, max(7, rows * 4.1)), sharey=False)
+
+    if rows == 1:
+        axes = np.array([axes])
+
+    colors_list = ['#e94560', '#53d8fb', '#66bb6a', '#f5a623',
+                   '#ab47bc', '#ff7043', '#4fc3f7', '#ef5350']
+
+    for row_idx, variable_name in enumerate(variable_names):
+        if variable_name == "__output__":
+            display_name = "Salida de Control"
+            base_variable = base_output_variable
+            optimized_variable = optimized_output_variable
+        else:
+            display_name = variable_name.replace('_', ' ').title()
+            base_variable = base_variables[variable_name]
+            optimized_variable = optimized_variables[variable_name]
+
+        for col_idx, (ax, variable, subtitle) in enumerate([
+            (axes[row_idx][0], base_variable, "Base (Original)"),
+            (axes[row_idx][1], optimized_variable, "Optimizado (GA)"),
+        ]):
+            for idx, (set_name, fuzzy_set) in enumerate(variable.sets.items()):
+                color = colors_list[idx % len(colors_list)]
+                membership = fuzzy_set.evaluate(variable.universe)
+                ax.plot(variable.universe, membership, color=color, linewidth=2,
+                        label=set_name.replace('_', ' '))
+                ax.fill_between(variable.universe, 0, membership, alpha=0.08, color=color)
+
+            ax.set_ylim(-0.05, 1.15)
+            ax.grid(True, alpha=0.2)
+            ax.legend(fontsize=8, loc='upper right')
+            ax.set_xlabel('Universo de Discurso')
+            if col_idx == 0:
+                ax.set_ylabel('Grado de Pertenencia')
+            ax.set_title(f"{display_name} | {subtitle}", fontsize=10.5, fontweight='bold')
+
+    fig.suptitle('Comparacion Completa de Funciones de Pertenencia', fontsize=14, fontweight='bold', y=0.995)
+    fig.tight_layout(rect=[0.0, 0.0, 1.0, 0.975], h_pad=2.2, w_pad=1.2)
     return fig

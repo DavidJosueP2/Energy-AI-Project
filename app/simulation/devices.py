@@ -402,12 +402,14 @@ class ControlledDevice:
         self.target_temperature = target_temperature
         self.comfort_range = comfort_range
         self.dt = dt
+        self.control_mode = "idle"
         self.reset()
 
     def reset(self, initial_temp: Optional[float] = None):
         self.temperature = initial_temp if initial_temp is not None else self.dynamics.initial_temperature
         self.power_level = 0.0
         self.consumption_kw = 0.0
+        self.control_mode = "idle"
 
     def step(
         self,
@@ -430,7 +432,23 @@ class ControlledDevice:
         delta_usage = cfg.usage_gain * self.dt * usage_load
         delta_control = cfg.control_gain * self.dt * ctrl_norm
 
-        self.temperature += delta_ambient + delta_occupancy + delta_solar + delta_usage - delta_control
+        temp_error = self.temperature - self.target_temperature
+        if self.descriptor.key == "hvac":
+            deadband = max(self.comfort_range * 0.5, 0.15)
+            if temp_error > deadband:
+                control_effect = -delta_control
+                self.control_mode = "cooling"
+            elif temp_error < -deadband:
+                control_effect = delta_control
+                self.control_mode = "heating"
+            else:
+                control_effect = 0.0
+                self.control_mode = "idle"
+        else:
+            control_effect = -delta_control
+            self.control_mode = "cooling" if ctrl_norm > 0.01 else "idle"
+
+        self.temperature += delta_ambient + delta_occupancy + delta_solar + delta_usage + control_effect
         self.temperature = float(np.clip(self.temperature, cfg.min_temperature, cfg.max_temperature))
 
         if ctrl_norm > 0.01:
@@ -445,6 +463,7 @@ class ControlledDevice:
             "device_temperature": round(self.temperature, 3),
             "device_power_level": round(self.power_level, 4),
             "device_consumption_kw": round(self.consumption_kw, 4),
+            "control_mode": self.control_mode,
         }
 
     def get_temp_error(self) -> float:

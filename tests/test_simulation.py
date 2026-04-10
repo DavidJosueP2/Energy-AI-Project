@@ -234,6 +234,22 @@ class TestSimulator:
 
         assert summer_result.data['temperature_outdoor'].mean() > winter_result.data['temperature_outdoor'].mean()
 
+    def test_winter_hvac_tracks_target_without_staying_cold(self):
+        """En invierno el HVAC debe poder calentar y acercarse a la meta termica."""
+        from app.fuzzy.controller import FuzzyController
+
+        cfg = AppConfig()
+        cfg.simulation.horizon_hours = 72
+        cfg.simulation.scenario_type = 'invierno'
+        cfg.simulation.target_temperature = 22.0
+        cfg.simulation.comfort_range = 0.5
+
+        controller = FuzzyController(cfg.fuzzy, device_key='hvac')
+        result = Simulator(cfg).run(controller.get_controller_function())
+
+        assert result.data['temperature_indoor'].mean() > 21.0
+        assert 'heating' in result.data['control_mode'].values
+
 
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])

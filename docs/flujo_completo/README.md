@@ -71,3 +71,9 @@ Si quieres mostrar de dónde salen los gráficos o el `DataFrame`, revisa:
 
 - [Simulación y DataFrame](./simulacion_y_dataframe/README.md)
 - [GUI y Gráficos](./gui_y_graficos/README.md)
+
+La sección de simulación incluye ahora también:
+
+- un documento matemático del entorno y la dinámica térmica;
+- la relación entre temperatura exterior, ocupación, radiación y control;
+- la formulación simplificada del costo y del confort.

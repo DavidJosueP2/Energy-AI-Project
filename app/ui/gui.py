@@ -1,29 +1,7 @@
-# ==============================================================================
-# gui.py - Interfaz grafica profesional con PyQt5
-# ==============================================================================
-"""
-Interfaz grafica completa del sistema de gestion energetica inteligente.
-
-Caracteristicas principales:
-- Panel de configuracion con parametros editables
-- Selector de dispositivo (HVAC / Refrigerador)
-- Pestana de Inferencia Difusa interactiva con entradas linguisticas
-- Visualizacion de funciones de pertenencia
-- Visualizacion de reglas activadas
-- Ejecucion de simulacion base y optimizacion GA
-- Comparacion base vs optimizado en TODAS las vistas
-- Exportacion de resultados
-
-Sin emojis. Se usan iconos textuales donde corresponde.
-"""
-
 import sys
 import os
 import traceback
 from typing import Optional
-
-import numpy as np
-import pandas as pd
 
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
@@ -57,11 +35,6 @@ from app.visualization.report_export import (
     export_csv, generate_html_report
 )
 
-
-# ==============================================================================
-# Hilos de trabajo
-# ==============================================================================
-
 class SimulationWorker(QThread):
     """Hilo para ejecutar simulacion."""
     progress = pyqtSignal(int, int)
@@ -88,7 +61,6 @@ class SimulationWorker(QThread):
             self.finished.emit(result, metrics)
         except Exception as e:
             self.error.emit(f"Error en simulacion: {str(e)}\n{traceback.format_exc()}")
-
 
 class OptimizationWorker(QThread):
     """Hilo para optimizacion genetica."""
@@ -370,8 +342,8 @@ class MainWindow(QMainWindow):
         layout.addWidget(QLabel("Dispositivo:"), 0, 0)
         self.combo_device = QComboBox()
         self.combo_device.addItems([
-            "HVAC (Climatizacion)",
-            "Refrigerador"
+            "HVAC Mitsubishi MSZ-GL24NA / MUZ-GL24NA",
+            "Refrigerador Bosch KGN39AWCTG"
         ])
         self.combo_device.currentIndexChanged.connect(self._on_device_changed)
         layout.addWidget(self.combo_device, 0, 1)
@@ -948,6 +920,7 @@ class MainWindow(QMainWindow):
                   f"Costo: ${metrics.total_cost:.2f} | "
                   f"Confort: {metrics.comfort_percentage:.1f}%")
 
+        print(self.base_result.data)
         self._update_all_plots()
         self._update_metrics_table()
 
@@ -989,8 +962,7 @@ class MainWindow(QMainWindow):
         self._log(f"Optimizacion completada en {ga_result.total_time_seconds:.1f}s")
         self._log(f"   Mejor fitness: {ga_result.best_fitness:.4f} | "
                   f"Evaluaciones: {ga_result.total_evaluations}")
-
-        # Simulacion con controlador optimizado
+        
         self._log("Ejecutando simulacion optimizada...")
         sim = Simulator(self.config)
         self.optimized_result = sim.run(
@@ -1004,12 +976,10 @@ class MainWindow(QMainWindow):
                   f"Costo: ${self.optimized_metrics.total_cost:.2f} | "
                   f"Confort: {self.optimized_metrics.comfort_percentage:.1f}%")
 
-        # Actualizar TODOS los graficos con comparacion
         self._update_all_plots()
         self._update_ga_plot()
         self._update_metrics_table()
 
-        # Update hourly slider with optimized controller logic
         self._on_hour_changed(self.slider_hour.value())
 
         self.progress_bar.setValue(100)
@@ -1063,10 +1033,7 @@ class MainWindow(QMainWindow):
                 self._log(f"CSV exportados a: {dirpath}")
             except Exception as e:
                 self._on_error(f"Error CSV: {str(e)}")
-
-    # ------------------------------------------------------------------
-    # Progreso y errores
-    # ------------------------------------------------------------------
+    
     def _on_sim_progress(self, step, total):
         self.progress_bar.setValue(int((step / max(total, 1)) * 100))
 

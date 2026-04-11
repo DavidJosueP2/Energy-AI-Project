@@ -35,7 +35,17 @@ class SimulationResult:
 
 
 class Simulator:
-    """Ejecuta una simulacion temporal usando el controlador difuso activo."""
+    """Ejecuta una simulacion temporal usando el controlador difuso activo.
+
+    El flujo matematico por paso es:
+
+    1. leer el entorno en el instante k;
+    2. construir las entradas crisp del controlador difuso;
+    3. obtener un nivel de control u(k) en [0, 100];
+    4. actualizar la temperatura del dispositivo con el modelo dinamico;
+    5. calcular consumo, costo y confort;
+    6. registrar el estado en una fila del DataFrame.
+    """
 
     def __init__(self, config: AppConfig):
         self.config = config
@@ -75,6 +85,7 @@ class Simulator:
 
         for step in range(sim_c.num_steps):
             env_state = environment.get_state_at(step)
+            # Entradas crisp que luego seran fuzzificadas por el controlador.
             controller_inputs = self._build_controller_inputs(device, env_state)
 
             try:
@@ -90,11 +101,16 @@ class Simulator:
                 control_level=control_level,
             )
 
+            # Balance electrico horario:
+            #   P_total = P_base + P_dispositivo
             total_consumption = env_state["base_consumption"] + device_state["device_consumption_kw"]
+            # Costo horario:
+            #   costo_step = P_total * tarifa * Delta_t
             step_cost = total_consumption * env_state["tariff"] * sim_cfg.time_step_hours
             cumulative_cost += step_cost
             cumulative_energy += total_consumption * sim_cfg.time_step_hours
 
+            # El confort se evalua respecto a una banda alrededor del setpoint.
             temp_deviation = abs(device_state["device_temperature"] - target_temp)
             comfort_index = self._compute_comfort_index(temp_deviation, comfort_range)
 
@@ -144,6 +160,17 @@ class Simulator:
         return SimulationResult(pd.DataFrame(records), cfg, label)
 
     def _build_controller_inputs(self, device: ControlledDevice, env_state: Dict[str, float]) -> Dict[str, float]:
+        """Construye las entradas crisp del sistema difuso.
+
+        Refrigerador:
+            x = [T_interna, aperturas, carga, tarifa_norm]
+
+        HVAC:
+            x = [|T_interior - T_objetivo|, humedad, ocupacion, tarifa_norm]
+
+        En HVAC se conserva tambien ``raw_temp_error`` para trazabilidad y para
+        ajustar la sensibilidad segun ``comfort_range`` dentro del controlador.
+        """
         if self.config.simulation.device_key == "refrigerador":
             return {
                 "device_temperature": device.temperature,
@@ -168,12 +195,18 @@ class Simulator:
         }
 
     def _resolve_ambient_temperature(self, device_key: str, env_state: Dict[str, float]) -> float:
+        """Selecciona la temperatura ambiente efectiva del dispositivo."""
         if device_key == "refrigerador":
             return float(env_state["room_temperature"])
         return float(env_state["temperature_outdoor"])
 
     @staticmethod
     def _compute_comfort_index(temp_deviation: float, comfort_range: float) -> float:
+        """Calcula un indice de confort simple en [0, 1].
+
+        - Dentro de la banda de confort: 1.0
+        - Fuera de la banda: decae linealmente con la desviacion adicional
+        """
         if temp_deviation <= comfort_range:
             return 1.0
         return max(0.0, 1.0 - (temp_deviation - comfort_range) / 5.0)

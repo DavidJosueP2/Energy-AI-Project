@@ -4,6 +4,11 @@
 
 Esta sección explica cómo se ejecuta la simulación temporal, cómo se construyen los resultados y por qué el `DataFrame` es la fuente directa de los gráficos.
 
+Documentación matemática complementaria:
+
+- [Modelo Matemático del Entorno y la Dinámica](./modelo_matematico_entorno_y_dinamica.md)
+- [Parámetros Reales Bosch y Mitsubishi](./parametros_reales_bosch_mitsubishi.md)
+
 ## Archivos principales
 
 - `app/simulation/simulator.py`
@@ -120,6 +125,27 @@ Esto permite evaluar si la decisión difusa realmente:
 - reduce consumo;
 - reduce costo;
 - y responde razonablemente ante cambios del entorno.
+
+## Dónde están las fórmulas
+
+La documentación narrativa de esta carpeta explica el flujo. Las fórmulas
+principales del modelo están resumidas en:
+
+- [Modelo Matemático del Entorno y la Dinámica](./modelo_matematico_entorno_y_dinamica.md)
+
+Ahí se describen formalmente:
+
+- temperatura exterior;
+- humedad;
+- radiación solar;
+- tarifa normalizada;
+- carga base;
+- aproximación de temperatura ambiente del refrigerador;
+- balance térmico del HVAC;
+- balance térmico del refrigerador;
+- consumo eléctrico;
+- costo por paso temporal;
+- e índice de confort.
 
 ## Métricas calculadas
 

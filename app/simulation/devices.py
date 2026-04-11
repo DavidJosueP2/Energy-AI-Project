@@ -25,6 +25,8 @@ class DeviceDescriptor:
     """Metadatos compartidos del dispositivo."""
 
     key: str
+    manufacturer: str
+    model: str
     display_name: str
     control_display_name: str
     temperature_display_name: str
@@ -40,7 +42,11 @@ class DeviceDescriptor:
 
 @dataclass
 class DeviceDynamicsConfig:
-    """Configuracion fisica del modelo dinamico del dispositivo."""
+    """Configuracion fisica del modelo dinamico del dispositivo.
+
+    Los coeficientes de esta estructura gobiernan el balance termico discreto
+    aplicado en ``ControlledDevice.step(...)``.
+    """
 
     initial_temperature: float
     min_temperature: float
@@ -133,18 +139,30 @@ class DeviceDefinition:
 def _build_hvac_definition() -> DeviceDefinition:
     descriptor = DeviceDescriptor(
         key="hvac",
-        display_name="HVAC (Climatizacion)",
-        control_display_name="Nivel de climatizacion",
-        temperature_display_name="Temperatura interior",
+        manufacturer="Mitsubishi Electric",
+        model="MSZ-GL24NA / MUZ-GL24NA",
+        display_name="HVAC Mitsubishi MSZ-GL24NA / MUZ-GL24NA",
+        control_display_name="Nivel de climatizacion Mitsubishi",
+        temperature_display_name="Temperatura interior controlada",
         default_target_temperature=22.0,
         default_comfort_range=2.0,
-        target_min=18.0,
-        target_max=30.0,
+        target_min=16.0,
+        target_max=31.0,
         comfort_min=0.5,
         comfort_max=5.0,
         achievable_min_temperature=14.0,
         achievable_max_temperature=45.0,
     )
+    # Datos respaldados por Mitsubishi:
+    # - rango de consigna del control remoto: 16 a 31 C
+    # - capacidad nominal de enfriamiento: 22,400 BTU/h = 6.56 kW termicos
+    # - COP a 47 F: 3.46
+    # - potencia electrica nominal en cooling: 1,800 W
+    #
+    # Supuestos que permanecen como calibracion del modelo:
+    # - control_gain: se escala respecto al modelo anterior para reflejar la
+    #   mayor capacidad termica del equipo
+    # - standby_kw: se mantiene como sobreconsumo simplificado del sistema
     dynamics = DeviceDynamicsConfig(
         initial_temperature=26.0,
         min_temperature=14.0,
@@ -153,16 +171,17 @@ def _build_hvac_definition() -> DeviceDefinition:
         occupancy_gain=0.12,
         solar_gain=0.008,
         usage_gain=0.0,
-        control_gain=1.85,
-        max_power_kw=3.5,
+        control_gain=3.45,
+        max_power_kw=6.56,
         standby_kw=0.12,
-        cop=3.2,
+        cop=3.46,
     )
     fuzzy_spec = DeviceFuzzySpec(
         descriptor=descriptor,
         output_name="control_output",
         explanation=(
-            "Controlador difuso Mamdani para confort termico residencial. "
+            "Controlador difuso Mamdani para confort termico residencial "
+            "basado en un equipo Mitsubishi MSZ-GL24NA / MUZ-GL24NA. "
             "Prioriza confort, pero modula la potencia segun tarifa y ocupacion."
         ),
         variables=[
@@ -243,36 +262,49 @@ def _build_hvac_definition() -> DeviceDefinition:
 def _build_refrigerator_definition() -> DeviceDefinition:
     descriptor = DeviceDescriptor(
         key="refrigerador",
-        display_name="Refrigerador",
-        control_display_name="Nivel de enfriamiento",
-        temperature_display_name="Temperatura interna del refrigerador",
+        manufacturer="Bosch",
+        model="KGN39AWCTG",
+        display_name="Refrigerador Bosch KGN39AWCTG",
+        control_display_name="Nivel de enfriamiento Bosch",
+        temperature_display_name="Temperatura interna del compartimento fresh food",
         default_target_temperature=4.0,
         default_comfort_range=1.5,
-        target_min=-2.0,
+        target_min=2.0,
         target_max=8.0,
         comfort_min=0.5,
         comfort_max=4.0,
-        achievable_min_temperature=-3.0,
+        achievable_min_temperature=0.0,
         achievable_max_temperature=18.0,
     )
+    # Datos respaldados por Bosch:
+    # - setpoint recomendado fresh food: 4 C
+    # - rango configurable del compartimento de refrigeracion: 2 a 8 C
+    # - consumo anual: 162 kWh/a
+    # - clima de operacion: 10 a 43 C
+    #
+    # Datos derivados para el modelo dinamico:
+    # - max_power_kw y standby_kw se calibran para ser compatibles con el
+    #   consumo anual publicado, ya que la ficha no reporta potencia nominal
+    #   instantanea del compresor.
     dynamics = DeviceDynamicsConfig(
         initial_temperature=5.5,
-        min_temperature=-3.0,
+        min_temperature=0.0,
         max_temperature=18.0,
         ambient_coupling=0.060,
         occupancy_gain=0.0,
         solar_gain=0.0,
         usage_gain=0.85,
-        control_gain=4.60,
-        max_power_kw=0.22,
-        standby_kw=0.02,
-        cop=2.3,
+        control_gain=2.50,
+        max_power_kw=0.12,
+        standby_kw=0.004,
+        cop=2.0,
     )
     fuzzy_spec = DeviceFuzzySpec(
         descriptor=descriptor,
         output_name="control_output",
         explanation=(
-            "Controlador difuso Mamdani para refrigeracion domestica. "
+            "Controlador difuso Mamdani para refrigeracion domestica "
+            "basado en un Bosch KGN39AWCTG. "
             "Compensa aperturas y carga interna, moderando el consumo segun tarifa."
         ),
         variables=[
@@ -386,7 +418,24 @@ def build_runtime_dynamics_config(device_key: str, house_config=None) -> DeviceD
 
 
 class ControlledDevice:
-    """Dispositivo termico controlado por una salida difusa en [0, 100]."""
+    """Dispositivo termico controlado por una salida difusa en [0, 100].
+
+    El estado principal es la temperatura del dispositivo o del ambiente
+    controlado. El modelo usa un balance termico discreto de primer orden:
+
+        T(k+1) = T(k)
+               + Delta_ambiente
+               + Delta_ocupacion
+               + Delta_solar
+               + Delta_uso
+               + Delta_control
+
+    HVAC y refrigerador comparten esta forma general, pero el termino de
+    control se interpreta de forma distinta:
+
+    - HVAC: puede enfriar o calentar segun el error respecto a la meta.
+    - Refrigerador: solo enfria.
+    """
 
     def __init__(
         self,
@@ -419,6 +468,24 @@ class ControlledDevice:
         usage_load: float = 0.0,
         control_level: Optional[float] = None,
     ) -> Dict[str, float]:
+        """Avanza un paso temporal del modelo dinamico.
+
+        Variables intermedias:
+
+        - ctrl_norm = control_level / 100
+        - Delta_ambiente = k_a * (T_amb - T)
+        - Delta_ocupacion = k_o * occupancy
+        - Delta_solar = k_s * (radiacion / 1000) * 10
+        - Delta_uso = k_u * usage_load
+        - Delta_control = k_c * ctrl_norm
+
+        Para HVAC:
+            si T > T_obj + deadband  -> enfria  -> Delta_control con signo negativo
+            si T < T_obj - deadband  -> calienta -> Delta_control con signo positivo
+
+        Para refrigerador:
+            siempre enfria cuando hay control activo.
+        """
         cfg = self.dynamics
         if control_level is None:
             control_level = usage_load
@@ -426,14 +493,21 @@ class ControlledDevice:
         ctrl_norm = float(np.clip(control_level / 100.0, 0.0, 1.0))
         self.power_level = ctrl_norm
 
+        # Intercambio con el ambiente exterior o con el recinto donde esta el
+        # dispositivo. Si T_amb > T, el sistema gana calor; si T_amb < T, lo pierde.
         delta_ambient = cfg.ambient_coupling * self.dt * (ambient_temperature - self.temperature)
+        # Carga interna por presencia humana, usada solo por HVAC.
         delta_occupancy = cfg.occupancy_gain * self.dt * occupancy
+        # Ganancia por radiacion solar incidente, usada solo por HVAC.
         delta_solar = cfg.solar_gain * self.dt * (solar_radiation / 1000.0) * 10.0
+        # Perturbacion de uso: aperturas, carga interna u otras fuentes de calor.
         delta_usage = cfg.usage_gain * self.dt * usage_load
+        # Capacidad termica efectiva del actuador para el paso temporal actual.
         delta_control = cfg.control_gain * self.dt * ctrl_norm
 
         temp_error = self.temperature - self.target_temperature
         if self.descriptor.key == "hvac":
+            # La banda muerta evita oscilaciones innecesarias alrededor del setpoint.
             deadband = max(self.comfort_range * 0.5, 0.15)
             if temp_error > deadband:
                 control_effect = -delta_control
@@ -452,6 +526,8 @@ class ControlledDevice:
         self.temperature = float(np.clip(self.temperature, cfg.min_temperature, cfg.max_temperature))
 
         if ctrl_norm > 0.01:
+            # Consumo electrico simplificado:
+            #   P = P_max * u / COP + P_standby
             self.consumption_kw = cfg.max_power_kw * ctrl_norm / max(cfg.cop, 0.1) + cfg.standby_kw
         else:
             self.consumption_kw = 0.0

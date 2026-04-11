@@ -81,18 +81,21 @@ class HouseConfig:
     gamma: float = 0.008
     
     # Efecto del climatizador (°C por unidad de potencia relativa por hora)
-    # Para un sistema HVAC de ~3.5kW (12000 BTU) típico residencial.
-    delta: float = 1.85
+    # Calibrado sobre un Mitsubishi MSZ-GL24NA / MUZ-GL24NA de 22,400 BTU/h
+    # (~6.56 kW térmicos nominales en enfriamiento).
+    delta: float = 3.45
     
     # Temperatura interior inicial (°C)
     initial_temperature: float = 26.0
     
-    # Potencia máxima del HVAC en kW
-    hvac_max_power_kw: float = 3.5
+    # Capacidad térmica nominal del HVAC en kW.
+    # Fuente: Mitsubishi MSZ-GL24NA / MUZ-GL24NA, rated cooling capacity
+    # 22,400 BTU/h = 6.56 kW.
+    hvac_max_power_kw: float = 6.56
     
-    # Coeficiente de rendimiento (COP) del sistema HVAC
-    # Valores típicos: 2.5-4.0 para aires acondicionados modernos.
-    hvac_cop: float = 3.2
+    # Coeficiente de rendimiento (COP) del sistema HVAC.
+    # Fuente: Mitsubishi datasheet, COP at 47°F = 3.46.
+    hvac_cop: float = 3.46
     
     # Consumo en standby del HVAC cuando está encendido pero al mínimo (kW)
     hvac_standby_kw: float = 0.12

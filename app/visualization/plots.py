@@ -358,7 +358,7 @@ def plot_metrics_comparison_bars(base_metrics: PerformanceMetrics,
     fig, ax = plt.subplots(figsize=(10, 6))
     
     labels = ['Energía\nTotal\n(kWh)', 'Costo\nTotal\n($)', 'Confort\n(%)',
-              'Pico\nDemanda\n(kW)', 'Nivel de\nControl\nPromedio (%)', 'Fitness\nScore']
+              'Pico\nDemanda\n(kW)', 'Nivel de\nControl\nPromedio (%)', 'Performance\nScore']
     
     base_vals = [
         base_metrics.total_energy_kwh,
@@ -366,7 +366,7 @@ def plot_metrics_comparison_bars(base_metrics: PerformanceMetrics,
         base_metrics.comfort_percentage,
         base_metrics.peak_demand_kw,
         base_metrics.avg_control_level,
-        base_metrics.fitness_score * 100,
+        base_metrics.performance_score * 100,
     ]
     opt_vals = [
         opt_metrics.total_energy_kwh,
@@ -374,7 +374,7 @@ def plot_metrics_comparison_bars(base_metrics: PerformanceMetrics,
         opt_metrics.comfort_percentage,
         opt_metrics.peak_demand_kw,
         opt_metrics.avg_control_level,
-        opt_metrics.fitness_score * 100,
+        opt_metrics.performance_score * 100,
     ]
     
     x = np.arange(len(labels))

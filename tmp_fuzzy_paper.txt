@@ -1,0 +1,742 @@
+Acun and Çunkaş ﻿                                                                                                       Journal of Electrical Systems
+Journal of Electrical Systems and Inf Technol (2023) 10:31
+https://doi.org/10.1186/s43067-023-00100-6                                                                              and Information Technology
+
+
+ RESEARCH                                                                                                                                            Open Access
+
+Low‑cost fuzzy logic‑controlled home
+energy management system
+Furkan Acun1   and Mehmet Çunkaş2*   
+
+
+*Correspondence:
+mcunkas@selcuk.edu.tr                 Abstract
+1
+  ERG Operation Transportation        This paper presents a low-cost method for real-time energy management in resi-
+and Maintenance Inc., Ankara,         dences. Light, motion, temperature, and sound sensors are system inputs. Lighting,
+Turkey                                heating, and cooling output powers are set according to sensor data and consumer
+2
+  Department of Electrical
+and Electronics Engineering,          conditions. The system is controlled by using three different fuzzy logic inference
+Faculty of Technology, Selçuk         engines together with a microcontroller, sensors, and Nextion HMI display. The light-
+University, 42031 Konya, Turkey       ing, cooling, and heating can be precisely controlled according to the conditions of
+                                      the house. This ensures that energy consumption is minimized while maintaining an
+                                      appropriate level of comfort for the users. This shows that the system is designed as
+                                      user-friendly and can be operated easily by the consumer. Thus, whether the con-
+                                      sumers are at home or not, the consumption of electricity, water, and natural gas is
+                                      controlled, and unnecessary consumption is prevented. The results show that such sys-
+                                      tems can effectively reduce energy consumption while maintaining user comfort, and
+                                      this system could be an essential component of home energy management systems.
+                                      Keywords: Energy consumption, Home energy management systems (HEMS), Fuzzy
+                                      logic, Microcontroller, Smart home
+
+                                    Introduction
+                                    Energy management involves the planning, monitoring, and control of energy-related
+                                    processes to protect both energy resources and the environment. Energy efficiency is
+                                    closely linked to sustainable development, the selection of optimal fuel sources, the use
+                                    of renewable energy sources, and environmental awareness and safety [1].
+                                      The growth of population and urbanization has led to an increase in energy con-
+                                    sumption in households worldwide. Many countries are actively pursuing the imple-
+                                    mentation and development of energy management systems for their own benefit
+                                    [2–4]. Managing energy in residential settings requires a complex application pro-
+                                    cedure due to the many interdependent variables involved. To effectively manage
+                                    energy, an efficient energy management system is necessary to reduce total energy
+                                    consumption without compromising the comfort of the home’s occupants. Many
+                                    studies have been conducted on home energy management systems (HEMS), examin-
+                                    ing their impact on energy consumption, user behavior, and energy cost savings [5, 6].
+                                    Recently, there has been a significant increase in interest in energy management sys-
+                                    tems that employ advanced artificial intelligence techniques [7–9]. However, the need
+
+
+                                    © The Author(s) 2023. Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits
+                                    use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original
+                                    author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third
+                                    party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the mate-
+                                    rial. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or
+                                    exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://​
+                                    creat​iveco​mmons.​org/​licen​ses/​by/4.​0/.
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol   (2023) 10:31                                 Page 2 of 20
+
+
+
+
+                  for large amounts of data, the complexity of neural network models, and the difficulty
+                  of interpreting the results make these approaches difficult to apply.
+                    Fuzzy logic is increasingly being utilized in energy management applications to reduce
+                  energy costs. Kontogiannis et al. [10] studied the design of fuzzy systems to achieve
+                  minimum energy consumption in residential settings. Arabul et al. [11] developed a
+                  fuzzy logic controller for an off-grid smart home system to improve sustainable energy
+                  usage. Atefand and Eltawil [12] proposed a fuzzy logic controlled approach for heating,
+                  ventilation, and air conditioning systems to reduce consumption during peak loads in
+                  smart grids. This study was compared with four different scenarios, and the simulation
+                  results showed improved system performance. Baniyounes [13] conducted a simulation
+                  study to determine the occupancy level of a building and its effect on energy consump-
+                  tion using fuzzy logic-based controllers. Christopoulos et al. [14] proposed a new fuzzy
+                  logic model to improve cost, power consumption, and C     ­ O2 pollution for users. While
+                  there was no significant reduction in energy consumption, their model resulted in a sub-
+                  stantial decrease in ­CO2 emissions. Garrab et al. [15] designed a system that enhances
+                  energy efficiency during high power consumption demands of smart grids in residential
+                  settings. Colatta and Pau [16] used Bluetooth Low Energy in a wireless network to coor-
+                  dinate communication between household appliances using fuzzy logic. Overall, fuzzy
+                  logic-based approaches have proven to be a useful tool for energy management appli-
+                  cations by reducing energy consumption and improving energy efficiency in residential
+                  buildings.
+                    It is noteworthy that in some studies, fuzzy logic and intelligent optimization algo-
+                  rithms are used together. Behrooz et al.[17] presented an integrated approach that
+                  employs fuzzy logic and a genetic algorithm to control a building’s automation system.
+                  Fayaz and Kim [18] utilized a fuzzy controller and optimization algorithms to maxi-
+                  mize occupant comfort and minimize power consumption in residential settings. The
+                  authors compared the performance of the genetic algorithm, particle swarm optimiza-
+                  tion, and bat algorithm, with the recommended approach. Khalid et al. [19] performed
+                  energy management for smart homes by combining a fuzzy controller and optimization
+                  techniques. Jarndal [20] designed an adjustable smart home system that utilizes Genetic
+                  Algorithm-Fuzzy Logic-Neural Networks techniques to detect human behavior patterns
+                  and predict the user’s next behavior.
+                    The other studies focus on optimizing electricity usage in smart homes and micro-
+                  grids, prioritizing the reduction of energy consumption and enhancement of energy
+                  efficiency. They cover various approaches to energy management and demand response,
+                  incorporating both renewable energy sources and energy storage systems [21, 22]. Han
+                  et al. [23] proposed a system based on ZigBee and PLC-based renewable energy gate-
+                  way (REG) that optimizes home energy use. Anvari-Moghaddam et al. [24] developed a
+                  multi-objective nonlinear programming model for optimum energy use in smart homes.
+                  Erol-Kantarcı ve Mouftah [25] proposed an energy-saving system using wireless com-
+                  munication between grid-supplied or locally produced power. Bolurian et al. [26] inves-
+                  tigated the efficiency of HEMS by incorporating demand forecasting and renewable
+                  energy. Zunnurain et al. [27] proposed an advanced Demand Side Management frame-
+                  work for microgrids that utilizes an integrated Demand Response strategy.
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol   (2023) 10:31                                    Page 3 of 20
+
+
+
+
+                    While the use of artificial intelligence techniques and hybrid methods in energy man-
+                  agement systems offers significant advantages, it has some difficulties, especially in terms
+                  of cost and ease of implementation. Additionally, the installation and maintenance pro-
+                  cedures for these systems may require advanced technical skills. Moreover, there is still a
+                  need for more research on the real-time applications of these technologies. In this study,
+                  a real-time low-cost, and user-friendly energy management system using fuzzy logic is
+                  designed. The system is controlled by a microcontroller and uses three different fuzzy
+                  inference engines. These engines operate independently according to sensor data and
+                  control all conditions such as cooling–heating status, electricity price, lighting status,
+                  consumer status, electricity, water and natural gas usage, and date-time. The Nextion
+                  HMI screen is used to monitor and control all these conditions. The system was tested
+                  by assembling all the components on a model house. The lighting system allows 25%,
+                  50%, 75%, and 100% step adjustments according to the house conditions. Similarly, the
+                  cooling and heating systems have a 33%, 50%, and 100% step setting. The system, which
+                  can detect whether there are people or animals in the house, prevents unnecessary con-
+                  sumption by controlling the use of electricity, water, and natural gas when no one is pre-
+                  sent. The developed energy management system, being cost-effective and easy to apply
+                  to residences, provides a reduction in energy bills. In addition, the user-friendly system
+                  enables it to reach a wider audience of homeowners and expands energy management.
+
+
+                  Material and methods
+                  Efforts to enhance energy efficiency in homes can be more effective if the following
+                  conditions are considered [28]: (a) A higher energy consumption in a house indicates a
+                  greater potential for energy savings. (b) Improvements to energy systems are more finan-
+                  cially effective when electricity and fuel costs are higher. (c) When the ambient tempera-
+                  tures are closer to the desired temperature, the energy consumption will be lower.
+                     Consumer behavior is highly variable due to human nature. It is crucial to alter behav-
+                  ior in relation to the usage of electrical energy, but people frequently require reminders,
+                  making technological interventions the most effective solution. By effectively managing
+                  electrical energy, various benefits can be attained, including energy savings, lowered bill-
+                  ing costs, and financial savings [29].
+                     In this study, a fuzzy logic-based energy management system is designed for residen-
+                  tial homes. Fuzzy logic rules are applied to set air conditioning and lighting, ensuring the
+                  most suitable temperature and lighting. The system utilizes various sensors to identify
+                  the types of consumers in the homes and establish consumption restrictions for electric-
+                  ity, water, and natural gas based on factors such as whether the consumer is a human or
+                  a pet. The system is also capable of detecting when the consumer is not present in the
+                  residence. In this way, energy consumption is reduced by increasing energy efficiency,
+                  and while energy management is ensured, unnecessary consumption is restricted with-
+                  out compromising consumer comfort. The structure of the proposed system is shown in
+                  Fig. 1.
+
+                  System components
+                  The system uses temperature, light, sound, and motion sensors, as well as a precision
+                  clock module and an 18F46K20 microcontroller. It includes a 100-W heating element
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol   (2023) 10:31                                         Page 4 of 20
+
+
+
+
+                    Fig. 1 Overview of the proposed system
+
+
+
+
+                  for warming, a 310-W Peltier cooler for chilling, and a strip LED for illumination. The
+                  4.3-inch Nextion HMI LED screen allows for manual control, real-time monitoring of
+                  results, and automatic control of the system, allowing users to adjust operating condi-
+                  tions as needed. Table 1 presents a list of the system’s components and features.
+
+                  Proposed fuzzy system
+                  In many real-world problems, the inputs can be uncertain and the outputs probabilistic
+                  or approximate. It is important to determine the problem-specific algorithm [30]. How-
+                  ever, fuzzy logic is particularly useful in real-time control systems as it responds quickly
+                  and accurately to uncertainties [31, 32]. In this study, a fuzzy logic method is proposed
+                  to optimize energy use in a household by controlling various energy-consuming devices.
+                  The system employs three different inference engines, with each engine working inde-
+                  pendently based on sensor data. The output obtained from the first inference engine is
+                  used as input for the second inference engine [33]. The overall structure of the designed
+                  system is depicted in Fig. 2. The system’s inputs comprise time, motion changes, sound
+                  changes, interior lighting light intensity, exterior lighting light intensity, electricity price,
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol    (2023) 10:31                                                    Page 5 of 20
+
+
+
+
+                  Table 1 System component and specification
+
+                  Temperature sensor (NTC)       10 KΩ resistor, 5 mm diameter, and 23 mm leg length
+                  Light sensor (LDR)             5 mm body diameter, resistance ranging from 150Ω to 500KΩ
+                  Sound sensor                   Microphone with 5 mm body diameter, 150Ω–500KΩ resistance, 2.2KΩ output
+                                                 impedance, 1–10 V operating range, max power 0.5 mA
+                  Motion sensor                  Operating voltage range 3.3–15 V, motion detection distance 5 m, output time
+                                                 adjustable between 2.5 s and 1 h
+                  Precision clock module         Operating voltage range 3.3–5 V, 8 gr weight, programmable square wave output,
+                                                 internal AT24C32 memory (32 KB)
+                  HMI LCD                        480 × 272 Resolution, 16 MB internal memory, 2 KB RAM, micro sd card slot, 5 V
+                                                 operating voltage
+                  Microcontroller                8-bit, 40 pins, 3.8 KB RAM, 64 KB program memory size
+                  12 V adapter                   100–240 V AC input voltage, 12 V output voltage, 29 A output current, 350W
+                  Model house and test cabin     Wooden model house with 40 cm width, 40 cm length, and 25 cm height
+
+
+
+
+                    Fig. 2 General structure of the proposed fuzzy system
+
+
+
+
+                  and ambient temperature. Three output parameters are determined: consumer situation,
+                  interior lighting output power, and air conditioning output power.
+
+
+                  Fuzzy inference engine I
+                  Fuzzy inference engine-1 consists of 108 rules. Light, sound, motion sensors, and real-
+                  time clock data are determined as inputs in the inference mechanism. Consumer situa-
+                  tion is determined as output. The system structure is shown in Fig. 3. Examples of the
+                  rule base are given below.
+
+                      If Indoor Light Intensity is LOW, Sound Change is LESS, Motion Variation is LESS,
+                      and Real Time is “MORNING”, Consumer Situation is “NONE”,
+                      …
+                      If Indoor Light Intensity is LOW, Sound Change is LESS, Motion Change is Normal
+                      and Real Time is "NOON", Consumer Situation is "HUMAN AVAILABLE",
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol   (2023) 10:31                                  Page 6 of 20
+
+
+
+
+                    Fig. 3 Fuzzy inference engine I
+
+
+
+
+                      …
+                      If Indoor Light Intensity is LOW, Sound Change is NORMAL, Motion Change is
+                      LESS, and Real Time is “MORNING”, Consumer Situation is “PET AVAILABLE”,
+
+
+                     Figure 4a–e displays the membership functions for the inputs and outputs in the fuzzy
+                  inference system structure. Triangular and trapezoidal membership functions are uti-
+                  lized to transform inputs and outputs into fuzzy values. The Mamdani minimum infer-
+                  ence mechanism is used to obtain final fuzzy values, which are then converted into the
+                  output value through the centroid defuzzification method. The resulting output value
+                  indicates the consumer state, which is classified into three categories: "No Consumer,"
+                  "Pet Available," and "People Available."
+
+
+
+                  Fuzzy inference engine II
+                  The consumer situation obtained from the first fuzzy inference mechanism, electricity
+                  price, and temperature data is determined as inputs in this inference mechanism. Cool-
+                  ing and heating output power has been determined as output. The system structure is
+                  shown in Fig. 5. In the second fuzzy inference system, the rule base consists of 45 rules.
+                  Examples of the rule base are given below.
+
+                      If the Consumer Situation is "HUMAN AVAILABLE ", Electricity Price is "LOW"
+                      and Ambient Temperature is "TOO HOT", Cooling and Heating Output Power is
+                      "100% COOLING",
+                      …
+                      If the Consumer Situation is "PET AVAILABLE ", Electricity Price is "LOW" and
+                      Ambient Temperature is "TOO HOT", Cooling and Heating Output Power is "100%
+                      COOLING",
+                      …
+                      If Consumer Situation is “NO CONSUMER”, Electricity Price is “LOW” and Ambi-
+                      ent Temperature is “TOO COLD”, the Cooling and Heating Output Power is
+                      “COOLING AND HEATING OFF”,
+                      …
+                      If the Consumer Situation is "HUMAN AVAILABLE ", Electricity Price is "HIGH"
+                      and Ambient Temperature is "TOO COLD", Cooling and Heating Output Power is
+                      "66% HEATING",
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol   (2023) 10:31                                                Page 7 of 20
+
+
+
+
+                    Fig. 4 a Motion change fuzzy membership function. b Sound change fuzzy membership function. c Indoor
+                    light intensity fuzzy membership function. d Real-time fuzzy membership function. e Consumer situation
+                    fuzzy membership function
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol   (2023) 10:31                                     Page 8 of 20
+
+
+
+
+                    Fig. 5 Fuzzy inference engine II
+
+
+
+                      …
+                      If the Consumer Situation is "HUMAN AVAILABLE ", Electricity Price is "LOW"
+                      and Ambient Temperature is "TOO COLD", Cooling and Heating Output Power is
+                      "100% HEATING",
+
+
+                    The second fuzzy inference engine employs triangular membership functions as
+                  shown in Fig. 6a–c. Inputs and outputs are transformed into fuzzy values using trian-
+                  gular membership functions, and their corresponding fuzzy membership degrees are
+                  determined. After processing the inputs in the fuzzy decision table, the fuzzy values for
+                  the cooling and heating output powers are determined using the Mamdani minimum
+                  inference mechanism. The Centroid defuzzification method is then used to convert
+                  these values to the output value, and the final output is calculated. The cooling and heat-
+                  ing output powers are classified as “100% Cooling,” “66% Cooling,” “33% Cooling,” “Cool-
+                  ing and Heating Off,” “33% Heating,” “66% Heating” and “100% Heating.”
+
+
+                  Fuzzy inference engine III
+                  The inputs for this inference mechanism include light data and electricity prices, while
+                  the output is the power level for interior lighting. The system’s structure is illustrated in
+                  Fig. 7. In the third fuzzy inference system, the rule base comprises 27 rules. Examples of
+                  rules from the rule base are provided below.
+
+                      If Electricity Price is “LOW”, Indoor Light Intensity is “LOW” and Outdoor Light
+                      Intensity is “LOW”, Indoor Lighting Output Power is “LEVEL 5”,
+                      …
+                      If Electricity Price is “NORMAL”, Indoor Light Intensity is “LOW” and Outdoor Light
+                      Intensity is “LOW”, Indoor Lighting Output Power is “LEVEL 4”,
+                      …
+                      If Electricity Price is “LOW”, Indoor Light Intensity is “HIGH” and Outdoor Light
+                      Intensity is “NORMAL”, Indoor Lighting Output Power is “LEVEL 3”,
+                      …
+                      If Electricity Price is “NORMAL”, Indoor Light Intensity is “NORMAL” and Out-
+                      door Light Intensity is “NORMAL”, Indoor Lighting Output Power is “LEVEL 2”,
+                      …
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol   (2023) 10:31                                                  Page 9 of 20
+
+
+
+
+                    Fig. 6 a Electricity price fuzzy membership function. b Ambient temperature fuzzy membership function. c
+                    Cooling and heating output power fuzzy membership function
+
+
+
+
+                    Fig. 7 Fuzzy inference engine III
+
+
+
+                      If Electricity Price is “HIGH”, Indoor Light Intensity is “HIGH” and Outdoor Light
+                      Intensity is “HIGH”, Indoor Lighting Output Power is “LEVEL 1”
+
+
+                    The triangle membership functions are illustrated in Fig. 8a–c for input and output
+                  variables of the third fuzzy inference engine. Inputs and outputs are transformed into
+                  fuzzy values with triangular membership functions and fuzzy membership degrees are
+                  obtained. After the inputs are processed, the fuzzy values of the interior lighting output
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol   (2023) 10:31                                               Page 10 of 20
+
+
+
+
+                    Fig. 8 a Indoor light intensity fuzzy membership function. b Outdoor light intensity fuzzy membership
+                    function. c Indoor lighting output power fuzzy membership function
+
+
+
+
+                  power are determined with the help of the Mamdani minimum inference mechanism.
+                  The Centroid defuzzification method is used to convert these values to the output val-
+                  ues. The interior lighting output power is classified as “Level 1,” “Level 2,” “Level 3,”
+                  “Level 4” and “Level 5.” At Level 1, the indoor lighting remains switched off.
+
+                  Circuit and visual design
+                  All control is performed through the Nextion 4.3-inch HMI LCD screen. Two sepa-
+                  rate options have been constructed: a manual test mode and a normal operating mode.
+                  The sensors are installed on the model house and connected to the electronic board.
+                  In addition to the menu displayed on the Nextion LCD screen, the output powers for
+                  the interior lighting, cooling, and heating are also indicated by the level LEDs on the
+                  electronic board. Filter capacitors have been included to decrease the impact of any
+                  electromagnetic noise that could arise from the microcontroller, sensors, or other cir-
+                  cuit components. The 18F46K20 microcontroller, which is responsible for the control,
+                  and communication with the Nextion LCD, the DS 3231 precision clock module, and
+                  all other management, is programmed utilizing the C programming language. First, cir-
+                  cuit simulation tests were conducted in the Proteus program. Following that, the printed
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol   (2023) 10:31                                     Page 11 of 20
+
+
+
+
+                  circuit was created by transferring it onto the PCB. The electronic board structure for
+                  the system was designed in the Proteus program, and the PCB diagram is presented in
+                  Fig. 9.
+                     To conduct experimental studies on the system, a model house was designed, and sen-
+                  sors were installed in appropriate locations. Their physical connections were made to
+                  the control card. Analog data collected from the sensors were converted to digital for-
+                  mat and processed in the microcontroller. The design of the model house used for exper-
+                  imental studies and the placement of sensors are illustrated in Fig. 10.
+                     The Nextion LCD screen interface, which controls the device’s operation, is designed
+                  using the Nextion Editor program. The homepage design is displayed in Fig. 11. In this
+                  menu, the brightness adjustment of the screen is made from the part hidden in the upper
+                  left. Here, it is possible to reach different menus. The instantaneous status of electricity,
+                  water, and natural gas is shown to the consumer in Fig. 12. Electricity, water, and natural
+                  gas consumption are closed when there is no consumer. If the consumer is a pet, the nat-
+                  ural gas valve is closed; water and electricity consumption are activated. If the consumer
+                  is human, electricity, water, and natural gas are active. Electricity, water, and natural gas
+                  consumption are monitored from this menu.
+                     The consumer situation obtained from the first inference engine, the electricity
+                  price selected, and the value of the temperature sensed are instantly monitored and
+                  the cooling and heating output power is calculated. Electricity price is shown as a
+                  slide bar. Fuzzy results are mathematically calculated based on the user’s selection of
+                  low, normal, or high electricity prices. In addition, the indoor lighting output power
+                  is calculated based on the instantaneous light intensity detected by light sensors
+                  installed inside and outside the model house, and the user-selected electricity price.
+                  Figure 13 displays the manual test page, which offers manual control of variables such
+                  as time, indoor and outdoor light intensity, number of motion and sound detections,
+
+
+
+
+                    Fig. 9 The designed control card
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol   (2023) 10:31                                  Page 12 of 20
+
+
+
+
+                    Fig. 10 Model house sensor placement and structure
+
+
+
+
+                    Fig. 11 Nextion LCD screen home section
+
+
+
+
+                  ambient temperature, and electricity price for each desired test scenario. The page
+                  also displays the results of three different inference engines for electricity, water, and
+                  natural gas situations on the right-hand side. The first page presents the membership
+                  status of the test results as a percentage, while the second page displays the math-
+                  ematical values of the Centroid defuzzification results."
+                    The fuzzy logic controller’s test results menu has been added as a submenu on the
+                  manual test menu, as depicted in Fig. 14. This menu allows for instant monitoring and
+                  control based on the parameters selected on the manual test page.
+                    There is a Centroid clarification menu added as a subpage within the manual test
+                  menu. On this page, the mathematical calculations of Centroid defuzzification are fol-
+                  lowed and the accuracy of the results of three different inference engines is checked.
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol     (2023) 10:31                           Page 13 of 20
+
+
+
+
+                    Fig. 12 Interface showing electricity, water, and natural gas
+
+
+
+
+                    Fig. 13 Manual test interface
+
+
+
+
+                  Additionally, the sensor data page is updated in real time with information such as
+                  time, number of motion changes, indoor and outdoor light intensities, ambient tem-
+                  perature, and sound changes. On the consumer situation menu, the membership val-
+                  ues obtained according to the sensor data are followed. On the date and time menu,
+                  the date is set as day, month, and year. Apart from the date set, the hour and minute
+                  settings are made separately.
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol      (2023) 10:31                                                   Page 14 of 20
+
+
+
+
+                    Fig. 14 Fuzzy logic controller test results interface
+
+
+
+
+                  Experimental results
+                  Light, motion, temperature, and sound sensors are used for system inputs, which are
+                  then represented by triangular and trapezoidal membership functions within a fuzzy
+                  logic structure. Three fuzzy logic inference engines are constructed using a Mamdani-
+                  type inference method and a Centroid defuzzification method. The output power of
+                  the lighting, heating, and cooling systems is controlled by the sensor data. Overall
+                  management of the system is achieved through a combination of a microcontroller,
+                  sensors, and a Nextion HMI display.
+                    The manual trials are conducted on the fuzzy inference mechanism before the sys-
+                  tem is tested in real time. These trials are performed using the manual test menu on
+                  the Nextion LCD screen. The input parameters could be adjusted in three different
+                  fuzzy inference engines to test the consumer situation, cooling and heating output
+
+
+
+                  Table 2 Test results for consumer situation
+                  Inputs                                                    Output memberships (µ)               Centroid
+                                                                                                                 defuzzification
+                  Indoor light Sound              Motion          Time No               Pet          Human       memberships
+                  intensity    change             change               consumer         available    available
+                  (%)          frequency          frequency
+
+                  51              15              15               12:00 0              0            1           0.9
+                  28               2               7               08:15 0              0.48         0.51        0.8
+                  32               7              12               14:58 0              0            1           0.9
+                  17              12               7               14:58 0              0.79         0.2         0.74
+                  20              22               9               22:39 0              0            1           0.9
+                  40              26              12               00:59 0              0            1           0.9
+                  54              11              15               16:54 0              0            1           0.9
+                  14               0               1               15:15 1              0            0           0.3
+                  14              12               9               21:25 0              0            1           0.9
+                  10               6              15               21:25 0              0            1           0.9
+                  80              19               6               07:25 0              0.39         0.60        0.82
+Table 3 Test results for cooling and heating output power
+Inputs                                                           Output memberships (µ)                                                      Centroid
+                                                                                                                                             defuzzification
+Consumer situation memberships (µ)   Electricity   Ambient       Cooling     Cooling   Cooling   Cooling and   Heating   Heating   Heating   memberships
+                                     price (%)     temperature   power       power 66% power 33% heating Off   power 33% power 66% power
+                                                   (°C)          100%                                                              100%
+                                                                                                                                                               Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol
+
+
+
+
+Human available (µ = 1)              29            25            0           1            0       0            0         0         0         0.25
+Pet available (µ = 0.79)             46            14            0           0            0       0            0.33      0.66      0         0.708
+Human available (µ = 1)              19            34            1           0            0       0            0         0         0         0.125
+Human available (µ = 1)              11            20            0           0            0       1            0         0         0         0.5
+                                     91            31            0           0            0       1            0         0         0         0.5
+                                                                                                                                                               (2023) 10:31
+
+
+
+
+No Consumer (µ = 1)
+Human Available (µ = 1)              30             8            0           0            0       0            0         0         1         0.875
+Human Available (µ = 1)              63            27            0           0.28         0.72    0            0         0         0         0.34
+Human Available (µ = 0.60)           15             8            0           0            0       0            0         0         1         0.875
+Human available (µ = 0.60)           15            38            1           0            0       0            0         0         0         0.125
+Pet available (µ = 1)                83            38            0           0            1       0            0         0         0         0.375
+Pet available (µ = 1)                18            38            1           0            0       0            0         0         0         0.125
+Pet Avaılable (µ = 0.75)             18             9            0           0            0       0            0         0         1         0.875
+Human available (µ = 1)              16            41            1           0            0       0            0         0         0         0.125
+                                                                                                                                                               Page 15 of 20
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol       (2023) 10:31                                          Page 16 of 20
+
+
+
+
+                  Table 4 Test results for interior lighting output power
+                  Inputs                                         Light output memberships (µ)            Centroid
+                                                                                                         defuzzification
+                  Electricity Outdoor light Indoor light         Level 1 Level 2 Level 3 Level 4 Level 5 memberships
+                  price (%) intensity (%) intensity (%)
+
+                  29            35              51               0          0       0     0.81    0.18    0.81
+                  46            50              17               0          0.8     0.2   0       0       0.44
+                  57            54                6              0.27       0.72    0     0       0       0.34
+                  68            76              20               1          0       0     0       0       0.2
+                  76            90              40               1          0       0     0       0       0.2
+                  11            19              37               0          0       0     0       1       0.9
+                  91             5              14               0          0       1     0       0       0.6
+                  30            76              14               0          1       0     0       0       0.4
+                  63            97              10               1          0       0     0       0       0.2
+                  15             5              80               0          0       0     0       1       0.9
+                  15            68              30               0          0.9     0.1   0       0       0.42
+
+
+
+
+                  power, and interior lighting output power by varying the parameter values. The input
+                  parameters, numerical results of the Centroid defuzzification method, and member-
+                  ship degrees of outputs could be monitored during the trials.
+                    The test results for the first fuzzy inference engine are presented in Table 2. This is
+                  a test to determine if the system is functioning correctly. The inputs for interior light-
+                  ing, sound, and motion changes are adjusted, and the output membership function
+                  values are monitored. The second fuzzy inference engine test results are shown in
+                  Table 3. This section monitors the value of the heating–cooling output membership
+                  functions, which are adjusted based on changes in electricity prices and ambient tem-
+                  perature. The third fuzzy inference engine test results are given in Table 4. Consid-
+                  ering the electricity price, indoor lighting and outdoor lighting intensity, the output
+                  level of lighting can be determined. These trials are carried out using the interface in
+                  Fig. 13. This interface enables manual testing of the system, allowing for verification
+                  of whether it produces the correct results.
+                    Real-time tests were conducted on the model house, and the obtained results were
+                  analyzed. As shown in Fig. 15a, when the system inputs were set to Indoor Light
+                  Intensity “LOW,” Sound Change “NORMAL,” Motion Change “HIGH,” and Time
+                  “NIGHT,” the system output was sensed as Consumer Situation “HUMAN AVAILA-
+                  BLE.” In Fig. 15b, when the inputs were set to Consumer Situation “HUMAN AVAIL-
+                  ABLE,” Electricity Price “HIGH,” and Ambient Temperature “TOO HOT,” the system
+                  output was determined as Cooling and Heating Condition “COOLING POWER 66%.”
+                  In Fig. 15c, when the inputs were set to Electricity Price “LOW,” Indoor Light Inten-
+                  sity “LOW,” and Outdoor Light Intensity “LOW,” the system output was determined
+                  as “LEVEL 5.” When the real-time test results were examined, it was observed that all
+                  three fuzzy inference engines provided appropriate results by the fuzzy membership
+                  values of the input sets.
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol     (2023) 10:31                                                Page 17 of 20
+
+
+
+
+                    Fig. 15 a Customer situation test result. b Cooling and heating output power test result. c Indoor light
+                    intensity output power test result
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol        (2023) 10:31                                                     Page 18 of 20
+
+
+
+
+                     Let’s examine the operation of the system by considering a typical daily consumer
+                  behavior. A person left their house at 07:00 in the morning and returned home at 18:00
+                  in the evening. Upon their return, the outdoor temperature was recorded as 15 °C for
+                  a duration of 2 h, followed by 11 °C between 20:00 and 23:00, and 10 °C between 23:00
+                  and 07:00. The consumer turned off the lighting after 23:00 and it was turned back on
+                  between 06:00 and 07:00. According to this scenario, in the proposed fuzzy logic-con-
+                  trolled system, the heating operates at 33% power for 1 h, 66% power for 2 h, and 66%
+                  power for 4 h and 45 min. The lighting is turned on at 25% power for 2 h and at 50%
+                  power for 4 h, and is off for 7 h. In total, the current system consumes 491.1 W-hours for
+                  lighting and heating. In the conventional system, under the same conditions, the heating
+                  operates at 33% power for 5 h and at 66% power for 5 h. The lighting remains on at 100%
+                  power for 6 h and is off for 7 h. Consequently, the conventional system consumes 570.6
+                  W-hours for lighting and heating. Therefore, thanks to the proposed system, instead of
+                  consuming 570.6 W-hours per day, only 491.1 W-hours are consumed. The proposed
+                  system achieves a daily energy savings of 13.93% in this scenario.
+
+                  Conclusion
+                  This study proposes a low-budget energy management system for residential homes
+                  that uses fuzzy logic control. The system is tested on a model house equipped with
+                  two lights, one sound, one temperature, and one motion sensor. The cooling and heat-
+                  ing output power of the house is determined based on the current electricity price,
+                  the consumer’s situation, and the ambient temperature. The indoor lighting output
+                  power is adjusted according to the indoor and outdoor light intensity, and the instant
+                  electricity price. The lighting system has four different adjustment levels (25%, 50%,
+                  75%, and 100%) in the residence, while the cooling and heating system has three
+                  options of 33%, 66%, and 100%, respectively. The natural gas system can be completely
+                  closed or opened, depending on the consumer’s situation.
+                    The use of fuzzy logic controllers in the design and development of the energy man-
+                  agement system provided a cost-effective, efficient, and effective solution for residen-
+                  tial homes. The system’s performance was observed to depend on the number and
+                  sensitivity of sensors used. To increase the system’s accuracy, more sensors or wire-
+                  less sensors could be added after conducting a cost-performance analysis. Addition-
+                  ally, the system can be remotely controlled and monitored through an application by
+                  adding a Wi-Fi module. Smart home appliances such as washing machines, dishwash-
+                  ers, dryers, and ovens can also be integrated into the energy management system.
+                  Acknowledgements
+                  ChatGPT is used to improve the readability and language of the research article.
+
+                  Author contributions
+                  FA was involved in conceptualization, methodology, software, validation, writing—original draft. MC contributed to
+                  formal analysis, investigation, supervision, writing—review and editing.
+
+                  Funding
+                  None.
+
+                  Availability of data and materials
+                  Data sharing not applicable—no new data generated.
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol         (2023) 10:31                                                              Page 19 of 20
+
+
+
+
+                  Declarations
+                  Competing interests
+                  The authors declare no conflict of interest.
+
+                  Permission to reproduce material from other sources
+                  The design herein belongs entirely to the authors. No material was taken from any source.
+
+                  Received: 12 April 2023 Accepted: 7 June 2023
+
+
+
+
+                  References
+                  1. Energy efficiency: The clean facts. https://​www.​nrdc.​org/​stori​es/​energy-​effic​iency-​clean-​facts. Accessed 10 Dec
+                      2022.
+                  2. Rajesh P, Shajin FH, Kannayeram G (2022) A novel intelligent technique for energy management in smart home
+                      using internet of things. Appl Soft Comput 128:109442
+                  3. Yousefi M, Hajizadeh A, Soltani MN (2019) A comparison study on stochastic modeling methods for home energy
+                      management systems. IEEE Trans Industr Inf 15(8):4799–4808
+                  4. Zupančič J, Filipič B, Gams M (2020) Genetic-programming-based multi-objective optimization of strategies for
+                      home energy-management systems. Energy 203:117769
+                  5. Kwon K, Lee S, Kim S (2021) AI-based home energy management system considering energy efficiency and resident
+                      satisfaction. IEEE Internet Things J 9(2):1608–1621
+                  6. Han J, Choi CS, Park WK, Lee I (2011) Green home energy management system through comparison of energy
+                      usage between the same kinds of home appliances. In: 2011 IEEE 15th ınternational symposium on consumer
+                      electronics (ISCE): 14–17 June; Singapore. IEEE: 1–4
+                  7. Ahmed MS, Mohamed A, Homod RZ, Shareef H (2016) Hybrid LSA-ANN based home energy management schedul-
+                      ing controller for residential demand response strategy. Energies 9(9):716
+                  8. Mahapatra C, Moharana AK, Leung VC (2017) Energy management in smart cities based on internet of things: peak
+                      demand reduction and energy savings. Sensors 17(12):2812
+                  9. Lissa P, Deane C, Schukat M, Seri F, Keane M, Barrett E (2021) Deep reinforcement learning for home energy manage-
+                      ment system control. Energy AI 3:100043
+                  10. Kontogiannis D, Bargiotas D, Daskalopulu A (2021) Fuzzy control system for smart energy management in residen-
+                      tial buildings based on environmental data. Energies 14(3):752
+                  11. Arabul FK, Arabul AY, Kumru CF, Boynuegri AR (2017) Providing energy management of a fuel cell–battery–wind
+                      turbine–solar panel hybrid off grid smart home system. Int J Hydrog Energy 42(43):26906–26913
+                  12. Atef S, Ismail N, Eltawil AB (2022) A new fuzzy logic based approach for optimal household appliance scheduling
+                      based on electricity price and load consumption prediction. Adv Build Energy Res 16(2):262–280
+                  13. Baniyounes A (2019) Energy performance of fuzzy logic controllers in smart buildings. Int J Energy Econ Policy
+                      9(1):41–47
+                  14. Christopoulos K, Raptis A, Antonopoulos C, Orfanoudakis T, Voros NS (2018) A scalable approach to efficient
+                      house power consumption and CO 2 management through fuzzy logic. In: 2018 IEEE ınternational conference on
+                      ındustrial technology (ICIT): 20–22 February ; Lyon, France. IEEE: 1132–1137
+                  15. Garrab A, Bouallegue A, Bouallegue R (2017) An agent based fuzzy control for smart home energy management in
+                      smart grid environment. Int J Renew Energy Res 7(2):599–612
+                  16. Collotta M, Pau G (2015) A solution based on bluetooth low energy for smart home energy management. Energies
+                      8(10):11916–11938
+                  17. Behrooz F, Ramli A, Samsudin K (2009) A new fuzzy logic approach to building automation from safety and health
+                      perspective. In: International Advanced Technology Congress (ATCi): November 3–5; Malaysia
+                  18. Fayaz M, Kim D (2018) Energy consumption optimization and user comfort management in residential buildings
+                      using a bat algorithm and fuzzy logic. Energies 11(1):161
+                  19. Khalid R, Javaid N, Rahim MH, Aslam S, Sher A (2019) Fuzzy energy management controller and scheduler for smart
+                      homes. Sustain Comput Inform Syst 21:103–118
+                  20. Jarndal A (2016) Smart home system for energy saving using genetic-fuzzy-neural networks approach. Int J Sustain
+                      Water Environ Syst 8(1):27–31
+                  21. Iqbal MM, Kumar S, Lal C, Kumar C (2022) Energy management system for a small-scale microgrid. J Electr Syst Inf
+                      Technol 9(1):5
+                  22. Otuoze AO, Mustafa MW, Larik RM (2018) Smart grids security challenges: classification by sources of threats. J Electr
+                      Syst Inf Technol 5(3):468–483
+                  23. Han J, Choi C-S, Park W-K, Lee I, Kim S-H (2014) Smart home energy management system including renewable
+                      energy based on ZigBee and PLC. IEEE Trans Consum Electron 60(2):198–202
+                  24. Anvari-Moghaddam A, Monsef H, Rahimi-Kian A (2014) Optimal smart home energy management considering
+                      energy saving and a comfortable lifestyle. IEEE Trans Smart Grid 6(1):324–332
+                  25. Erol-Kantarci M, Mouftah HT (2011) Wireless sensor networks for cost-efficient residential energy management in
+                      the smart grid. IEEE Trans Smart Grid 2(2):314–325
+                  26. Bolurian A, Akbari H, Daemi T, Mirjalily S, Mousavi S (2022) Energy management in a smart grid including demand
+                      response programs considering internet of things. Renew Energy Res Appl 3(1):131–141
+                  27. Zunnurain I, Maruf MNI, Rahman MM, Shafiullah G (2018) Implementation of advanced demand side management
+                      for microgrid incorporating demand response and home energy management system. Infrastructures 3(4):50
+Acun and Çunkaş ﻿Journal of Electrical Systems and Inf Technol          (2023) 10:31                                                               Page 20 of 20
+
+
+
+
+                   28. Krigger J, Dorsi C (2004) Residential energy: cost savings and comfort for existing buildings. Saturn Resource
+                       Management
+                   29. Bazila S, Kalinga E, Ibwe K, Abdalla AT (2022) Electrical power behavioral usage in public institutions and its interven-
+                       tion: a case of tanzania higher learning institutions. J Electr Syst Inf Technol 9(1):1–14
+                   30. Knypiński Ł (2022) Performance analysis of selected metaheuristic optimization algorithms applied in the solution
+                       of an unconstrained task. COMPEL Int J Comput Math Electr Electron Eng 41(5):1271–1284
+                   31. Deniz V, Çunkaş M (2019) Real time fuzzy logic controlled fire detection system for home applications. Int J Intell
+                       Eng Inform 7(5):441–456
+                   32. Rai N, Rai B (2018) Control of fuzzy logic based PV-battery hybrid system for stand-alone DC applications. J Electr
+                       Syst Inf Technol 5(2):135–143
+                   33. Acun F, Çunkaş M (2022) Low-cost energy management system in homes. In: International conference on engineer-
+                       ing technologies (ICENTE’22): 17–19 November ; Konya, Turkey. 421–427
+
+
+                  Publisher’s Note
+                  Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations.
+

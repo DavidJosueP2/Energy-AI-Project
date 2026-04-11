@@ -1,0 +1,1708 @@
+Manual de instrucciones
+           User Manual
+
+
+
+
+                  Frigorifico
+                      Fridge
+
+               ERE 39353 X
+                                                                        electrolux 3
+
+
+Bienvenido al mundo Electrolux
+Gracias por elegir un producto Electrolux de primera clase, el cual esperamos le
+proporcione una gran satisfacción en el futuro. Electrolux ambiciona ofrecerle una
+amplia variedad de productos de calidad que haga su vida más cómoda. Usted
+encontrará algunos ejemplos en la portada de este manual. Por favor, tómese
+unos minutos para estudiar este manual de modo que pueda aprovecharse de los
+beneficios de su nueva máquina. Nosotros prometemos proporcionarle una
+experiencia superior como usuario y mucha tranquilidad. ¡Buena suerte!
+4 electrolux
+
+
+En este manual se utilizan los símbolos siguientes
+
+       Información importante para su seguridad personal y para evitar daños al
+       electrodoméstico
+
+       Información general y consejos
+
+       Información medioambiental
+
+
+El símbolo        en el producto o en su embalaje indica que este producto no se
+puede tratar como desperdicios normales del hogar. Este producto se debe
+entregar al punto de recolección de equipos eléctricos y electrónicos para
+reciclaje. Al asegurarse de que este producto se deseche correctamente, usted
+ayudará a evitar posibles consecuencias negativas para el ambiente y la salud
+pública, lo cual podría ocurrir si este producto no se manipula de forma adecuada.
+Para obtener información más detallada sobre el reciclaje de este producto,
+póngase en contacto con la administración de su ciudad, con su servicio de
+desechos del hogar o con la tienda donde compró el producto.
+                                                                      electrolux 5
+
+
+INDICE                                    Consejos                            17
+                                          Consejos para refrigeración         17
+Advertencias y consejos importants 6      Manutención                         17
+Uso                                   9   Limpieza periódica                  17
+Limpieza de las partes internas       9   Temporadas largas de inactividad    18
+El panel de control                   9   Lámpara de iluminación              18
+Display                              10   Desescarche                         18
+Funcionamiento                       10   Datos técnicos                      19
+Desconexión                          10   Como actuar si el aparato no
+Regulación de la temperatura         11   funciona                            19
+Menú de Funciones                    11   Instalación                         20
+Uso del compartimento frigorífico 13      Colocación                          20
+Función Holiday                      13   Conexión eléctrica                  20
+Refrigeración de alimentos y bebidas 13   Retenes-Repisas                     21
+Estante de Quick Chill               14   Distanciadores posteriores          21
+Sostenedor de botellas y latas       14   Reversibilidad de la puerta         22
+Para desmontar el sostenedor de           Garantía/Servicio postventa         24
+botellas y latas                     14   Garantía Europea                    26
+Instalación del filtro de carbono    15   www.electrolux.com                  27
+Cambio del filtro de carbono         15
+Rejillas movibles                    16
+Compartimiento para botellas         16
+Ubicación estantes de la
+contrapuerta                         16
+6 electrolux
+
+
+       ADVERTENCIAS Y                       • Es peligroso modificar o intentar
+                                              modificar las características de
+       CONSEJOS                               este aparato.
+       IMPORTANTS                           • Quitar siempre el enchufe de la toma
+Es muy importante conservar este              de corriente antes de efectuar
+libro de instrucciones junto al aparato       cualquier operación de limpieza o
+por si fuera necesario consultarlo. Si el     manutención (como la substitución
+aparato se vendiese o transfiriese a          de la bombilla en aquellos aparatos
+otra persona, acuérdese de entregarlo         que la tienen).
+junto con él para que el nuevo
+                                            • No consumir nunca los cubitos de
+propietario conozca el funcionamiento
+                                              hielo recién sacados del
+de la máquina y sus advertencias.
+                                              congelador ya que podrían
+En caso de que este aparato, dotado           provocar quemaduras.
+de cierre magnético, sustituya uno
+                                            • Estos aparatos son pesados. Tener
+con cierre automático, aconsejamos
+                                              cuidado en los desplazamientos.
+que la cerradura de este último quede
+inservible, antes de deshacerse de él.      • Este aparato no contiene en el
+Así se evitará que los niños, jugando,        circuito refrigerante y en el
+puedan quedarse encerrados dentro,            aislamiento, gases refrigerantes
+con grave peligro de sus vidas.               nocivos pare el ozono. El aparato
+                                              no debe ser eliminado junto con
+Estas advertencias han sido
+                                              los deshechos urbanos y
+redactadas para su seguridad y para
+                                              chatarras. Se debe evitar el daño
+la seguridad de los demás. Le
+                                              del circinto refrigerante, sobre todo
+rogamos, por lo tanto, leerlas
+                                              en la parse posterior cerca del
+atentamente antes de instalar y utilizar
+                                              intercambiador. Las informaciones
+el aparato.
+                                              sobre los centros de recepción son
+                                              suministradas por las autoridades
+Seguridad                                     municipales
+• Este aparato no está pensado para         • Prestar la máxima atención durante
+  ser utilizado por personas                  las operaciones de desplazamiento
+  (incluidos los niños) con                   pare no dañar las parses del
+  capacidades físicas, sensoriales o          circuito refrigerante a fin de evitar
+  mentales reducidas, o que no                las posibles salidas de liquido.
+  tengan experiencia y conocimiento,        • El aparato no debe ser colocado
+  a menos que una persona                     cerca de termosifones o cocinas a
+  responsable de su seguridad les             gas.
+  supervise o les ofrezca instrucción
+  en el uso del aparato.                    • Evitar la exposición prolongada del
+  Los niños deben ser supervisados            aparato a los rayos solares
+  para asegurarse de que no                 • La parse posterior del aparato debe
+  jueguen con el aparato.
+                                                                         electrolux 7
+
+   recibir una circulación de aire            +18°C y +43°C (Clase T); +18°C y
+   suficiente y se debe evitar cualquier      +38°C (Clase ST); +16°C y +32°C
+   daño al circuito refrigerante.             (Clase N); +10°C y +32°C (Clase
+• Solamente pare los congeladores             SN); la clase de pertenencia está
+  (excluidos los empotrados): su              indicada en la placa matrícula
+  mejor ubicación es el sótano.               situada en la cámara al lado del
+                                              cajón verduras.
+• No introducir aparatos eléctricos
+  en el interior del equipo (por              Atención: en caso de temperaturas
+  ejemplo: fabricadora de helados).           ambiente diferentes de las
+                                              indicadas para la clase climática a
+Asistencia                                    la cual pertenece este producto, es
+                                              preciso observar las indicaciones
+• Cualquier modificación que                  siguientes: cuando la temperatura
+  eventualmente fuese necesaria a la          ambiente desciende por debajo del
+  instalación eléctrica doméstica             valor mínimo puede suceder que la
+  para poder instalar el aparato tiene        temperatura de conservación en el
+  que ser realizada sólo por personal         vano congelador no esté
+  competente.                                 garantizada; por lo tanto, se
+                                              aconseja que se consuman a lo
+• Para eventuales intervenciones              más pronto los alimentos
+  dirigirse a un Centro de Asistencia         presentes en su interior.
+  Técnica autorizado y exigir las
+  piezas de repuesto originales.           • Los productos que hayan sido
+                                             descongelados no se tienen que
+• En caso de necesitar reparaciones          volver a congelar.
+  no intentar hacerlas personalmente.
+  Las reparaciones efectuadas por          • Seguir atentamente las
+  personas no competentes pueden             indicaciones del fabricante para la
+  provocar daños. Ponerse en                 conservación y/o congelación de
+  contacto con el Centro de                  los alimentos.
+  Asistencia más cercano y emplear         • En todos los aparatos de
+  sólo repuestos originales.                 refrigeración y congelación existen
+                                             superficies que se cubren con
+Uso                                          escarcha. Según el modelo, la
+• Los frigoríficos y/o congeladores          escarcha puede ser eliminada
+  domésticos están destinados sólo           automáticamente (desescarche
+  a la conservación y/o congelación          automático) o manualmente. No
+  de alimentos.                              intentar nunca quitar la escarcha con
+                                             un objeto puntiagudo ya que se
+• Las mejores prestaciones se                podría dañar irremediablemente el
+  obtienen con temperaturas                  evaporador. Utilizar para ello sólo el
+  ambiente comprendidas entre                rascador de plástico que se
+                                             suministra con el aparato. Por el
+8 electrolux
+
+
+   mismo motivo no despegar nunca las
+   cubetas del hielo con un cuchillo o          Protección del
+   cualquier otro objeto puntiagudo.            ambiente
+• No colocar en el compartimiento
+                                          Este aparato no contiene en el circuito
+  de la baja temperatura (congelador
+                                          refrigerante y en el aislamiento, gases
+  o conservador) bebidas gaseosas
+                                          refrigerantes nocivos para el ozono. El
+  que podrían explotar.
+                                          aparato no debe ser eliminado junto
+Instalación                               con los deshechos urbanos y
+                                          chatarras. Se debe evitar el dano del
+• El aparato se calienta                  circinto refrigerante, sobre todo en la
+  considerablemente en la proximidad      parte posterior cerca del
+  del condensador y del compresor,        intercambiador. Las informaciones
+  por lo tanto hay que verificar que el   sobre los centros de recepciõn son
+  aire pueda circular libremente          suministradas por las autoridades
+  alrededor del mismo. Una ventilación    municipales; Los materiales usados en
+  insuficiente puede causar un mal        este aparato marcados con el simbolo
+  funcionamiento y daños al aparato.            son reciclables.
+  Seguir cuidadosamente las
+  instrucciones que se dan para la
+  instalación.
+• Una vez instalado el aparato
+  verificar que no esté apoyado
+  sobre el cable de alimentación.
+   Importante: en caso de que el
+   cable de alimentación se dañe,
+   deberá ser sustituido con un cable
+   especial. Ambos cables pueden
+   ser solicitados al fabricante o al
+   Servicio de asistencia.
+• Si el aparato es transportado en
+  forma horizontal es posible que el
+  aceite contenido en el compresor
+  pase al circuito refrigerante.
+  Esperar por lo menos dos horas
+  antes de poner en marcha el
+  aparato para dar tiempo a que el
+  aceite regrese al compresor.
+                                                                           electrolux 9
+
+
+     USO
+Limpieza de las partes
+internas
+Antes del empleo limpiar todas las                   No emplear detergentes o
+partes internas con agua tibia y jabón        polvos abrasivos que podrían dañar las
+neutro, a fin de eliminar el                  superficies.
+característico olor de nuevo y secarlas
+luego cuidadosamente.
+
+
+
+
+El panel de control
+
+
+
+
+                            A B           C        D E
+
+
+
+A - Tecla de encendido / apagado del          C - Display de visualización de las
+    aparato                                       temperaturas y funciones
+B - Tecla de regulación de la                 D - Tecla de activación de las
+    temperatura                                   funciones
+                                              E - Tecla de confirmación
+10 electrolux
+
+
+Display
+
+
+
+
+     Indicador de temperatura positiva           Si está encendido, indica que está
+                                                 activa la función Shopping
+     Indicador de la temperatura
+                                                 Si está encendido, indica que está
+     Si está encendido, indica que
+                                                 activa la función Eco Mode
+     está activa la función Child Lock
+                                                 Si está encendido, indica que
+                                                 está activa la función Quick Chill
+
+
+
+
+Funcionamiento                                     Importante
+Después de pulse la toma de                 Si la puerta permanece abierta durante
+corriente, si el display no se ilumina de   mas de 7 minutos la luz interior será
+conexión la tecla (A), encendido del        desconectada automáticamente la luz
+aparato.                                    se reactivará al volver a cerrar y abrir la
+Para la correcta conservación de los        puerta.
+alimentos, es recomendable definir la       Desconexión
+función Eco Mode y las siguientes
+temperaturas:                               La desconexión se realiza pulsando la
++5°C en el frigorífico                      tecla (A) durante más de 1 segundo.
+• Para modificar la temperatura,            Después de esto, se indicará una cuenta
+    consulte la sección "Regulación de      atrás de la temperatura de -3 -2 -1.
+    la temperatura".
+                                                                         electrolux 11
+
+
+Regulación de la                          En el display se indican las siguientes
+                                          funciones:
+Temperatura
+                                             Función Child Lock
+Apretando el botón (B), en el indicador
+parpadea la temperatura programada.          Función Shopping
+Confirme la temperatura elegida              Función Eco Mode
+pulsando el botón E (se oye un sonido)
+o esperando unos segundos (no se             Función Quick Chill
+oye el sonido).                           Función Child Lock
+El indicador indica de nuevo la
+temperatura actual dentro del             La función Child Lock se activa
+compartimiento.                           pulsando la tecla D (si es necesario,
+La temperatura programada es              varias veces) hasta que aparezca el
+alcanzada dentro de 24 h.
+                                          icono correspondiente       .
+Después de periodos largos sin usar el
+                                          Debe confirmar la selección pulsando
+aparato no será necesario regular de
+                                          en pocos segundos el botón E . Se
+nuevo la temperatura, ya que esta
+                                          oirá una señal acústica y el icono
+permanece almacenada en memoria.
+                                          permanecerá activado.
+                                          En este estado, ninguna acción sobre
+       ¡Atención!                         los botones implicará variación alguna
+Durante el periodo de estabilización,     mientras la función esté activa.
+después de la primera puesta en           Se puede desactivar la función en
+marcha, la temperatura mostrada           cualquier momento pulsando la tecla D
+puede no corresponderse con la            hasta que el icono correspondiente
+temperatura programada.                   comience a parpadear y seguidamente
+Durante este periodo es posible que       pulsar el botón E.
+la temperatura mostrada sea differente
+a la temperatura programada.              Función Shopping
+                                          Si hay que introducir una gran
+Menú de Funciones                         cantidad de alimentos calientes, por
+Pulsando la tecla D se activa el menú     ejemplo después de haber hecho la
+de funciones. La activación de cada       compra, se aconseja activar la función
+función puede confirmarse pulsando la     Shopping para enfriarlos más
+tecla. Si después de unos segundo no      rápidamente y para evitar que suba la
+se confirma ninguna función el display    temperatura de los alimentos que ya
+saldrá del menú de funciones y            están en el frigorífico.
+regresará su estado normal.               La función Shopping se activa
+                                          pulsando la tecla D (si es necesario
+                                          varias veces) hasta que aparezca el
+                                          icono correspondiente      .
+12 electrolux
+
+Debe confirmar la selección pulsando       Función Quick Chill
+en pocos segundos el botón E . Se
+oirá una señal acústica y el icono         La función Quick Chill enfría
+permanecerá activado.                      rápidamente latas y botellas
+La función Shopping se apaga               dirigiéndoles aire frío.
+automáticamente después de unas 6          Coloque las bebidas en el
+horas.                                     compartimiento Quick Chill y abra al
+Se puede desactivar la función en          máximo la palanca del aire.
+cualquier momento pulsando la tecla D      La función Quick Chill se activa
+hasta que el icono correspondiente         pulsando el botón D (varias veces, si
+comience a parpadear y seguidamente        es necesario) hasta que aparezca el
+pulsar el botón E.                         icono correspondiente       .
+Función Eco Mode                           Debe confirmar la selección pulsando
+                                           en pocos segundos el botón E . Se
+La función Eco Mode se activa              oirá una señal acústica y el icono
+pulsando la tecla D (si es necesario,      permanecerá activado.
+varias veces) hasta que aparezca el        La función Quick Chill se apaga
+icono correspondiente      (o fijando la   automáticamente después de unas 6
+temperatura en + 5°C).                     horas.
+Debe confirmar la selección pulsando       Cuando termine el enfriamiento,
+en pocos segundos el botón E . Se          desactive la función pulsando la tecla
+oirá una señal acústica y el icono         D hasta que parpadee el icono
+permanecerá activado.                      correspondiente, después la tecla E y
+En este estado, las temperaturas se        sitúe la palanca de aire en el mínimo.
+fijan de modo automático (+ 5°C), para
+obtener las mejores condiciones de
+conservación de los alimentos.
+Se puede desactivar la función en
+cualquier momento modificando la
+temperatura seleccionada en el                                         MIN
+
+compartimiento.
+                                                                      MAX
+                                                                         electrolux 13
+
+
+Uso del compartimento                       función Holiday del modo de ahorro
+                                            de energía y el indicador muestra la
+frigorífico                                 letra H.
+Es posible programar la temperatura         Se puede desactivar la función en
+de este compartimento entre +2°C y          cualquier momento modificando la
++8°C.                                       temperatura seleccionada en el
+Durante el funcionamiento normal se         compartimiento.
+indica la temperatura dentro del
+compartimiento frigorífico.                         ¡Atención!
+                                            El frigorífico de estar totalmente vacío
+      ¡Atención!                            de alimentos cuando se active la
+  Es normal que exista una diferencia       función Holiday.
+  entre la temperatura mostrada y la
+  programada. En particular cuando:         Refrigeracíon de alimentos
+• recientemente se ha modificado la         y bebidas
+  temperatura programada.
+• la puerta ha quedado abierta por          Para utilizar de la mejor manera el
+  mucho tiempo.                             compartimiento refrigerante, es
+• se han introducido en el frigorífico      necesario:
+  alimentos calientes.
+                                            • no introducir comidas calientes o
+                                              líquidos en en evaporacíon;
+Función Holiday “H”                         • tapar o envolver los alimentos,
+                                              especialmente si son aromáticos;
+Al activar la función Holiday se regula
+la temperatura del frigorífico a +15 ºC.    • no colocar sobre las rejillas
+Esta función le permite mantener              papeles, cartones o plásticos que
+frigorífico vacío y con la puerta cerrada     obstaculicen la circulacíon del aire.
+durante periodos largos como las
+vacaciones, evitándose la formación
+de malos olores.
+La función Holiday H puede regularse
+pulsando la tecla B. Al pulsar la tecla
+B, en el indicador parpadea el ajuste
+de temperatura actual. Vuelva a pulsar
+la tecla B. Cuando aparezca en
+pantalla la letra H, confirme la
+temperatura elegida apretando el
+botón E (oirá un sonido) o esperando
+unos segundos (no oirá el sonido).
+Ahora el refrigerador se encuentra en
+14 electrolux
+
+
+Estante de Quick Chill
+El estante de Quick Chill menos
+profundopuede ser colocado en
+alguna de los carriles superiores. Para
+mantener un buen funcionamiento, el
+estante debe ser colocado en el
+segundo carril contando desde arriba
+hacia abajo.
+                                          Para enfriar una botella o una lata,
+                                          colóquela centrada delante de la rejilla,
+                                          de esta manera conseguirá el mejor
+                                          efecto posible.
+                                          Para facilitar el enfriamiento de una
+                                          botella grande, el soporte para botellas
+                                          puede bajarse.
+
+                                          Para desmontar el
+                                          sostenedor de botellas
+Sostenedor de botellas y
+                                          y latas
+latas
+                                          Saque del refrigerador el anaquel de
+El sostenedor de botellas y latas se      Quick Chill con el sostenedor.
+puede mover horizontalmente,              Para descargar el sostenedor del
+permitiendo así flexibilidad en el        anaquel, desenganche los garfios que
+acomodo de botellas y latas frente a la   están en el canto trasero del anaquel.
+rejilla. Para facilitar el movimiento
+horizontal del sostenedor, presione el
+anaquel hacia atrás.
+                                                                            electrolux 15
+
+
+Instalación del filtro de                   Cambio del filtro de
+carbono                                     carbono
+Al ser entregado, el filtro de carbono      Para mantener su funcionamiento en
+se encuentra situado dentro de una          óptimas condiciones, el filtro de
+bolsa de plástico para asegurar una         carbono debe cambiarse una vez al
+duración prolongada.Debe ser colocado       año en caso de que el refrigerador
+sobre las guías situadas interiormente      haya sido usado normalmente. Es
+de la tapa abatible antes de que el         posible comprar nuevos filtros en el
+frigorífico sea puesto en funcionamiento.   servicio técnico del fabricante.
+Se abre la rejilla al presionar y           El filtro se coloca detrás de la rejilla y
+haciendo girar el portillo hacia afuera.    se accede a él abriendo el portillo. La
+El filtro de carbono se coloca entonces     rejilla se abre presionando haciendo
+en el carril que se encuentra en el         girar el portillo hacia afuera. El filtro de
+parte trasera del portillo. Véase la        carbono se quita del carril en el que
+imagen.                                     está colocado El nuevo filtro de
+                                            carbono se instala entonces en el
+     La manupulación del filtro debe        mismo carril.
+     de realizarese con cuidado de
+forma que no se desprendan                       La manupulación del filtro debe
+fragmentos de su superficie.                     de realizarese con cuidado de
+                                                 forma que no se desprendan
+                                            fragmentos de su superficie.
+
+
+        1
+
+                                                     1
+16 electrolux
+
+
+Rejillas movibles
+En las paredes del compartimento
+existen unas guías que consienten
+poner las rejillas a distintas alturas.
+
+
+
+
+                                          Ubicación estantes de la
+                                          contrapuerta
+                                          Para poder colocar confecciones de
+                                          varios tamaños es posible colocar los
+   D338
+                                          estantes de la contrapuerta a varias
+Compartimiento para                       alturas.
+                                          La operación se efectúa de la siguiente
+botellas                                  manera: Empujar gradualmente el
+Almacene las botellas con el cuello       estante en el sentido indicado por las
+hacia adelante.                           flechas hasta llegar a desengancharlo,
+Atención: Coloque echadas sólo las        luego volverlo a montar en la posición
+botellas sin abrir.                       deseada.
+Para guardar botellas ya abiertas
+puede usted alzar el compartimiento
+hasta dejarlo inclinado.
+Para ello tire del compartimiento hacia
+adelante hasta que sea posible virarlo
+hacia arriba e introduzca entonces la
+superficie delantera en el nivel
+inmediato superior.
+                                                                         electrolux 17
+
+
+                                            MANUTENCIÓN
+      CONSEJOS
+                                                  Desenchufar siempre el
+Consejos para refrigeración                       aparato antes de proceder a
+                                                  cualquier operación de limpieza.
+Para un correcto uso aconsejamos:
+Carne: debe ser envuelta en saquitos              Atención
+de plástico y colocada en el espacio              Este aparato contiene
+situado sobre los cajones verdura.                hidrocarburos en el circuito
+En esta posicíon la carne puede ser               refrigerante; por lo tanto el
+conservada al máximo por 1 a 2 dias.              mantenimiento y la recarga
+Alimentos cocinados , platos fríos, etc.          deben ser efectuados
+tienen que conservarse bien cubiertos             exclusivamente por personal
+y se pueden colocar en cualquier                  autorizado por la empresa.
+bandeja del frigorífico.
+Fruta y verdura: una vez lavada, ha de      Limpieza periódica
+colocarse en el cajón (cajones) inferior.
+                                            Muchos detergentes específicos para
+Mantequilla y queso: deben colocarse
+                                            las superficies de cocina contienen
+en los reci-pientes adecuados o
+                                            agentes químicos que puede
+envueltos en hojas de aluminio o
+                                            atacar/perjudicar las partes en plástico
+politileno, a fin de evitar el contacto
+                                            presentes en este aparato. Se
+con el aire.
+                                            aconseja pues limpiar el revestimiento
+Leche embotellada: bien tapada, en la       de este aparato sólo con agua
+contropuerta.                               caliente que contenga una pequeña
+Bananas, papas, cebollas y ajo, si no       cantidad de detergente líquido para
+están confeccionados, no se deben           vajillas.
+colocar en frigorífico.                     Limpiar el interior con agua templada
+                                            y bicarbonato y las partes exteriores
+                                            esmaltadas con cera a la silicona;
+                                            limpiar el condensador y el
+                                            motocompresor con un cepillo o un
+                                            aspirador.
+                                            Esta operación mejorará el
+                                            funcionamiento con el consiguiente
+                                            ahorro de energia.
+18 electrolux
+
+
+Temporadas largas de                         Desescarche
+inactividad                                  La escarcha del evaporador del
+Durante los períodos en los cuales el        compartimento refrigerante se elimina
+aparato no esté funcionando observar         automáticamente a cada interrupcion
+las siguientes precauciones:                 del motocompresor. El agua de la
+                                             escarcha derretida, mediante un canal
+• desenchufarlo;                             adecuado, se recoge en un pequeño
+• sacar todos los alimentos;                 depósito colocado en la parte
+                                             posterior sobre el motocompresor del
+• limpiar cuidadosamente el interior y
+                                             aparato, de donde evapora.
+  todos los accesorios.                           D037
+
+• Dejar las puertas entornadas para
+  facilitar la circulación del aire, a fin
+  de evitar la formación de olores
+  desagradables.
+
+Lámpara de iluminación
+Para la sustitución eventual de la
+lámpara oprimir el enganche posterior
+y al mismo tiempo sacar la tapa en
+dirección de las flechas.                       D037
+
+
+                                             Se recomienda limpiar periódicamente
+       Atención                              el agujero de desagüe del agua de
+Sustituir la lámpara por otra de igual       desescarche, situado en la parte
+potencia (la potencia máxima está            central del canal en el compartimiento
+indicada en el difusor de luz).              refrigerante, utilizando el «limpiador»
+                                             adecuado que se encuentra en el
+                                             agujero, para evitar que el agua de
+                                             desescarche caiga sobre los
+                                             alimentos.
+
+                                                  Atención
+                                             Se recomienda no utilizar utensilios
+                                             metálicos para quitar la escarcha a fin
+                                             de evitar graves daños al aparato.
+                                             No usar dispositivo mecánico alguno u
+                                             otro medio artificial para acelerar el
+                                             processo de desescarche excepto los
+                                             recomendados.
+                                                                          electrolux 19
+
+
+DATOS TÉCNICOS
+ Capacidad neta del frigorífico en litros                                 375
+ Consumo energético en kWh/día                                           0,400
+
+ Consumo energético en kWh/año                                            146
+
+ Dimensiones en mm
+
+ Altura                                                                   1800
+
+ Ancho                                                                    600
+
+ Profundidad                                                              650
+
+Los datos técnicos se indican en la placa-matrícula situada sobre el lado
+izquierdo interno del aparato.
+
+
+
+COMO ACTUAR SI EL
+APARATO NO FUNCIONA
+Si el aparato presentase anomalías            • Si se ven restos de agua en el
+será oportuno controlar:                          fondo del refrigerador comprobar
+• Que esté bien enchufado y que el                que el orificio de desagüe de la
+    interruptor de la instalación eléctrica       escarcha derretida no esté
+    esté conectado.                               obturado (ver cápitulo
+• Que no haya un corte de energía                 Desescarche).
+    eléctrica.                                Después de hacer las verificaciones
+• Además si el aparato hace                   anteriores, si la anomalía persiste,
+    demasiado ruido verificar que los         llame al Centro de Asistencia Técnica
+    costados no estén en contacto con         más cercano.
+    muebles que pueden causar ruidos          Es importante en el momento de
+    o vibraciones y que la unidad             llamar proporcionar la referencia del
+    refrigerante no vibre.                    modelo y el número de matrícula del
+                                              aparato indicados en el certificado de
+                                              garantía o en la tarjeta matrícula.
+20 electrolux
+
+
+INSTALACIÓN                                    Conexión eléctrica
+Colocación                                     Antes de enchufar el aparato,
+                                               asegurarse de que la tensión y la
+Situar el aparato lejos de fuentes de calor,   frecuencia indicadas en la tarjeta
+como: radiadores, estufas, exposición          matrícula, correspondan a las de la
+directa a los rayos del sol, etc.              instalación doméstica. Se admite una
+Asegurarse de que en les partes                oscilación de 6% sobre la tensión
+posterior, superior e inferior no haya         nominal.
+ningún obstáculo que impida la                 Para el funcionamiento a tensiones
+circulacidn del aire.                          distintas, habrá que utilizar un
+Para que el aparato rinda mejor, la            autotransformador de potencia
+distancia mínima entre la parte superior       adecuada. Asegurarse de que la toma
+y el eventual mueble pénsil de encima,         de corriente y el enchufe sean
+debería ser por lo menos de 100 mm .           compatibles entre sí sin tener que
+La solución preferible, de todos               interponer reducciones ladrones o
+modos, seria la ilustrada en la (sin           adaptadores varios. Si fuera necesario,
+mueble). Dos patas graduables,                 cambiar la toma de la instalación de la
+situadas en la base del mueble,                casa con una adapta.
+consienten rivelarlo a la perfección.                Es indispensable conectar el
+Asegurarse de que la toma de corriente               aparato a una toma de tierra eficaz.
+y el enchute sean compatibles entre sí         Para ello el enchufe del cable de
+sin tener que interponer reducciones           alimentación está dotado de un
+ladrones o adaptadores varios. Si fuera        adecuado contacto. Si la toma de
+necesario, cambiar la toma de la               corriente de la instalación doméstica
+instalación de la casa con una adepta.         no estuviera conectada a tierra,
+                                               conectar el aparato a una instalación
+       Importante                              de tierra, conforme a las leyes en vigor,
+Se debe poder desenchufar el aparato;          consultando para ello con un técnico
+por lo tanto una vez efectuada la              especializado.
+instalación es necesario que el enchufe        El fabricante declina toda
+no quede escondido.                            responsabilidad en el caso que esta
+                                               norma no sea respetada.
+                                                        Este aparato es conforme a las
+                                                        siguientes Directivas
+                                                        Comunitarias:
+    100 mm
+
+
+
+
+                                               • 87/308 CEE del 2/6/87 relativa a la
+                                                   supresión de interferencias radio.
+                                               • 73/23 CEE 19/02/73 (Baja tensión)
+                                                   y modificaciones sucesivas;
+                                               • 89/336 CEE 03/05/89
+                       10 mm
+    10 mm
+
+
+
+
+                                                   (Compatibilidad electromagnética) y
+                                                   modificaciones sucesivas.
+    NP007
+                                                                     electrolux 21
+
+
+Retenes-Repisas                           Distanciadores
+Su aparato dispone de retenes-repisas     posteriores
+que permiten bloquear las repisas         En el aparato hay dos distanciadores
+durante el transporte.                    que deberàn ser montados como se
+Para quitarlos actuar como sigue:         muestra en la figura.
+mover los retenes-repisas en la           Aflojar los tornillos, introducir el
+dirección de la flecha, subir el vidrio   distanciador debajo de la cabeza del
+por la parte trasera y empujarlo hacia    tronillo y volver a atornillar.
+adelante hasta que queda libre,
+seguidamente quitar los retenes.
+
+              A
+
+
+
+
+                   B
+
+
+
+
+                  C
+22 electrolux
+
+
+Reversibilidad de la
+                                                                              b
+puerta
+Antes de llevar a cabo alguna
+operación, quitar el enchufe de                                      c
+alimentación. Para cambiar el sentido                      a
+de apertura de la puerta, proceder de
+la siguiente forma.
+Para llevar a cabo las siguientes
+operaciones, sugerimos que estas se
+realicen acompañado de otra persona
+con el fin de ayudar a sujetar la puerta
+del aparato durante los procesos.          • Quitar la puerta
+• Abrir la puerta con el frigorífico en    • Retirar usando una herramienta la
+    posición vertical. Desatornillar los     cubierta (e) y desatornilla el eje de
+    tornillos de la cornisa puerta           la bisagra inferior (f) y atornillalo en
+    superior de plástico.                    el lado contrario.
+                                           • Reinsertar la cubierta (e) en el lado
+                                             contrario.
+
+
+
+
+• Extraer el tapón y montarlo en el        • Reinsertar la puerta.
+  lado opuesto (d).                        • Poner atención para que el canto
+• Tumbar el aparato sobre la parte           frontal de la puerta tiene que estar
+  posterior.                                 en paralelo con el panel superior.
+• Retirar el tornillo de la bisagra (a)    • Fijar el tope puerta en el lado
+• Retire los tornillos de la bisagra         opuesto.
+  superior y extráigala (b).               • Posicionar y ajustar la bisagra
+• Retire el tope puerta extrayendo su        superior (que se encuentra en el
+  tornillo (c).                              interior de la bolsa del libro de
+                                             instrucciones) en el lado contrario.
+                                                                      electrolux 23
+
+
+• Fije la nueva tapa bisagra ( que se
+  encuentra en el interior de la bolsa         Advertencia
+  del libro de instrucciones).
+                                         Después de haber cambiado el sentido
+• Levantar el aparato situándolo en
+                                         de apertura de las puertas compruebe
+  su posición vertical.
+                                         que todos los tornillos estén
+• Abrir la puerta y colocar la cornisa
+                                         debidamente apretados y que la
+  puerta superior con tornillos.
+                                         guarnición magnética se ajusta
+                                         correctamente al mueble. Si la
+                                         temperatura ambiente es baja (p.ej.
+                                         invierno), la guarnición magnética
+                                         quizás no ajuste perfectamente. En el
+                                         caso mencionado, espere a que la
+                                         guarnición se ajuste sola o acelere este
+                                         proceso calentando la zona afectada
+                                         con un secador normal de pelo.
+
+
+
+
+• Fijar la manilla de la puerta en el
+  lado opuesto.
+
+      Colocar de nuevo, nivelar el
+aparato, esperar por lo menos dos
+horas antes de y conectar la
+alimentación.
+De todas formas si no pudiera realizar
+las operaciones mencionadas,
+contacte con tu Servicio Técnico mas
+cercano. El Servicio postventa
+especializado llevará acabo la
+reversibilidad de la puerta por su
+cuenta.
+24 electrolux
+
+
+GARANTÍA/SERVICIO POSTVENTA
+Condiciones de Garantía: ELECTROLUX HOME PRODUCTS ESPAÑA, S.A.
+garantiza al usuario del aparato cuyos datos de identificación figuran en el
+presente documento, durante el plazo de dos (2) años desde la fecha de su
+entrega, la reparación totalmente gratuita de las averías que experimente el
+aparato, incluyendo la presente garantía tanto el coste de las piezas de recambio
+como el de la mano de obra y, en su caso, el del desplazamiento del personal
+técnico del Servicio Oficial de la Marca al domicilio del usuario.
+En el supuesto de que el producto, por su tamaño y movilidad, fuera susceptible
+de ser trasportado por el usuario al Taller Oficial de la Marca, éste quedará liberado
+de la obligación de trasladar su personal técnico al domicilio del usuario.
+Para hacer uso del derecho de garantía aquí reconocido, será requisito necesario
+que el aparato se destine al uso privado. También será necesario presentar al
+personal técnico de la marca, antes de su intervención, la factura o tique de
+compra del aparato o el albarán de entrega correspondiente si éste fuera posterior,
+en unión del presente documento.
+
+Exclusiones: La presente garantía no cubre la instalación, nivelación, instrucciones
+de uso del aparato ni sustitución de lámparas. No quedan cubiertas por esta
+garantía y por tanto la misma quedará sin efecto en los casos de averías
+producidas como consecuencia de:
+• Fuerza mayor (fenómenos atmosféricos, geológicos, etc.)
+• Uso inadecuado o no acorde con las instrucciones del fabricante.
+• Falta de mantenimiento y limpieza: filtros con objetos tales como botones,
+   monedas, etc; condensadores con polvo, pelusa u otros elementos que
+   impidan la libre circulación del aire; cubetas de detergente con residuos, etc.
+• Uso de productos de limpieza abrasivos que causen daños en chapa, pintura
+   y plásticos.
+• La rotura accidental de componentes de plástico y vidrio.
+• La instalación y/o conexión incorrectas o no reglamentarias (voltaje, presión de
+   gas o agua, conexión eléctrica o hidráulica no adecuadas).
+• Los daños estéticos no denunciados en el momento de la entrega.
+
+La garantía no tendrá efecto en caso de manipulación de la placa de
+características del aparato o de los datos que figuren en la factura, tique de
+compra o albarán de entrega de aquél o de los consignados en este documento.
+Tampoco producirá efecto si se produjesen intervenciones de personal técnico no
+autorizado o no perteneciente al Servicio Oficial de la marca.
+Se informa al usuario que, además de la garantía reconocida en este documento,
+tiene la protección que le concede la Ley 23/2003, de 10 de julio, respecto de la
+                                                                    electrolux 25
+
+exigencia de que el bien adquirido sea conforme con el contrato de compraventa,
+pudiendo reclamar al vendedor, en caso de disconformidad, por las faltas que se
+pongan de manifiesto en el plazo de dos (2) años desde la entrega. En ese
+supuesto, tendrá derecho a solicitar la reparación gratuita del bien o a la
+sustitución de éste, salvo que una de esas opciones resulte imposible o
+desproporcionada.
+
+ELECTROLUX HOME PRODUCTS ESPAÑA, S.A.-S      Sociedad Unipersonal
+Albacete, n 3C - 28027 MADRID - CIF A08145872
+Central Servicio Técnico
+Ctra. M-300 km, 29,900
+Apdo. 119
+28802 Alcalá de Henares (Madrid)
+Recepción de Llamadas
+Averías 902 116 388
+Atención Usuarios:
+e-mail: usuarios.postventa@electrolux.es
+Para España:
+Puede comprar recambios y accesorios on-line entre en
+http://www.service.electrolux.com y seleccione Tienda Virtual
+26 electrolux
+
+
+GARANTÍA EUROPEA
+Este aparato está garantizado por Electrolux en cada uno de los países indicados
+en la parte posterior de este manual durante el periodo especificado en la garantía
+del aparato o el periodo que prevea la ley. Si usted se traslada de uno de estos
+países a otro de los países abajo indicados, la garantía del aparato se desplazará
+con usted siempre que se cumplan los siguientes requisitos:
+
+• La garantía entra en vigor el día en que usted compre el aparato, que se
+  demostrará mediante un justificante de compra válido emitido por el vendedor
+  del aparato.
+
+• La garantía del aparato tendrá el mismo periodo de validez y cubrirá las
+  mismas piezas y mano de obra que las garantías emitidas en su nuevo país de
+  residencia para ese modelo o gama de aparatos en concreto.
+
+• La garantía del aparato es personal del comprador original e intransferible.
+
+• El aparato deberá ser instalado y utilizado según las instrucciones de Electrolux
+  y es únicamente de uso doméstico, lo que significa que no podrá ser utilizado
+  con fines comerciales.
+
+• El aparato deberá ser instalado observando todas las normativas relevantes
+  que estén en vigor en su nuevo país de residencia.
+
+Las disposiciones de esta Garantía Europea no afectan a los derechos que le
+correspondan por ley.
+                                                                                                                  electrolux 27
+
+
+                                               www.electrolux.com
+Albania               +35 5 4 261 450              Rr. Pjeter Bogdani Nr. 7 Tirane
+Belgique/België/Belgien +32 2 363 04 44            Bergensesteenweg 719, 1502 Lembeek
+Èeská republika      +420 2 61 12 61 12 Budģjovická 3, Praha 4, 140 21
+Danmark               +45 70 11 74 00              Sjællandsgade 2, 7000 Fredericia
+Deutschland           +49 180 32 26 622            Muggenhofer Str. 135, 90429 Nürnberg
+Eesti                 +37 2 66 50 030              Mustamäe tee 24, 10621 Tallinn
+España                +34 902 11 63 88             Carretera M-300,Km.29,900 Alcalá de Henares Madrid
+France                 www.electrolux.fr
+Great Britain         +44 8705 929 929             Addington Way, Luton, Bedfordshire LU4 9QQ
+Hellas                +30 23 10 56 19 70 4, Limnou Str., 54627 Thessaloniki
+Hrvatska              +385 1 63 23 338             Slavonska avenija 3, 10000 Zagreb
+Ireland               +353 1 40 90 753             Long Mile Road Dublin 12
+Italia                +39 (0) 434 558500 C.so Lino Zanussi, 26 - 33080 Porcia (PN)
+Latvija               +37 17 84 59 34              Kr. Barona iela 130/2, LV-1012, Riga
+Lietuva               +370 5 2780609               Verkiŝ29, LT-09108 Vilnius
+Luxembourg            +35 2 42 43 13 01            Rue de Bitbourg, 7, L-1273 Hamm
+Magyarország          +36 1 252 1773               H-1142 Budapest XIV, Erzsébet királyné útja 87
+Nederland             +31 17 24 68 300             Vennootsweg 1, 2404 CG - Alphen aan den Rijn
+Norge                 +47 81 5 30 222              Risløkkvn. 2 , 0508 Oslo
+Österreich            +43 18 66 400                Herziggasse 9, 1230 Wien
+Polska                +48 22 43 47 300             ul. Kolejowa 5/7, Warsaw
+Portugal              +35 12 14 40 39 39 Quinta da Fonte-Edificio Gonçalves Zarco-Q 35-2774-518 Paço de Arcos
+Romania               +40 21 451 20 30             Str. Garii Progresului 2, S4, 040671 RO
+Schweiz-Suisse-Svizzera +41 62 88 99 111           Industriestrasse 10, CH-5506 Mägenwil
+Slovenija             +38 61 24 25 731             Electrolux Ljubljana d.o.o., Gerbiěeva 98, 1000 Ljubljana
+Slovensko             +421 2 43 33 43 22 Electrolux Slovakia s.r.o., Electrolux Domáce spotrebiěe SK, Seberíniho 1, 821 03 Bratislava
+Suomi                  www.electrolux.fi
+Sverige               +46 (0)771 76 76 76 Electrolux Service, S:t Göransgatan 143, S-105 45 Stockholm
+Türkiye               +90 21 22 93 10 25 Tarlabaŏcaddesi no : 35 Taksim ástanbul
+Россия                +7 095 937 7837             129090 Москва, Олимпийский проспект, 16, БЦ "Олимпик"
+28 electrolux
+
+
+Welcome to the world of Electrolux
+You’ve chosen a first class product from Electrolux, which hopefully will provide
+you with lots of pleasure in the future. Electrolux ambition is to offer a wide variety
+of quality products that would make your life even more comfortable. You can look
+at some examples on the cover in this manual. But now it’s time to study this
+manual and start using and enjoying the benefits from your new machine. We
+promise that it’ll make your life a little easier. Good luck!
+                                                                         electrolux 29
+
+
+The following symbols are used in this manual:
+
+      Important information concerning your personal safety and information on
+      how to avoid damaging the appliance.
+
+      General information and tips
+
+      Environmental information
+
+The symbol         on the product or on its packaging indicates that this product
+may not be treated as household waste. Instead it shall be handed over to the
+applicable collection point for the recycling of electrical and electronic equipment.
+By ensuring this product is disposed of correctly, you will help prevent potential
+negative consequences for the environment and human health, which could
+otherwise be caused by inappropriate waste handling of this product. For more
+detailed information about recycling of this product, please contact your local city
+office, your household waste disposal service or the shop where you purchased
+the product.
+30 electrolux
+
+
+CONTENTS                                 Hints                              41
+                                         Hints for refrigeration            41
+Safety Information                  31   Maintenance                        41
+Use                                 34   Periodic cleaning                  41
+Cleaning the interior               34   Periods of non-operation           42
+Control panel                       34   Interior light                     42
+Display                             34   Defrosting                         42
+First switch on                     35   Technical information              43
+Switching off                       35   Customer service and spare parts   43
+Temperature regulation              35   Installation                       44
+Functions Menu                      35   Location                           44
+Use of the fridge compartment       37   Electrical connection              44
+Holiday Function                    37   Shelf holders                      45
+Fresh food refrigeration            37   Rear spacers                       45
+Quick Chill Shelf                   38   Door reversibility                 46
+Bottle and Can Holder               38   European Guarantee                 48
+Dismantling of the Bottle and Can   38   www.electrolux.com                 49
+Holder
+Installation of the carbon filter   39
+Change of the carbon filter         39
+Movable shelves                     40
+Bottle rack                         40
+Positioning the door shelves        40
+                                                                        electrolux 31
+
+
+     SAFETY INFORMATION                    • Before any cleaning or
+                                             maintenance work is carried out,
+It is most important that this               be sure to switch off and unplug
+instruction book should be retained          the appliance.
+with the appliance for future reference.
+                                           • This appliance is heavy. Care
+Should the appliance be sold or
+                                             should be taken when moving it
+transferred to another owner, or
+should you move house and leave the        • Ice lollies can cause frost burns if
+appliance, always ensure that the            consumed straight from the
+book is supplied with the appliance in       appliance.
+order that the new owner can be            • Take utmost care when handling
+acquainted with the functioning of the       your appliance so as not to cause
+appliance and the relevant warnings.         any damages to the cooling unit
+If this appliance featuring magnetic         with consequent possible fluid
+door seals is to replace an older            leakages.
+appliance having a spring lock (latch)     • The appliance must not be located
+on the door or lid, be sure to make          close to radiators or gas cookers.
+that spring lock unusable before you
+                                           • Avoid prolonged exposure of the
+discard the old appliance. This will
+                                             appliance to direct sunlight.
+prevent it from becoming a death-ttrap
+for a child.                               • There must be adequate ventilation
+                                             round the back of the appliance
+These warnings are provided in the
+                                             and any damage to the refrigerant
+interest of safety. You must read them
+                                             circuit must be avoided.
+carefully before installing or using the
+appliance.                                 • For freezers only (except built-iin
+                                             models): an ideal location is the
+General Safety                               cellar or basement.
+• This appliance is not intended for       • Do not use other electrical
+  use by persons (including children)        appliances (such as ice cream
+  with reduced physical, sensory or          makers) inside of refrigerating
+  mental capabilities, or lack of            appliances.
+  experience and knowledge, unless
+  they have been given supervision
+  or instruction concerning use of the
+                                           Service/Repair
+  appliance by a person responsible        • Any electrical work required to
+  for their safety.                          install this appliance should be
+  Children should be supervised to           carried out by a qualified electrician
+  ensure that they do not play with          or competent person
+  the appliance.
+                                           • This product should be serviced by
+• It is dangerous to alter the               an authorized Service Centre, and
+  specifications or modify this              only genuine spare parts should be
+  product in any way.                        used.
+32 electrolux
+
+
+• Under no circumstances should            • Frozen food must not be re-frozen
+  you attempt to repair the appliance        once it has been thawed out.
+  yourself. Repairs carried out by         • Manufacturers’ storage
+  inexperienced persons may cause            recommendations should be strictly
+  injury or more serious                     adhered to. Refer to relevant
+  malfunctioning. Refer to your local        instructions.
+  Service Centre, and always insist
+  on genuine spare parts.                  • The inner lining of the appliance
+                                             consists of channels through which
+• This appliance contains                    the refrigerant passes. If these
+  hydrocarbons in its cooling unit;          should be punctured this would
+  maintenance and recharging must            damage the appliance beyond
+  therefore only be carried out by           repair and cause food loss. DO
+  authorized technicians.                    NOT USE SHARP INSTRUMENTS
+                                             to scrape off frost or ice. Frost may
+Use                                          be removed by using the scraper
+• The domestic refrigerators and             provided. Under no circumstances
+  freezers are designed to be used           should solid ice be forced off the
+  specifically for the storage of edible     liner. Solid ice should be allowed to
+  foodstuffs only.                           thaw when defrosting the
+                                             appliance.
+• Best performance is obtained with
+  ambient temperature between              • Do not place carbonated or fizzy
+  +18°C and +43°C (class T); +18°C           drinks in the freezer as it creates
+  and +38°C (class ST); +16°C and            pressure on the container, which
+  +32°C (class N); +10°C and +32°C           may cause it to explode, resulting
+  (class SN). The class of your              in damage to the appliance.Do not
+  appliance is shown on its rating           use a mechanical device or any
+  plate.                                     artificial means to speed up the
+                                             thawing process other than those
+   Warning: when the ambient
+                                             recommended by the
+   temperature is not included within
+                                             manufacturer. Never use metal
+   the range indicated for the class of
+                                             objects for cleaning your appliance
+   this appliance, the following
+                                             as it may get damaged.
+   instructions must be observed:
+   when the ambient temperature
+   drops below the minimum level, the
+                                           Installation
+   storage temperature in the freezer      • During normal operation, the
+   compartment cannot be                     condenser and compressor at the
+   guaranteed; therefore it is advisable     back of the appliance heat up
+   to use the food stored as soon as         considerably. For safety reasons,
+   possible.                                 minimum ventilation must be as
+                                             shown in the instructions.
+                                                                            electrolux 33
+
+   Attention: keep ventilation openings
+   clear of obstruction.                            Environment
+• Care must be taken to ensure that                 Protection
+  the appliance does not stand on
+  the electrical supply cable.               This appliance does not contain
+   Important: if the supply cord is          gasses which could damage the ozone
+   damaged, it must be replaced by a         layer, in either its refrigerant circuit or
+   special cord or assembly availa-ble       insulation materials. The appliance
+   from the manufacturer or its service      shall not be discarded together with
+   agent.                                    the urban refuse and rubbish. Avoid
+                                             damaging the cooling unit, especially
+• If the appliance is transported            at the rear near the heat exchanger.
+  horizontally, it is possible that the      Information on your local disposal sites
+  oil contained in the compressor            may be obtained from municipal
+  flows in the refrigerant circuit. It is    authorities. The materials used on this
+  advisable to wait at least two hours       appliance marked by the symbol
+  before connecting the appliance to         are recyclable.
+  allow the oil to flow back in the
+  compressor.
+• There are working parts in this
+  product which heat up. Always
+  ensure that there is adequate
+  ventilation as a failure to do this will
+  result in component failure and
+  possible food loss. See installation
+  instructions.
+• Parts which heat up should not be
+  exposed. Wherever possible the
+  back of the product should be
+  against a wall.
+34 electrolux
+
+
+      USE
+
+Cleaning the interior
+Before using the appliance for the first            Do not use detergents or
+time, wash the interior and all internal       abrasive powders, as these will
+accessories with luke-warm water and           damage the finish.
+some neutral soap so as to remove
+the typical smell of a brand-new
+product, then dry thoroughly.
+
+Control panel
+
+
+
+
+                              A B          C        D E
+
+A - Appliance button ON/OFF                    D - Function button
+B - Temperature regulation button              E - Confirmation button
+C - Temperature and function indicator
+
+
+Display
+
+
+
+
+     Positive Temperature indicator                If on the Shopping function is on
+     Temperature indicator                         If on the Eco Mode function is on
+     If on the Child Lock function is on           If on the Quick Chill function is on
+                                                                              electrolux 35
+
+                                               After a long period out of use it is not
+First switch on                                necessary to set again the temperature
+After plugging the plug into the power         because it remains stored.
+outlet, if the display is not illuminated,
+press key (A), appliance on.
+                                                        Attention!
+For a correct storage of the food select
+                                               During the stability period by the first
+the Eco Mode function that guarantee
+                                               starting the temperature displayed can
+the following temperature is set:
+                                               not correspond to the setting
+    +5°C in the fridge
+                                               temperature. During this time it is
+• To select a different temperature            possible that the temperature displayed
+    see "Temperature regulation".              is different than the setting temperature.
+
+        Important                              Functions Menu
+If the door remains ajar for some              By activating the key D the functions
+minutes, the internal                          menu is operating.
+lighting will turn off electronically; after   Each function could be confirmed by
+this, the lighting function will be reset      pressing button E. If there is no
+by closing and opening the door itself.        confirmation after some seconds the
+                                               display will go out from the menu and
+Switching off                                  return in normal condition.
+The appliance is shut off by pressing          The following functions are indicated:
+key (A) for more than 1 second. During             Child Lock function
+this, a countdown of the temperature
+from -3 -2 -1 will be shown.                       Shopping function
+                                                   Eco Mode function
+Temperature regulation
+                                                   Quick Chill function
+The temperature may be regulated by
+pressing the key B.                            Child Lock Function
+By pressing the key B the current
+temperature setting flashes on the             The Child Lock function is activated by
+indicator and by pressing the key B            pressing key D (several times if
+again it is possible to change it.             necessary) until the corresponding icon
+You confirm the choice of the                  appears      .
+temperature either by pressing the key         You must confirm the choice by
+E, (you will hear the buzzer) or by            pressing key E within few seconds.
+waiting for some seconds (you will not         You will hear the buzzer and the icon
+hear the buzzer).                              remains lighted.
+Then the indicator shows again the             In this condition any possible operation
+inside compartment temperature.                through the keys does not cause any
+The newly selected-temperature must            change as long as this function is
+be reached after 24 hours.                     activated.
+36 electrolux
+
+
+It is possible to de-activate the            temperatures are automatically set
+function at any time by pressing key D       (+5°C), in the best conditions for
+until the corresponding icon will flash      storing food.
+and then key E.                              It is possible to de-activate the
+                                             function at any time by changing the
+Shopping Function                            selected temperature in the
+If you need to insert a large amount of      compartment.
+warm food, for example after doing the       Quick Chill Function
+grocery shopping, we suggest
+activating the Shopping function to          The Quick Chill function permits the
+chill the products more rapidly and to       rapid cooling of cans and bottles
+avoid warming the other food which is        taking forced cold air into them.
+already in the refrigerator.                 Put the drinks on the Quick Chill shelf
+The Shopping function is activated by        and open the air lever till the
+pressing key D (several times if             maximum.
+necessary) until the corresponding icon      The Quick Chill function is activated by
+                                             pressing key D (several times if
+appears        .
+                                             necessary) until the corresponding icon
+You must confirm the choise by
+pressing key E within few seconds.           appears      .
+You will hear the buzzer and the icon        You must confirm the choise by
+remains lighted.                             pressing key E within few seconds.
+The Shopping function shuts off              You will hear the buzzer and the icon
+automatically after approximately 6 hours.   remains lighted.
+It is possible to de-activate the            The Quick Chill function shuts off
+function at any time by pressing key D       automatically after approximately 6 hours.
+until the corresponding icon will flash      When the cooling is finished de-
+and then key E.                              activate the function by pressing key D
+                                             until the corresponding icon will flash,
+Eco Mode Function                            then key E and dispose the air lever to
+The Eco Mode function is activated by        the minimum.
+pressing key D (several times if
+necessary) until the corresponding icon
+appears      (or setting the temperature
+at +5°C).
+You must confirm the choice by
+pressing key E within few seconds.                                        MIN
+
+You will hear the buzzer and the icon
+remains lighted.                                                         MAX
+
+In this condition the chosen
+                                                                          electrolux 37
+
+
+Use of the fridge                          function in the energy- saving mode
+                                           and the indicator shows the letter H.
+compartment                                It is possible to de-activate the function
+The temperature of this compartment        at any time by changing the selected
+may be regulated between +2°C and          temperature in the compartment.
++8°C.
+During normal functioning the indicator           Attention!
+shows the temperature inside the fridge.   The fridge compartment must be
+                                           empty with Holiday function on.
+       Attention!
+Difference between the temperature
+                                           Fresh food refrigeration
+displayed and temperature setting is       To obtain the best performance:
+normal. Especially when:                   • do not store warm food or
+• a new setting has recently been             evaporating liquids in the
+    selected                                  refrigerator;
+
+• the door has been left open for a        • do cover or wrap the food,
+  long time                                  particularly if it has a strong flavour.
+
+• warm food has been placed in the         • Position food so that air can
+  compartment.                               circulate freely round it.
+
+Holiday Function “H”
+The Holiday function sets the
+temperature at + 15°C.
+This function allows you to keep the
+refrigerator shut and empty during a
+long holiday period ( e. g. the summer
+holidays) without the formation of a
+bad smell.
+The Holiday Function H may be
+regulated by pressing the key B. By
+pressing the key B the current
+temperature setting flashes on the
+indicator. Press the key B again. When
+on the display appears the letter H
+confirm the choice of the temperature
+or by pressing the key E, (you will hear
+the buzzer) or by waiting for some
+seconds (you will not hear the buzzer).
+Now the refrigerator is in the Holiday
+38 electrolux
+
+
+Quick Chill Shelf
+The Quick Chill Shelf can be placed
+in one of the upper grooves. To
+maintain the best performance the
+shelf should be placed in the
+second groove from the top.
+
+
+
+                                       Dismantling of the Bottle
+                                       and Can Holder
+                                       1. Take out the Quick Chill Shelf with
+                                          holder from the cabinet.
+                                       2. To loosen the holder from the shelf,
+                                          bend the hooks/brackets that
+Bottle and Can Holder                     surround the backside of the shelf.
+The side of the bottle and can
+holder is moveable to enable a
+more flexible placement of cans
+and bottles in front of the grid. To
+alow the holder to be moved
+easier when moving sideways,
+press the shelf backwards.
+The bottle support can be pulled
+out when chilling larger bottles.
+                                                                             electrolux 39
+
+
+Installation of the carbon Change of the carbon
+filter                     filter
+On delivery the carbon filter is placed      To maintain the best performance
+in a plastic bag to secure the length of     the carbon filter should be changed
+life of the carbon filter. The filter        once a year with normal usage.
+should be placed behind the grill            New carbon filters can be purchased
+before the cabinet is turned on.             from your local dealer.
+The cover can be opened by turning the       The filter is placed behind the grill and can
+cover outward. The carbon filter is then     be reached by opening the cover. The
+mounted in the slot found in the back, see   cover can be opened by turning the cover
+the illustration.                            outward. The carbon filter is pulled out of
+                                             its slot.
+                                             The new carbon filter is placed in the
+     The filter should be handled            existing slot.
+     carefully so fragments don´t
+     loosen from the surface.                      The filter should be handled
+                                                   carefully so fragments don´t
+                                                   loosen from the surface.
+
+
+
+
+        1
+
+
+                                                      1
+40 electrolux
+
+
+Movable shelves
+The walls of the refrigerator are
+equipped with a series of runners so
+that the shelves can be positioned as
+desired.
+
+
+
+
+                                            Positioning the door
+                                            shelves
+                                            To permit storage of food packages of
+                                            various sizes, the door shelves can be
+    D338                                    placed at different heights.
+                                            To make these adjustments proceed
+Bottle rack                                 as follows: Gradually pull the shelf in
+                                            the direction of the arrows until it
+Place bottles in the rack with the          comes free, then reposition as
+bottleneck to the front.                    required.
+Important: Only store unopened
+bottles horizontally.
+The bottle rack can be tilted for storing
+opened bottles.
+To do this pull the bottle rack forward
+until it can be tilted upwards, then
+slide the front support into the next
+level up.
+                                                                        electrolux 41
+
+
+     HINTS                                 MAINTENANCE
+                                                Unplug the appliance before
+Hints for refrigeration                         carrying out any maintenance
+Useful hints:                                   operation.
+Meat (all types): wrap in polythene             Warning
+bags and place on the glass shelf               This appliance contains
+above the vegetable drawer.                     hydrocarbons in its cooling unit;
+For safety, store in this way only one          maintenance and recharging must
+or two days at the most.                        therefore only be carried out by
+                                                authorized technicians.
+Cooked foods, cold dishes, etc..:
+these should be covered and may be         Periodic cleaning
+placed on any shelf.
+Fruit and vegetables: these should be      Many proprietary kitchen surface
+thoroughly cleaned and placed in the       cleaners contain chemicals that can
+special drawer(s) provided.                attack/damage the plastics used in
+                                           this appliance. For this reason it is
+Butter and cheese: these should be
+                                           recommended that the outer casing of
+placed in special airtight containers or
+wrapped in aluminium foil or polythene     this appliance is only cleaned with
+bags to exclude as much air as             warm water with a little washing-u  up
+possible.                                  liquid added.
+Milk bottles: these should have a cap      Clean the inside with warm water and
+and should be stored in the bottle rack    bicarbonate of soda.
+on the door.                               Rinse and dry thoroughly.
+Bananas, potatoes, onions and garlic,      Clean the condenser (black grill) and
+if not packed, must not be kept in the     the compressor at the back of the
+refrigerator.                              appliance with a brush or a vacuum
+                                           cleaner. This operation will improve the
+                                           performance of the appliance and
+                                           save electricity consumption.
+42 electrolux
+
+
+Periods of non-operation
+When the appliance is not in use for
+long periods, take the following
+precautions:
+• remove the plug from the wall socket;
+• remove all food;
+• defrost and clean the interior and all
+  accessories;
+• leave the door ajar to allow air to         D037
+  circulate to prevent unpleasant
+  smells.
+                                           Defrosting
+Interior light
+                                           Frost is automatically eliminated from
+If it becomes necessary to replace the     the evaporator of the refrigerator
+lamp, press on the rear hook and at the    compartment every time the motor
+same time slide the cover in the           compressor stops, during normal use.
+direction indicated by the arrow.          The defrost water drains out through a
+                                           trough into a special container at the
+      Attention                            back of the appliance, over the motor
+Replace the lamp with one of the same      compressor, where it evaporates.
+power (the maximum power is shown          It is important to periodically clean the
+on the light diffuser).                    defrost water drain hole in the middle
+                                           of the refrigerator compartment
+                                           channel to prevent the water
+                                           overflowing and dripping onto the food
+                                           inside. Use the special cleaner
+                                           provided, which you will find already
+                                           inserted into the drain hole.
+                                                                          electrolux 43
+
+
+TECHNICAL INFORMATION
+Net Fridge Capacity lt.                                                   375
+
+Energy Consumption kWh/24h                                               0,400
+
+Energy Consumption kWh/year                                               146
+
+
+
+Dimensions mm
+
+High                                                                      1800
+
+ Width                                                                    600
+
+Depth                                                                     650
+
+The technical infomation are situated in the rating plate on the internal left side of
+the appliance.
+
+
+
+
+CUSTOMER SERVICE
+AND SPARE PARTS
+If the appliance is not functioning         • If your appliance is still not working
+properly, check that:                         properly after making the above
+                                              checks, contact the nearest service
+• the plug is firmly in the wall socket       centre.
+  and the mains power switch is on;
+                                            To obtain fast service, it is essential
+• there is an electricity supply (find      that when you apply for it you specify
+  out by plugging in another                the model and serial number of your
+  appliance);                               appliance which can be found on the
+• If there are water drops on the           guarantee certificate or on the rating
+  bottom of the cabinet, check that         plate located inside the appliance, on
+  the defrost water drain opening is                        hand side.
+                                            the bottom left-h
+  not obstructed (see “Defrosting”
+  section).
+44 electrolux
+
+
+INSTALLATION                               Electrical connection
+Location                                   Before plugging in, ensure that the
+The appliance should be installed well     voltage and frequency shown on the
+away from sources of heat such as          serial number plate correspond to your
+radiators, boilers, direct sunlight etc.   domestic power supply. Voltage can
+Ensure that air can circulate freely       vary by ±6% of the rated voltage.
+around the back of the cabinet. To         For operation with different voltages, a
+ensure best performance, if the            suitably sized auto-transformer must
+appliance is positioned below an           be used.
+overhanging wall unit, the minimum         The appliance must be earthed.
+distance between the top of the            The power supply cable plug is provided
+cabinet and the wall unit must be at       with a contact for this purpose.
+least 100 mm . Ideally, however, the       If the domestic power supply socket is
+appliance should not be positioned         not earthed, connect the appliance to
+below overhanging wall units. Accurate     a separate earth in compliance with
+levelling is ensured by one or more        current regulations, consulting a
+adjustable feet at the base of the         specialist technician.
+cabinet.                                   The Manufacturer declines all
+                                           responsibility if the above safety
+                                           precautions are not observed.
+                                                   This appliance complies with
+                                                    the following E.E.C. Directives:
+    100 mm
+
+
+
+
+                                           •    87/308 EEC of 2/6/87 relative to
+                                               radio interference suppression.
+                                           • 73/23 EEC of 19.2.73 (Low Voltage
+                                             Directive) and subsequent
+                                             modifications;
+    10 mm
+
+
+
+
+                         10 mm
+
+
+
+
+                                           • 89/336 EEC of 3.5.89
+                                             (Electromagnetic Compatibility
+    NP00
+                                             Directive) and subsequent
+                                             modifications.
+             Attention
+It must be possible to disconnect the
+appliance from the mains power
+supply; the plug must therefore be
+easily accessible after installation.
+                                                                         electrolux 45
+
+
+Shelf holders                                Rear spacers
+Your appliance is equipped with shelf        In the appliance, there are two spacers
+retainers that make it possible to           which must be fitted as shown in the
+secure the shelves during                    figure .
+transportation.                              Slacken the screws and insert the
+                                             spacer under the screw head, then re-
+To remove them proceed as follows:
+                                             tighten the screws.
+Move the shelf holders in the direction
+of the arrow, raise the shelf from the
+rear and push it forward until it is freed
+and remove the retainers.
+
+               A
+
+
+
+
+                     B
+
+
+
+
+                    C
+46 electrolux
+
+
+Door reversibility
+                                                                               b
+Before carrying out any operations,
+remove the plug from the power socket.
+To change the opening direction of the                                c
+door, proceed as follows:                                   a
+• To carry out the following operations,
+   we suggest that this be made with
+   another person that will keep a firm
+   hold on the doors of the appliance
+   during the operations.
+• Open the door with the appliance in
+  the upright position. Unscrew the        • Remove using a tool the cover (e)
+  screws and remove the upper door           unscrew the lower hinge pivot (f)
+  plastic trim.                              and place it on the opposite side.
+• Remove the little plastic cover from     • Reinsert the cover (e) on the
+  the door plastic trim and refit on the     opposite side.
+  opposite side (d).                       • Reinsert the door .
+                                           • Pay attention that the front board of
+                                             the doors are parallel to the front
+                                             board of the top.
+                                           • Fix the door stopper on the
+                                             opposite side.
+                                           • Position and fix the upper hinge (that
+                                             can be found in the instruction for use
+                                             bag) on the opposite side .
+                                           • Fix the screw of the new cover hinge
+                                             (that can be found in the instruction for
+                                             use bag).
+• Lay down the appliance back side
+  down.
+• Remove the screw of the hinge cover
+  plug (a).
+• Unscrew the upper hinge and remove
+  it (b).
+• Unscrew the screw and remove the
+  door stopper (c).
+• Remove the door.
+                                                                          electrolux 47
+
+
+• Lift up the appliance to vertical
+  position.                                       Warning
+• Open the door and reposition the           After having reversed the opening
+  upper door plastic trim with screws.      direction of the doors check that all the
+                                            screws are properly tightened and that
+                                            the magnetic seal adheres to the
+                                            cabinet.
+                                            If the ambient temperature is cold (i.e.
+                                            in Winter), the gasket may not fit
+                                            perfectly to the cabinet. In that case,
+                                            wait for the natural fitting of the gasket
+                                            or accelerate this process by heating
+                                            up the part involved with a normal
+                                            hairdrier. Lay down the appliance back
+                                            side down.
+
+• Fix the handle on the opposite side.
+
+       Reposition, level the appliance,
+      wait for at least two hours and
+      then connect it to the power
+      socket.
+In case you do not want to carry out the
+above mentioned operations, contact the
+nearest After Sales Service Force.. The
+After Sales Service specialist will carry
+out the reversibility of the doors at
+your cost.
+48 electrolux
+
+
+EUROPEAN GUARANTEE
+
+This appliance is guaranteed by Electrolux in each of the countries listed at the
+back of this user manual, for the period specified in the appliance guarantee or
+otherwise by law. If you move from one of these countries to another of the
+countries listed, the appliance guarantee will move with you subject to the
+following qualifications:
+
+• The appliance guarantee starts from the date you first purchased the appliance
+  which will be evidenced by production of a valid purchase document issued by
+  the seller of the appliance.
+
+• The appliance guarantee is for the same period and to the same extent for
+  labour and parts as exists in your new country of residence for this particular
+  model or range of appliances.
+
+• The appliance guarantee is personal to the original purchaser of the appliance
+  and cannot be transferred to another user.
+
+• The appliance is installed and used in accordance with instructions issued by
+  Electrolux and is only used within the home, i.e. is not used for commercial
+  purposes.
+
+• The appliance is installed in accordance with all relevant regulations in force
+  within your new country of residence.
+
+The provisions of this European Guarantee do not affect any of the rights granted
+to you by law.
+                                                                                                                  electrolux 49
+
+
+                                               www.electrolux.com
+Albania               +35 5 4 261 450              Rr. Pjeter Bogdani Nr. 7 Tirane
+Belgique/België/Belgien +32 2 363 04 44            Bergensesteenweg 719, 1502 Lembeek
+Èeská republika      +420 2 61 12 61 12 Budģjovická 3, Praha 4, 140 21
+Danmark               +45 70 11 74 00              Sjællandsgade 2, 7000 Fredericia
+Deutschland           +49 180 32 26 622            Muggenhofer Str. 135, 90429 Nürnberg
+Eesti                 +37 2 66 50 030              Mustamäe tee 24, 10621 Tallinn
+España                +34 902 11 63 88             Carretera M-300,Km.29,900 Alcalá de Henares Madrid
+France                 www.electrolux.fr
+Great Britain         +44 8705 929 929             Addington Way, Luton, Bedfordshire LU4 9QQ
+Hellas                +30 23 10 56 19 70 4, Limnou Str., 54627 Thessaloniki
+Hrvatska              +385 1 63 23 338             Slavonska avenija 3, 10000 Zagreb
+Ireland               +353 1 40 90 753             Long Mile Road Dublin 12
+Italia                +39 (0) 434 558500 C.so Lino Zanussi, 26 - 33080 Porcia (PN)
+Latvija               +37 17 84 59 34              Kr. Barona iela 130/2, LV-1012, Riga
+Lietuva               +370 5 2780609               Verkiŝ29, LT-09108 Vilnius
+Luxembourg            +35 2 42 43 13 01            Rue de Bitbourg, 7, L-1273 Hamm
+Magyarország          +36 1 252 1773               H-1142 Budapest XIV, Erzsébet királyné útja 87
+Nederland             +31 17 24 68 300             Vennootsweg 1, 2404 CG - Alphen aan den Rijn
+Norge                 +47 81 5 30 222              Risløkkvn. 2 , 0508 Oslo
+Österreich            +43 18 66 400                Herziggasse 9, 1230 Wien
+Polska                +48 22 43 47 300             ul. Kolejowa 5/7, Warsaw
+Portugal              +35 12 14 40 39 39 Quinta da Fonte-Edificio Gonçalves Zarco-Q 35-2774-518 Paço de Arcos
+Romania               +40 21 451 20 30             Str. Garii Progresului 2, S4, 040671 RO
+Schweiz-Suisse-Svizzera +41 62 88 99 111           Industriestrasse 10, CH-5506 Mägenwil
+Slovenija             +38 61 24 25 731             Electrolux Ljubljana d.o.o., Gerbiěeva 98, 1000 Ljubljana
+Slovensko             +421 2 43 33 43 22 Electrolux Slovakia s.r.o., Electrolux Domáce spotrebiěe SK, Seberíniho 1, 821 03 Bratislava
+Suomi                  www.electrolux.fi
+Sverige               +46 (0)771 76 76 76 Electrolux Service, S:t Göransgatan 143, S-105 45 Stockholm
+Türkiye               +90 21 22 93 10 25 Tarlabaŏcaddesi no : 35 Taksim ástanbul
+Россия                +7 095 937 7837             129090 Москва, Олимпийский проспект, 16, БЦ "Олимпик"
+     www.electrolux.com
+     www.electrolux.es
+
+
+
+
+2223 421-36-00 03112008
+

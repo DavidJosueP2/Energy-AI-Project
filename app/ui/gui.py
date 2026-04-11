@@ -919,8 +919,7 @@ class MainWindow(QMainWindow):
         self._log(f"   Energia: {metrics.total_energy_kwh:.1f} kWh | "
                   f"Costo: ${metrics.total_cost:.2f} | "
                   f"Confort: {metrics.comfort_percentage:.1f}%")
-
-        print(self.base_result.data)
+        
         self._update_all_plots()
         self._update_metrics_table()
 

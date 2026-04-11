@@ -1,0 +1,146 @@
+Product information sheet
+COMMISSION DELEGATED REGULATION (EU) 2019/2016
+
+Supplier’s name or trade
+                               Bosch
+mark (a) (b) :
+
+Supplier’s address (a) (b) :   BSH Hausgeräte GmbH, Carl-Wery-Str. 34, 81739 Munich, Germany
+
+Model identifier (a) :         KGN39AWCTG
+
+Type of refrigerating appliance:
+
+Low-noise appliance:                     No               Design type:                      Freestanding
+
+                                                          Other refrigerating appli-
+Wine storage appliance:                  No                                                     Yes
+                                                          ance:
+
+General product parameters:
+
+Parameter                               Value             Parameter                            Value
+
+                               Height              2030
+Overall dimensions (milli-
+                               Width               600    Total volume (dm3 or l)               363
+metre) (a) (b)
+                               Depth               665
+
+EEI                                      64               Energy efficiency class               C (c)
+
+Airborne acoustical noise                                 Airborne acoustical noise
+                                         35                                                     B (a)
+emissions (dB(A) re 1 pW)                                 emission class
+
+                                                                                        Extended temperate,
+Annual energy consump-
+                                        162               Climate class:               Temperate, Subtropical,
+tion (kWh/a)
+                                                                                              tropical
+
+Minimum ambient temper-                                   Maximum ambient temper-
+ature (°C), for which the                                 ature (°C), for which the
+                                        10   (c)
+                                                                                                43 (c)
+refrigerating appliance is                                refrigerating appliance is
+suitable                                                  suitable
+
+Winter setting                           No
+
+
+
+
+                                                          1                                              08.05.2025
+Compartment Parameters:
+
+                                                         Compartment parameters and values
+
+                                          Com-      Recommended temperat-          Freezing      Defrosting
+                                           part-    ure setting for optimised      capacity         type
+             Compartment type             ment          food storage (°C)          (kg/24 h)     (auto-de-
+                                         Volume      These settings shall not                    frost = A,
+                                         (dm3 or   contradict the storage con-                    manual
+                                            l)     ditions set out in Annex IV,                  defrost =
+                                                             Table 3                                 M)
+
+Pantry                             No       -                    -                      -            -
+
+Wine storage                       No       -                    -                      -            -
+
+Wine storage 2                     No       -                    -                      -            -
+
+Wine storage 3                     No       -                    -                      -            -
+
+Cellar                             No       -                    -                      -            -
+
+Fresh food                         Yes    260.0                 4                       -            A
+
+Chill                              No       -                    -                      -            -
+
+0-star or ice- making              No       -                    -                      -            -
+
+1-star                             No       -                    -                      -            -
+
+2-star                             No       -                    -                      -            -
+
+3-star                             No       -                    -                      -            -
+
+4-star                             Yes    103.0                 -18                   10.0           A
+
+2-star section                     No       -                    -                      -            -
+
+                                                                                   (for 4-star
+Variable temperature com-
+                                    -       -                    -                compart-           -
+partment
+                                                                                  ments) or -
+
+For 4-star compartments
+
+Fast freeze facility                               Yes
+
+For wine storage appliances
+
+Number of standard wine bottles                    -
+
+Light source parameters (b) (d):
+
+Type of light source                               LED
+
+Energy efficiency class                            E
+
+Type of light source                               LED
+
+Energy efficiency class                            F
+
+Minimum duration of the guarantee offered by the supplier (a) (b) :               24 months
+
+
+                                                   2                                             08.05.2025
+Additional information (a) (b) :
+
+Weblink to the supplier’s website, where the information in point 4 of Annex II of Commission Regulation
+(EU) 2019/2019 is found: www.bosch-home.com/energylabel
+
+(a)
+      this item shall not be considered relevant for the purposes of Article 2(6) of Regulation (EU) 2017/1369.
+
+  changes to these items shall not be considered relevant for the purposes of paragraph 4 of Article 4 of
+(b)
+
+Regulation (EU) 2017/1369.
+
+  if the product database automatically generates the definitive content of this cell the supplier shall not
+(c)
+
+enter these data.
+
+(d)
+      as determined in accordance with Commission Delegated Regulation (EU) 2019/2015.
+
+
+
+
+                                                          3                                            08.05.2025
+

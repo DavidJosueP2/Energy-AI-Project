@@ -9,12 +9,13 @@ import numpy as np
 import pandas as pd
 
 from app.config import MetricsConfig, SimulationConfig
+from app.simulation.devices import build_device_definition
 
 
 HIGHER_IS_BETTER_METRICS = {
     "Confort (%)",
     "Indice de Confort Promedio",
-    "Fitness Score",
+    "Performance Score",
 }
 
 
@@ -37,7 +38,7 @@ class PerformanceMetrics:
     avg_control_level: float = 0.0
     control_variability: float = 0.0
     control_active_percentage: float = 0.0
-    fitness_score: float = 0.0
+    performance_score: float = 0.0
 
     def to_dict(self) -> Dict[str, float]:
         return {
@@ -56,7 +57,7 @@ class PerformanceMetrics:
             "Nivel de Control Promedio (%)": round(self.avg_control_level, 1),
             "Variabilidad del Control": round(self.control_variability, 3),
             "Control Activo (%)": round(self.control_active_percentage, 1),
-            "Fitness Score": round(self.fitness_score, 4),
+            "Performance Score": round(self.performance_score, 4),
         }
 
 
@@ -90,11 +91,11 @@ def calculate_metrics(df: pd.DataFrame, sim_config: SimulationConfig, metrics_co
     control_changes = df["control_level"].diff().dropna()
     metrics.control_variability = float(control_changes.std()) if len(control_changes) > 0 else 0.0
     metrics.control_active_percentage = float((df["control_level"] > 5.0).sum() / len(df) * 100)
-    metrics.fitness_score = calculate_fitness(df, sim_config, metrics_config)
+    metrics.performance_score = calculate_performance_score(df, sim_config, metrics_config)
     return metrics
 
 
-def calculate_fitness(df: pd.DataFrame, sim_config: SimulationConfig, metrics_config: MetricsConfig) -> float:
+def calculate_performance_score(df: pd.DataFrame, sim_config: SimulationConfig, metrics_config: MetricsConfig) -> float:
     if df.empty:
         return 0.0
 
@@ -108,8 +109,9 @@ def calculate_fitness(df: pd.DataFrame, sim_config: SimulationConfig, metrics_co
     comfort_quality_norm = float(df["comfort_index"].mean())
     comfort_norm = 0.7 * comfort_band_norm + 0.3 * comfort_quality_norm
     dt = sim_config.time_step_hours
-    device_max_power = 0.25 if sim_config.device_key == "refrigerador" else 3.5
-    device_cop = 2.3 if sim_config.device_key == "refrigerador" else 3.2
+    definition = build_device_definition(sim_config.device_key)
+    device_max_power = float(definition.dynamics.max_power_kw)
+    device_cop = float(definition.dynamics.cop)
     base_peak = float(df["base_consumption_kw"].max()) if "base_consumption_kw" in df else 2.0
 
     max_device_energy = device_max_power / max(device_cop, 0.1) * sim_config.horizon_hours
@@ -126,7 +128,7 @@ def calculate_fitness(df: pd.DataFrame, sim_config: SimulationConfig, metrics_co
     avg_dev_norm = min(float(df["temp_deviation"].mean()) / max(comfort_range * 2.5, 0.1), 1.0)
     max_dev_norm = min(float(df["temp_deviation"].max()) / max(comfort_range * 4.0, 0.1), 1.0)
 
-    fitness = (
+    score = (
         metrics_config.weight_comfort * comfort_norm
         + metrics_config.weight_energy * (1.0 - energy_norm)
         + metrics_config.weight_cost * (1.0 - cost_norm)
@@ -135,7 +137,7 @@ def calculate_fitness(df: pd.DataFrame, sim_config: SimulationConfig, metrics_co
         - 0.08 * avg_dev_norm
         - 0.05 * max_dev_norm
     )
-    return float(fitness)
+    return float(score)
 
 
 def compare_metrics(base: PerformanceMetrics, optimized: PerformanceMetrics) -> Dict[str, Dict[str, float]]:

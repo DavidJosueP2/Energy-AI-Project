@@ -1,5 +1,15 @@
 """
 Generacion de perfiles ambientales y de uso.
+
+Este modulo define las perturbaciones exogenas de la simulacion. Las
+expresiones son deliberadamente simples para que el proyecto siga siendo
+interpretable:
+
+- temperatura exterior: oscilacion senoidal diaria + ruido suavizado;
+- humedad: oscilacion diaria desfasada respecto a la temperatura;
+- radiacion solar: envolvente diurna tipo sin^2;
+- ocupacion y tarifa: perfiles piecewise por franja horaria;
+- refrigerador: apertura de puerta y carga interna como perfiles de uso.
 """
 
 from typing import Dict
@@ -10,7 +20,12 @@ from app.config import EnvironmentConfig, SimulationConfig
 
 
 class EnvironmentProfile:
-    """Genera perfiles temporales reproducibles para la simulacion."""
+    """Genera perfiles temporales reproducibles para la simulacion.
+
+    Todos los arreglos tienen longitud ``num_steps`` y representan una
+    discretizacion uniforme del horizonte temporal. El paso temporal es
+    ``dt = time_step_hours``.
+    """
 
     def __init__(self, sim_config: SimulationConfig, env_config: EnvironmentConfig):
         self.sim_config = sim_config
@@ -32,6 +47,14 @@ class EnvironmentProfile:
         self.fridge_load = self._generate_fridge_load()
 
     def _generate_outdoor_temperature(self) -> np.ndarray:
+        """Genera la temperatura exterior.
+
+        Modelo:
+            T_ext(t) = mu_T + A_T * sin(phase(t)) + eps(t)
+
+        donde ``mu_T`` es la media diaria, ``A_T`` la amplitud, y ``eps`` un
+        ruido gaussiano suavizado para evitar cambios bruscos irreales.
+        """
         cfg = self.env_config
         hour_of_day = self.time_hours % 24
         phase = 2 * np.pi * (hour_of_day - cfg.temp_peak_hour + 6) / 24
@@ -44,6 +67,15 @@ class EnvironmentProfile:
         return base + noise
 
     def _generate_humidity(self) -> np.ndarray:
+        """Genera la humedad relativa normalizada.
+
+        Modelo:
+            H(t) = mu_H - A_H * sin(phase(t)) + eps_H(t)
+
+        Se usa el mismo ciclo diario de la temperatura con signo inverso para
+        reflejar que, en promedio, cuando la temperatura sube la humedad
+        relativa tiende a bajar.
+        """
         cfg = self.env_config
         hour_of_day = self.time_hours % 24
         phase = 2 * np.pi * (hour_of_day - cfg.temp_peak_hour + 6) / 24
@@ -52,6 +84,14 @@ class EnvironmentProfile:
         return np.clip(base + noise, 0.05, 0.99)
 
     def _generate_solar_radiation(self) -> np.ndarray:
+        """Genera radiacion solar horaria.
+
+        Durante horas de luz se usa:
+            R(t) = R_max * sin(pi * t_norm)^2
+
+        donde ``t_norm`` recorre el intervalo [0, 1] entre amanecer y
+        atardecer. Luego se modula por un factor de nubosidad aleatorio.
+        """
         cfg = self.env_config
         hour_of_day = self.time_hours % 24
         duration = cfg.sunset_hour - cfg.sunrise_hour
@@ -64,6 +104,12 @@ class EnvironmentProfile:
         return radiation * np.clip(cloud_factor, 0.0, None)
 
     def _generate_occupancy(self) -> np.ndarray:
+        """Genera ocupacion por franjas horarias.
+
+        No es un modelo termico directo. Es una variable de entorno que luego:
+        - entra como antecedente difuso en HVAC;
+        - aporta carga interna en la dinamica del dispositivo HVAC.
+        """
         cfg = self.env_config
         max_occ = cfg.max_occupants
         hour_of_day = self.time_hours % 24
@@ -88,6 +134,11 @@ class EnvironmentProfile:
         return np.round(occupancy, 1)
 
     def _generate_tariff(self) -> np.ndarray:
+        """Genera una tarifa electrica piecewise por hora del dia.
+
+        Esta es la tarifa numerica real de la simulacion. Mas adelante se
+        normaliza a [0, 1] para poder usarla tambien como variable difusa.
+        """
         cfg = self.env_config
         hour_of_day = self.time_hours % 24
         tariff = np.zeros(self.num_steps)
@@ -107,6 +158,11 @@ class EnvironmentProfile:
         return tariff
 
     def _normalize_tariff(self) -> np.ndarray:
+        """Normaliza la tarifa al intervalo [0, 1].
+
+        Formula:
+            tariff_norm = (tariff - tariff_off_peak) / (tariff_on_peak - tariff_off_peak)
+        """
         low = self.env_config.tariff_off_peak
         high = self.env_config.tariff_on_peak
         if abs(high - low) < 1e-9:
@@ -114,6 +170,14 @@ class EnvironmentProfile:
         return (self.tariff - low) / (high - low)
 
     def _generate_base_consumption(self) -> np.ndarray:
+        """Genera la carga electrica base del hogar.
+
+        Modelo:
+            P_base(t) = P_min + (P_max - P_min) * factor_horario(t)
+
+        donde ``factor_horario`` se define por tramos y se perturba levemente
+        para evitar patrones artificialmente perfectos.
+        """
         cfg = self.env_config
         hour_of_day = self.time_hours % 24
         c_min = cfg.base_consumption_min
@@ -139,11 +203,26 @@ class EnvironmentProfile:
         return consumption
 
     def _generate_room_temperature_proxy(self) -> np.ndarray:
+        """Aproxima la temperatura ambiente de la cocina/habitacion.
+
+        Se usa para el refrigerador y no representa una ecuacion fisica
+        detallada del recinto. La relacion es:
+
+            T_room = 22.5 + 0.18 * (T_ext - 22.5) + 0.15 * occupancy
+
+        Luego se limita al rango [18, 32] C para evitar valores no plausibles
+        en un entorno interior residencial simplificado.
+        """
         baseline = 22.5 + 0.18 * (self.temperature_outdoor - 22.5)
         occupancy_gain = 0.15 * self.occupancy
         return np.clip(baseline + occupancy_gain, 18.0, 32.0)
 
     def _generate_door_openings(self) -> np.ndarray:
+        """Genera un indice relativo de aperturas del refrigerador.
+
+        Este indice modela perturbaciones de uso. Horas de comida implican
+        mayor frecuencia de apertura, la madrugada menor uso.
+        """
         hour_of_day = self.time_hours % 24
         openings = np.zeros(self.num_steps)
         for idx, hour in enumerate(hour_of_day):
@@ -158,6 +237,11 @@ class EnvironmentProfile:
         return openings
 
     def _generate_fridge_load(self) -> np.ndarray:
+        """Genera un indice relativo de carga interna del refrigerador.
+
+        Se interpreta como carga termica asociada al contenido interno o a la
+        incorporacion de alimentos, no como potencia electrica.
+        """
         hour_of_day = self.time_hours % 24
         load = np.zeros(self.num_steps)
         for idx, hour in enumerate(hour_of_day):

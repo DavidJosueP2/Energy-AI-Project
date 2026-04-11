@@ -199,17 +199,13 @@ class FitnessEvaluator:
             0.0,
         )
 
-        # Perder confort respecto al baseline es una señal fuerte de mala calidad.
         comfort_penalty = (comfort_drop / 100.0) * 5.0
 
-        # El ahorro económico es la prioridad principal; energía es secundaria.
         savings_core = 0.65 * cost_saving + 0.25 * energy_saving
         operational_bonus = 0.0
         if cost_saving > 0.0 or energy_saving > 0.0:
             operational_bonus = 0.06 * peak_saving + 0.04 * variability_saving
 
-        # La mejora de confort solo se premia levemente para evitar soluciones
-        # que "compren" confort con más gasto.
         comfort_bonus = 0.0
         if savings_core >= 0.0:
             comfort_bonus = min(max(comfort_delta, 0.0), 1.0) / 500.0

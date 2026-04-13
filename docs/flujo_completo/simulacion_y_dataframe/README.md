@@ -73,7 +73,6 @@ Características:
 Dependiendo del dispositivo y la configuración, el `DataFrame` puede contener columnas como:
 
 - `time_hours`
-- `temperature_indoor`
 - `temperature_outdoor`
 - `device_temperature`
 - `target_temperature`
@@ -176,7 +175,7 @@ Si se quiere demostrar de dónde sale un gráfico, basta imprimir parte del `Dat
 Ejemplo conceptual:
 
 ```python
-print(self.base_result.data[['time_hours', 'temperature_indoor', 'temperature_outdoor']].head(10))
+print(self.base_result.data[['time_hours', 'device_temperature', 'temperature_outdoor']].head(10))
 ```
 
 Eso muestra:

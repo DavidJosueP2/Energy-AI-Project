@@ -1,0 +1,1478 @@
+               © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                         print or digital form is not permitted without ASHRAE's prior written permission.
+
+
+
+
+                                                                                     ANSI/ASHRAE Addendum d to
+                                                                                    ANSI/ASHRAE Standard 55-2017
+
+
+
+
+      Thermal Environmental
+              Conditions for
+          Human Occupancy
+
+Approved by ASHRAE and the American National Standards Institute on July 31, 2020.
+
+This addendum was approved by a Standing Standard Project Committee (SSPC) for which the Standards Committee has
+established a documented program for regular publication of addenda or revisions, including procedures for timely, docu-
+mented, consensus action on requests for change to any part of the standard. Instructions for how to submit a change can
+be found on the ASHRAE® website (https://www.ashrae.org/continuous-maintenance).
+
+The latest edition of an ASHRAE Standard may be purchased on the ASHRAE website (www.ashrae.org) or from
+ASHRAE Customer Service, 1791 Tullie Circle, NE, Atlanta, GA 30329-2305. E-mail: orders@ashrae.org. Fax: 678-539-
+2129. Telephone: 404-636-8400 (worldwide), or toll free 1-800-527-4723 (for orders in US and Canada). For reprint per-
+mission, go to www.ashrae.org/permissions.
+
+© 2020 ASHRAE                 ISSN 1041-2336
+                  © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                            print or digital form is not permitted without ASHRAE's prior written permission.
+                                         ASHRAE Standing Standard Project Committee 55
+                                        Cognizant TC: 2.1, Physiology and Human Environment
+                                                   SPLS Liaison: Karl L. Peterman
+
+Abhijeet Pande*, Chair                                          Daniel Int-Hout, III                                                Gwelen Paliaga
+David Heinzerling*, Vice-Chair/Webmaster                           Kristof Irwin                                                  Zaccary A. Poots*
+Josh Eddy*, Secretary                                             Essam E. Khalil*                                              Lawrence J. Schoen*
+Peter F. Alspach*                                               Dolaana Khovalyg*                                                  Peter Simmonds
+Edward A. Arens*                                               Mikhail Koupriyanov*                                                 Aaron R. Smith
+Robert Bean*                                                         Baizhan Li                                                      Priyam Tewari
+Richard de Dear                                                   Rodrigo Mora*                                                   John G. Williams*
+Thomas B. Hartman*                                             Francis J. Offermann*
+
+
+
+
+                              * Denotes members of voting status when the document was approved for publication
+
+
+                                            ASHRAE STANDARDS COMMITTEE 2020–2021
+
+ Drury B. Crawley, Chair                                        Srinivas Katipamula                                                   David Robin
+ Rick M. Heiden, Vice Chair                                      Gerald J. Kettler                                             Lawrence J. Schoen
+ Els Baert                                                        Essam E. Khalil                                                    Steven C. Sill
+ Charles S. Barnaby                                             Malcolm D. Knight                                          Richard T. Swierczyna
+ Robert B. Burkhead                                                 Jay A. Kohler                                               Christian R. Taber
+ Thomas E. Cappellin                                                Larry Kouma                                                  Russell C. Tharp
+ Douglas D. Fick                                                    Cesar L. Lim                                               Theresa A. Weston
+ Walter T. Grondzik                                                James D. Lutz                                                    Craig P. Wray
+ Susanna S. Hanson                                               Karl L. Peterman                                        Jaap Hogeling, BOD ExO
+ Jonathan Humble                                                  Erick A. Phelps                                        William F. McQuade, CO
+
+                                                 Connor Barbaree, Senior Manager of Standards
+
+
+                                                                   SPECIAL NOTE
+This American National Standard (ANS) is a national voluntary consensus Standard developed under the auspices of ASHRAE. Consensus is defined
+by the American National Standards Institute (ANSI), of which ASHRAE is a member and which has approved this Standard as an ANS, as
+“substantial agreement reached by directly and materially affected interest categories. This signifies the concurrence of more than a simple majority,
+but not necessarily unanimity. Consensus requires that all views and objections be considered, and that an effort be made toward their resolution.”
+Compliance with this Standard is voluntary until and unless a legal jurisdiction makes compliance mandatory through legislation.
+     ASHRAE obtains consensus through participation of its national and international members, associated societies, and public review.
+     ASHRAE Standards are prepared by a Project Committee appointed specifically for the purpose of writing the Standard. The Project
+Committee Chair and Vice-Chair must be members of ASHRAE; while other committee members may or may not be ASHRAE members, all
+must be technically qualified in the subject area of the Standard. Every effort is made to balance the concerned interests on all Project Committees.
+     The Senior Manager of Standards of ASHRAE should be contacted for
+           a. interpretation of the contents of this Standard,
+           b. participation in the next review of the Standard,
+           c. offering constructive criticism for improving the Standard, or
+           d. permission to reprint portions of the Standard.
+
+                                                                 DISCLAIMER
+ ASHRAE uses its best efforts to promulgate Standards and Guidelines for the benefit of the public in light of available information and accepted
+ industry practices. However, ASHRAE does not guarantee, certify, or assure the safety or performance of any products, components, or systems
+ tested, installed, or operated in accordance with ASHRAE’s Standards or Guidelines or that any tests conducted under its Standards or Guidelines
+ will be nonhazardous or free from risk.
+
+                                     ASHRAE INDUSTRIAL ADVERTISING POLICY ON STANDARDS
+ASHRAE Standards and Guidelines are established to assist industry and the public by offering a uniform method of testing for rating purposes, by
+suggesting safe practices in designing and installing equipment, by providing proper definitions of this equipment, and by providing other information
+that may serve to guide the industry. The creation of ASHRAE Standards and Guidelines is determined by the need for them, and conformance
+to them is completely voluntary.
+      In referring to this Standard or Guideline and in marking of equipment and in advertising, no claim shall be made, either stated or implied,
+that the product has been approved by ASHRAE.
+
+                ASHRAE is a registered trademark of the American Society of Heating, Refrigerating and Air-Conditioning Engineers, Inc.
+                                     ANSI is a registered trademark of the American National Standards Institute.
+© ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+          print or digital form is not permitted without ASHRAE's prior written permission.
+ (This foreword is not part of this standard. It is merely informative and does not contain
+ requirements necessary for conformance to the standard. It has not been processed
+ according to the ANSI requirements for a standard and may contain material that has
+ not been subject to public review or a consensus process. Unresolved objectors on infor-
+ mative material are not offered the right to appeal at ASHRAE or ANSI.)
+ FOREWORD
+ Addendum d removes the Graphical Comfort Zone Method (Section 5.3.1) from the standard
+ and replaces it with example graphics using the Analytical Comfort Zone Method (Section
+ 5.3.2) and the Elevated Air Speed Comfort Zone Method (Section 5.3.3). All references to the
+ graphical method have been removed, and section headings have been updated.
+     Note: In this addendum, changes to the current standard are indicated in the text by under-
+ lining (for additions) and strikethrough (for deletions) unless the instructions specifically men-
+ tion some other means of indicating the changes.
+
+ Addendum d to Standard 55-2017
+
+ Modify Section 5.3 as shown.
+ 5.3 Method for Determining Acceptable Thermal Environment in Occupied Spaces. Sec-
+ tion 5.3 is permitted to be used to determine the requirements for thermal comfort in all occu-
+ pied spaces within the scope of this standard.
+     Acceptable thermal environments shall be determined using one of the three two methods
+ shown in Table 5.3.1 and any applicable requirements of Sections 5.3.45.3.3 and 5.3.55.3.4.
+     Informative Note: Average air speed and average air temperature have precise definitions
+ in this standard. See Section 3 for all defined terms.
+   5.3.1 Graphic Comfort Zone Method
+     5.3.1.1 Applicability. Use of this method shall be limited to representative occupants with
+ metabolic rates between 1.0 and 1.3 met and clothing insulation Icl between 0.5 and 1.0 clo
+ who are not exposed to direct-beam solar radiation. Average air speed Va greater than 0.2 m/s
+ (40 fpm) requires the use of Section 5.3.3.
+     The Graphic Comfort Zone is limited to a humidity ratio at or below 0.012 kg·H2O/kg dry
+ air (0.012 lb·H2O/lb dry air), which corresponds to a water vapor pressure of 1.910 kPa (0.277
+ psi) at standard pressure or a dew-point temperature tdp of 16.8°C (62.2°F).
+     5.3.1.2 Methodology. Figure 5.3.1 specifies the comfort zone for environments that meet
+ the above criteria. Two zones are shown—one for 0.5 clo of clothing insulation Icl and one for
+ 1.0 clo of insulation.
+     Comfort zones for intermediate values of clothing insulation Icl shall be determined by lin-
+ ear interpolation between the limits for 0.5 and 1.0 clo using the following relationships:
+                tmin, Icl = [(Icl – 0.5 clo) tmin, 1.0 clo + (1.0 clo – Icl) tmin, 0.5clo]/0.5 clo
+               tmax, Icl = [(Icl – 0.5 clo) tmax, 1.0 clo + (1.0 clo – Icl) tmax, 0.5clo]/0.5 clo
+ where
+ tmin, Icl     = lower operative temperature to limit for clothing insulation Icl
+ tmax, Icl     = upper operative temperature to limit for clothing insulation Icl
+ Icl           = thermal insulation of the clothing in question, clo
+     Average air speeds Va greater than 0.2 m/s (40 fpm) increase the lower and upper operative
+ temperature to limit for the comfort zone in accordance with Section 5.3.3.
+   5.3.25.3.1 Analytical Comfort Zone Method
+     5.3.2.15.3.1.1 Applicability. It is permissible to apply the method in this section to all
+ spaces within the scope of this standard where the occupants have activity levels that result in
+ average metabolic rates between 1.0 and 2.0 met. Average air speeds Va greater than 0.20 m/s
+ (40 fpm) require the use of Section 5.3.35.3.2.
+     5.3.2.25.3.1.2 Methodology. The computer code3 in Normative Appendix B is to be used
+ with this standard. Compliance is achieved if –0.5 < PMV < +0.5. Alternative methods are per-
+ mitted. If any other method is used, it is the user’s responsibility to verify and document that
+
+
+ ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017                                                       1
+               © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                         print or digital form is not permitted without ASHRAE's prior written permission.
+
+
+
+
+    (a)
+
+
+
+
+    (b)
+
+
+
+
+Figure 5.3.1 Graphic Comfort Zone Method: Acceptable range of operative temperature to and humidity for spaces that meet
+the criteria specified in Section 5.3.1 (1.0 met < 1.3; 0.5 < clo < 1.0)—(a) I-P and (b) SI.
+
+
+
+2                                                ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017
+             © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                       print or digital form is not permitted without ASHRAE's prior written permission.
+Table 5.3.1 Applicability of Methods for Determining Acceptable Thermal Environments in Occupied
+Spaces
+
+Average Air Speed,
+m/s (fpm)                Humidity Ratio                met             clo             Comfort Zone Method
+
+<0.20 (40)               <0.012 kg·H2O/kg dry air      1.0 to 1.3      0.5 to 1.0      Section 5.3.1, “Graphic Comfort Zone Method”
+
+<0.20 (40)               All                           1.0 to 2.0      0 to 1.5        Section 5.3.25.3.1, “Analytical Comfort Zone
+                                                                                       Method”
+
+>0.20 (40)               All                           1.0 to 2.0      0 to 1.5        Section 5.3.35.3.2, “Elevated Air Speed Comfort
+                                                                                       Zone Method”
+
+
+              the method used yields the same results. The ASHRAE Thermal Comfort Tool3 is permitted to
+              be used to comply with this section.
+                  Figure 5.3.1.1 provides graphical examples of comfort zones using the Analytical Comfort
+              Zone Method. Direct use of these charts to comply with the Analytical Comfort Zone Method
+              is allowable for the specific input conditions described on each chart. In each figure, the darker
+              shade comfort zone is the same, and the lighter shade comfort zone represents a single altered
+              input (a) clothing insulation and (b) metabolic rate.
+                  Informative Note: See Informative Appendix L for more explanation of predicted mean
+              vote (PMV) and its relationship to predicted percentage dissatisfied (PPD).
+                   5.3.2.2.15.3.1.2.1 When direct-beam solar radiation falls on a representative occupant,
+              the mean radiant temperature tr shall account for long-wave mean radiant temperature trlw and
+              short-wave mean radiant temperature trsw using one of the following options.
+              a. Full calculation of mean radiant temperature tr as follows:
+                 1. Step 1: Determine long-wave mean radiant temperature trlw.
+                 2. Step 2: Determine short-wave mean radiant temperature trsw using Normative Appen-
+                      dix C.
+                 3. Step 3: Mean radiant temperature tr is equal to trlw + trsw determined in Step 1 and
+                      Step 2
+              b. Use a mean radiant temperature tr that is 2.8°C (5°F) higher than average air temperature ta
+                 if all of the following conditions are met:
+                 1. A space with air temperature stratification less than Section 5.3.4.35.3.3.3.
+                 2. A space without active radiant surfaces.
+                 3. Building envelope opaque surfaces of the space (walls, floor, roof) meet U-value pre-
+                      scriptive requirement of ASHRAE/IES 90.12.
+                 4. Outside air temperature is less than 43°C (110°F).
+                 5. Vertical fenestration has less than 9 ft. (3 m) total height.
+                 6. No skylights are present.
+                 7. The space complies with all requirements in a single row of Tables 5.3.2.2.15.3.1.2.1A,
+                      B, C or D. Interpolation between values within a single table (5.3.2.2.15.3.1.2.1A, B, C
+                      or D), but not between tables, is permissible. Solar absorptance properties for shade fab-
+                      rics used in Tables 5.3.2.2.15.3.1.2.1A, B, C or D shall use the most similar color from
+                      Table 5.3.2.2.15.3.1.2.1E unless more specific data are available from the manufacturer.
+                  Tables 5.3.2.2.15.3.1.2.1A through D show criteria that allow use of mean radiant tempera-
+              ture tr that is 2.8°C (5°F) higher than average air temperature ta for high-performance glazing
+              units (Table 5.3.2.2.15.3.1.2.1A); clear, low-performance glazing units (Table
+              5.3.2.2.15.3.1.2.1B); tinted glazing units (Table 5.3.2.2.15.3.1.2.1C); and electrochromic glaz-
+              ing units (Table 5.3.2.2.15.3.1.2.1D). See Normative Appendix C Section C2(e) for a descrip-
+              tion of fbes.
+                5.3.35.3.2 Elevated Air Speed Comfort Zone Method
+                  5.3.3.15.3.2.1 Applicability. It is permissible to apply the method in this section to all
+              spaces within the scope of this standard where the occupants have activity levels that result in
+              average metabolic rates between 1.0 and 2.0 met, clothing insulation Icl between 0.0 and 1.5
+              clo, and average air speeds Va greater than 0.20 m/s (40 fpm).
+
+
+              ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017                                                                  3
+                     © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                               print or digital form is not permitted without ASHRAE's prior written permission.
+
+                                                                                                                                                                            RELATIVE HUMIDITY (%)
+                                                                                                                                                        100                  80                           60
+                                                                                                                                                                                                                    .026
+          This graph is only applicable for the following conditions:
+          Metabolic Rate: 1.3 met
+          Clothing Level: 1.0 clo or 0.65 clo as indicated on graph (interpolation of clo values                                                                                                                    .024
+          not allowed). Refer to Table 5.2.2.2A for clo values of typical clothing ensembles.
+          Average air speed: 20 fpm
+                                                                                                                                    80                                                                              .022
+          Operative Temperature shall be determined in accordance with
+          Appendix C. Graph cannot be applied based on dry bulb
+          temperature alone. Also required are Section 5.3.3 Local Thermal                                                                                                                                          .020
+          Discomfort and 5.3.4 Temperature Varations with Time.                                                                  No upper humidity limit for
+                                                                                                                   )                                                                                           40
+          For design compliance requirements, see Section 6 and                                             ( °F                 thermal comfort. See ASHRAE
+                                                                                                        E                        Standard 62.14 and ASHRAE                                                          .018
+          for evaluating occupied spaces see Section 7.                                             R
+                                                                                                 TU                              Standard 62.25 for IAQ-related
+                                                                                               RA
+                                                                                          PE                                     humidity limits.
+                                                                                      M
+                                                                                 TE
+
+
+
+
+                                                                                                                                                                                                                                 HUMIDITY RATIO (lb H2O / lb DRY AIR)
+                                                                        U   LB             70                                                                                                                       .016
+
+                                                                 E   TB
+                                                             W
+                                                                                                                                                                                                                    .014
+
+
+
+                                                                                                                                                                                                                    .012
+                                             60
+
+                                                                                                                                                                                                                 .010
+                                                                                                                                                                                                               20
+
+
+           50                                                                                                                                                                                                       .008
+
+                   Comfort zone moves left with:                                                                                             Comfort zone moves right with:
+                   • Higher clothing                                                                                                         • Lower clothing                                                       .006
+                   • Higher metabolic rate                                                                                                   • Lower metabolic rate
+                   • Higher radiant temperature                                                                                              • Lower radiant temperature
+                   See Section 5.3.2                                   1.0 clo                              0.65 clo                         See Section 5.3.2                                                      .004
+                                                                        zone                                 zone
+
+                                                                                                                                                                                                                    .002
+
+
+                    No lower humidity limit.
+                                                                                                                                                                                                                    .000
+             50                                60                                               70                                    80                               90                           100
+                                                                                                                            OPERATIVE TEMPERATURE (°F)
+                                                                                                                            (½ Dry bulb + ½ MRT for still air)
+
+                                                                                                                                                                            RELATIVE HUMIDITY (%)
+                                                                                                                                                        100                  80                           60
+                                                                                                                                                                                                                .026
+          This graph is only applicable for the following conditions:
+          Metabolic Rate: 1.3 met
+          Clothing Level: 1.0 clo or 0.65 clo as indicated on graph (interpolation of clo values                                                                                                                .024
+          not allowed). Refer to Table 5.2.2.2A for clo values of typical clothing ensembles.
+          Average air speed: 0.1 m/s
+          Operative Temperature shall be determined in accordance with Appendix C.                                                                  No upper humidity limit for                                 .022
+          Graph cannot be applied based on dry bulb temperature alone. Also                                                                         thermal comfort. See ASHRAE
+          required are Section 5.3.3 Local Thermal Discomfort and 5.3.4                                                                             Standard 62.14 and ASHRAE
+          Temperature Varations with Time.                                                                             25                           Standard 62.25 for IAQ-related                              .020
+          For design compliance requirements, see Section 6 and for                                                                                 humidity limits.
+          evaluating occupied spaces see Section 7.                                                                )                                                                                           40
+                                                                                                            ( °C
+                                                                                                        E                                                                                                       .018
+                                                                                                    R
+                                                                                                 TU
+                                                                                               RA
+                                                                                          PE
+                                                                                      M
+                                                                                 TE
+                                                                                                                                                                                                                           HUMIDITY RATIO (kg H2O / kg DRY AIR)
+                                                                        U   LB                                                                                                                                  .016
+
+                                                                 E   TB
+                                                             W              20
+                                                                                                                                                                                                                .014
+
+
+
+                                                                                                                                                                                                                .012
+
+                                       15
+                                                                                                                                                                                                                 .010
+                                                                                                                                                                                                               20
+
+
+           10                                                                                                                                                                                                   .008
+
+                   Comfort zone moves left with:                                                                                                                              Comfort zone moves right with:
+                   • Higher clothing                                                                                                                                          • Lower clothing                  .006
+                   • Higher metabolic rate                             1.0 clo                       0.65 clo                                                                 • Lower metabolic rate
+                   • Higher radiant temperature                         zone                          zone                                                                    • Lower radiant temperature
+                   See Section 5.3.2                                                                                                                                          See Section 5.3.2
+                                                                                                                                                                                                                .004
+
+
+
+                                                                                                                                                                                                                .002
+
+
+                  No lower humidity limit.
+                                                                                                                                                                                                                .000
+            10                           15                                      20                                     25                                 30                          35
+                                                                                                                        OPERATIVE TEMPERATURE (°C)
+                                                                                                                        (½ Dry bulb + ½ MRT for still air)
+
+
+
+Figure 5.3.1.1A Analytical Comfort Zone Method example—effect of increased clo value.
+
+
+
+4                                                                                         ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017
+                        © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                                  print or digital form is not permitted without ASHRAE's prior written permission.
+                                                                                                                                                                               RELATIVE HUMIDITY (%)
+                                                                                                                                                           100                  80                           60
+                                                                                                                                                                                                                    .026
+         This graph is only applicable for the following conditions:
+         Metabolic Rate: 1.3 met or 2.0 met as indicated on graph (interpolation of met values
+         not allowed)                                                                                                                                                                                               .024
+         Clothing Level: 0.65 clo
+         Average air speed: 20 fpm
+         Operative Temperature shall be determined in accordance with Appendix C.                                                      80                                                                           .022
+         Graph cannot be applied based on dry bulb temperature alone. Also
+         required are Section 5.3.3 Local Thermal Discomfort and 5.3.4
+         Temperature Varations with Time.                                                                                                                                                                           .020
+         For design compliance requirements, see Section 6 and for                                                                    No upper humidity limit for
+         evaluating occupied spaces, see Section 7.                                                                 )                 thermal comfort. See ASHRAE                                                 40
+                                                                                                           ( °F                       Standard 62.14 and ASHRAE                                                     .018
+                                                                                                     RE
+                                                                                                TU                                    Standard 62.25 for IAQ-related
+                                                                                              RA                                      humidity limits.
+                                                                                         PE
+                                                                                     M
+                                                                                TE
+
+
+
+
+                                                                                                                                                                                                                             HUMIDITY RATIO (lb H2O / lb DRY AIR)
+                                                                        L   B                70                                                                                                                     .016
+                                                                     BU
+                                                                ET
+                                                            W
+                                                                                                                                                                                                                    .014
+
+
+
+                                                                                                                                                                                                                    .012
+                                               60
+
+                                                                                                                                                                                                                    .010
+                                                                                                                                                                                                                  20
+
+
+           50                                                                                                                                                                                                       .008
+
+                      Comfort zone moves left with:                                                                                             Comfort zone moves right with:
+                      • Higher clothing                                                                                                         • Lower clothing                                                    .006
+                      • Higher metabolic rate                                                                                                   • Lower metabolic rate
+                      • Higher radiant temperature       2.0 met                                                1.3 met                         • Lower radiant temperature
+                      See Section 5.3.2                   zone                                                   zone                           See Section 5.3.2                                                   .004
+
+
+
+                                                                                                                                                                                                                    .002
+
+
+                    No lower humidity limit.
+                                                                                                                                                                                                                    .000
+               50                               60                                             70                                        80                               90                           100
+                                                                                                                               OPERATIVE TEMPERATURE (°F)
+                                                                                                                               (½ Dry bulb + ½ MRT for still air)
+
+                                                                                                                                                                               RELATIVE HUMIDITY (%)
+                                                                                                                                                           100                  80                           60
+                                                                                                                                                                                                                   .026
+         This graph is only applicable for the following conditions:
+         Metabolic Rate: 1.3 met or 2.0 met as indicated on graph (interpolation of met values
+         not allowed)                                                                                                                                                                                              .024
+         Clothing Level: 0.65 clo
+         Average air speed: 0.1 m/s
+         Operative Temperature shall be determined in accordance with Appendix C.                                                                      No upper humidity limit for                                 .022
+         Graph cannot be applied based on dry bulb temperature alone. Also                                                                             thermal comfort. See ASHRAE
+         required are Section 5.3.3 Local Thermal Discomfort and 5.3.4                                                                                 Standard 62.14 and ASHRAE
+         Temperature Varations with Time.                                                                                 25                           Standard 62.25 for IAQ-related                              .020
+         For design compliance requirements, see Section 6 and for                                                                                     humidity limits.
+                                                                                                                                                                                                                  40
+         evaluating occupied spaces see Section 7.
+                                                                                                          (°   C)
+                                                                                                                                                                                                                   .018
+                                                                                                    RE
+                                                                                               TU
+                                                                                             RA
+                                                                                        PE
+                                                                                    M
+                                                                               TE
+
+                                                                                                                                                                                                                           HUMIDITY RATIO (kg H2O / kg DRY AIR)
+                                                                           B                                                                                                                                       .016
+                                                                  B   UL
+                                                               ET
+                                                           W           20
+                                                                                                                                                                                                                   .014
+
+
+
+                                                                                                                                                                                                                   .012
+
+                                         15
+                                                                                                                                                                                                                    .010
+                                                                                                                                                                                                                  20
+
+
+          10                                                                                                                                                                                                       .008
+
+                     Comfort zone moves left with:                                                                                              Comfort zone moves right with:
+                     • Higher clothing                                                                                                          • Lower clothing
+                                                                                                                                                                                                                   .006
+                     • Higher metabolic rate          2.0 met                                                   1.3 met                         • Lower metabolic rate
+                     • Higher radiant temperature      zone                                                      zone                           • Lower radiant temperature
+                     See Section 5.3.2                                                                                                          See Section 5.3.2
+                                                                                                                                                                                                                   .004
+
+
+
+                                                                                                                                                                                                                   .002
+
+
+                    No lower humidity limit.
+                                                                                                                                                                                                                   .000
+           10                              15                                  20                                          25                                 30                          35
+                                                                                                                           OPERATIVE TEMPERATURE (°C)
+                                                                                                                           (½ Dry bulb + ½ MRT for still air)
+
+
+
+Figure 5.3.1.1B Analytical Comfort Zone Method example—effect of increased met value.
+
+
+
+                          ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017                                                                                                                                                                                    5
+                © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                          print or digital form is not permitted without ASHRAE's prior written permission.
+Table 5.3.2.2.15.3.1.2.1A High-Performance (Low-e) Glazing Units
+
+                                                            Glazing Unit       Glazing Unit                         Interior Shade
+Representative Occupant              Fraction of Body       Total Solar        Indirect SHGC       Interior Shade   Solar Absorptance
+Distance from Interior Window        Exposed to Sun (fbes), Transmission       (SHGC – Tsol ),     Openness Factor, of Window-Facing
+or Shade Surface, ft (m)             %                      (Tsol ), %         %                   %                Side, %
+3.3 (1)                             50                     35               4.5                9                   65
+
+3.3 (1)                             100                    35               4.5                5                   65
+
+
+Table 5.3.2.2.15.3.1.2.1B Clear Low-Performance Glazing Units
+
+                                                     Glazing Unit              Glazing Unit                    Interior Shade
+Representative Occupant       Fraction of Body       Total Solar               Indirect SHGC Interior Shade    Solar Absorptance
+Distance from Interior Window Exposed to Sun (fbes), Transmission              (SHGC – Tsol), Openness Factor, of Window-Facing
+or Shade Surface, ft (m)      %                      (Tsol), %                 %              %                Side, %
+9.9 (3)                           50                      83                10                1                    25
+
+13.2 (4)                          50                      83                10                1                    65
+
+11.2 (3.4)                        100                     83                10                1                    25
+
+14.5 (4.4)                        100                     83                10                1                    65
+
+
+Table 5.3.2.2.15.3.1.2.1C Tinted Glazing Units
+
+                                                     Glazing Unit              Glazing Unit                         Interior Shade
+Representative Occupant       Fraction of Body       Total Solar               Indirect SHGC       Interior Shade   Solar Absorptance
+Distance from Interior Window Exposed to Sun (fbes), Transmission              (SHGC – Tsol),      Openness Factor, of Window-Facing
+or Shade Surface, ft (m)      %                      (Tsol), %                 %                   %                Side, %
+3.3 (1)                           50                       10               20                 8                   25
+
+3.3 (1)                           50                       10               20                 1                   65
+
+4 (1.2)                           100                      10               20                 1                   25
+
+4.9 (1.5)                         100                      10               20                 1                   65
+
+>9.2 (2.8)                         50                       <15               8                  No shade             No shade
+
+
+Table 5.3.2.2.15.3.1.2.1D Dynamic Glazing Units (Increasing Tsol Represents Decreasing Tint)
+
+                                                     Glazing Unit              Glazing Unit                         Interior Shade
+Representative Occupant       Fraction of Body       Total Solar               Indirect SHGC       Interior Shade   Solar Absorptance
+Distance from Interior Window Exposed to Sun (fbes), Transmission              (SHGC – Tsol),      Openness Factor, of Window-Facing
+or Shade Surface, ft (m)      %                      (Tsol), %                 %                   %                Side, %
+3.3 (1)                             50                     0.5              10                 N/A                  No shade
+3.3 (1)                             100                    0.5              10                 N/A                  No shade
+4.9 (1.5)                           50                     3                10                 N/A                  No shade
+6.6 (2)                             100                    3                10                 N/A                  No shade
+7.6 (2.3)                           50                     6                10                 N/A                  No shade
+9.9 (3)                             50                     9                10                 N/A                  No shade
+
+
+Table 5.3.2.2.15.3.1.2.1E Interior Shade Solar Absorptance Based on Color Description of Window-Facing Side of Shade
+
+Solar Absorptance, %         <15                         15 to 25                      25 to 65                      >65
+Color Description            White                       Silver, cornsilk, wheat,      Beige, pewter, smoke,         Charcoal, graphite,
+                                                         oyster, beige, pearl          pebble, stone, pearl grey,    chestnut
+                                                                                       light grey
+
+
+
+
+6                                                 ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017
+           © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                     print or digital form is not permitted without ASHRAE's prior written permission.
+
+
+
+
+Figure 5.3.35.3.2A Acceptable ranges of operative temperature to and average air speed Va for the 1.0 and 0.5 clo comfort
+zones presented in Figure 5.3.1 at humidity ratio 0.010.
+
+
+
+                5.3.3.25.3.2.2 Methodology. The calculation method in Normative Appendix D is to be
+            used with this method. This method uses the Analytical Comfort Zone Method in Section
+            5.3.25.3.1 combined with the Standard Effective Temperature (SET) method described in
+            Appendix D.
+                Figure 5.3.35.3.2A represents two particular cases (0.5 and 1.0 clo) of the Elevated Air
+            Speed Comfort Zone Method and shall be permitted as a method of compliance for the condi-
+            tions specified on the figure. The figure also defines comfort zones for air movement with
+            occupant control (darkly shaded; Section 5.3.2.3) versus without occupant control (lightly
+            shaded; Section 5.3.2.4). It is permissible to determine the operative temperature range by lin-
+            ear interpolation between the limits found for each zone in Figure 5.3.35.3.2A.
+                Figure 5.3.2B provides a graphical example of a comfort zone using the Elevated Air Speed
+            Comfort Zone Method with occupant control (lighter shade zone; Section 5.3.2.3) compared to
+            one using the Analytical Comfort Zone Method (darker shade zone; Section 5.3.1). Direct use of
+            this chart to comply with the Elevated Air Speed Comfort Zone Method with occupant control
+            using the lighter shade zone is allowable for the specific input conditions described on the chart.
+                Alternative methods are permitted. If any other method is used, the user shall verify and
+            document that the method used yields the same results. The ASHRAE Thermal Comfort Tool3
+            is permitted to be used to comply with this section.
+                When direct beam solar radiation falls on a representative occupant, the mean radiant tem-
+            perature (tr) shall account for long-wave mean radiant temperature (trlw) and short-wave mean
+            radiant temperature (trsw) in accordance with Section 5.3.2.2.15.3.1.2.1.
+                Figure 5.3.35.3.2CB describes the steps for determining the limits to airspeed inputs in
+            SET model.
+                5.3.3.35.3.2.3 Average Air Speed Va with Occupant Control. Section 5.3.3.45.3.2.4 does
+            not apply when the occupants have control over average air speed Va and one of the following
+            criteria is met:
+            a. One means of control for every six occupants or less.
+            b. One means of control for every 84 m2 (900 ft2) or less.
+            c. In multioccupant spaces where groups gather for shared activities, such as classrooms and
+               conference rooms, at least one control shall be provided for each space, regardless of size.
+
+
+            ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017                                                       7
+                   © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                             print or digital form is not permitted without ASHRAE's prior written permission.
+
+                                                                                                                                                                     RELATIVE HUMIDITY (%)
+                                                                                                                                                  100                 80                           60
+                                                                                                                                                                                                          .026
+          This graph is only applicable for the following conditions:
+          Metabolic Rate: 1.3 met
+          Clothing Level: 0.65 clo                                                                                                                                                                        .024
+          Average air speed: 20 fpm or 100 fpm as indicated on graph (interpolation of average
+          air speed values not allowed). For the 100 fpm zone, the occupant must have
+          control over average air speed per Section 5.3.2.3                                                                  80                                                                          .022
+          Operative Temperature shall be determined in accordance with Appendix
+          C. Graph cannot be applied based on dry bulb temperature alone. Also
+          required are Section 5.3.3 Local Thermal Discomfort and 5.3.4                                                                                                                                   .020
+          Temperature Varations with Time.
+                                                                                                                                          No upper humidity limit for                                   40
+           For design compliance requirements, see Section 6 and for
+                                                                                                          (°   F)                         thermal comfort. See ASHRAE
+           evaluating occupied spaces see Section 7.                                                                                                                                                      .018
+                                                                                                     RE                                   Standard 62.14 and ASHRAE
+                                                                                                TU                                        Standard 62.25 for IAQ-related
+                                                                                              RA
+                                                                                         PE                                               humidity limits.
+                                                                                     M
+                                                                                TE
+
+
+
+
+                                                                                                                                                                                                                   HUMIDITY RATIO (lb H2O / lb DRY AIR)
+                                                                          LB              70                                                                                                              .016
+                                                                     BU
+                                                                ET
+                                                            W
+                                                                                                                                                                                                          .014
+
+
+
+                                                                                                                                                                                                          .012
+                                             60
+
+                                                                                                                                                                                                          .010
+                                                                                                                                                                                                        20
+
+
+           50                                                                                                                                                                                             .008
+
+                   Comfort zone moves left with:                                                                                                                 Comfort zone moves right with:
+                   • Higher clothing                                                                      20 fpm              100 fpm                            • Lower clothing                         .006
+                   • Higher metabolic rate                                                                 zone                zone                              • Lower metabolic rate
+                   • Higher radiant temperature                                                                                                                  • Lower radiant temperature
+                   See Section 5.3.2                                                                                                                             See Section 5.3.2
+                                                                                                                                                                                                          .004
+
+
+
+                                                                                                                                                                                                          .002
+
+
+                   No lower humidity limit.
+                                                                                                                                                                                                          .000
+             50                               60                                               70                                80                             90                           100
+                                                                                                                      OPERATIVE TEMPERATURE (°F)
+                                                                                                                      (½ Dry bulb + ½ MRT for still air)
+
+
+                                                                                                                                                                     RELATIVE HUMIDITY (%)
+                                                                                                                                                  100                 80                           60
+                                                                                                                                                                                                         .026
+          This graph is only applicable for the following conditions:
+          Metabolic Rate: 1.3 met
+          Clothing Level: 0.65 clo                                                                                                                                                                       .024
+          Average air speed: 0.1 m/s or 0.5 m/s as indicated on graph (interpolation of average
+          air speed values not allowed). For the 0.5 m/s zone, the occupant must have
+          control over average air speed per Section 5.3.2.3
+                                                                                                                                              No upper humidity limit for                                .022
+          Operative Temperature shall be determined in accordance with Appendix                                                               thermal comfort. See ASHRAE
+          C. Graph cannot be applied based on dry bulb temperature alone. Also                                                                Standard 62.14 and ASHRAE
+          required are Section 5.3.3 Local Thermal Discomfort and 5.3.4                                              25                       Standard 62.25 for IAQ-related                             .020
+          Temperature Varations with Time.                                                                                                    humidity limits.
+          For design compliance requirements, see Section 6 and for                                              )                                                                                      40
+                                                                                                          ( °C
+          evaluating occupied spaces see Section 7.                                                                                                                                                      .018
+                                                                                                     RE
+                                                                                                TU
+                                                                                              RA
+                                                                                         PE
+                                                                                     M
+                                                                                TE
+                                                                                                                                                                                                                 HUMIDITY RATIO (kg H2O / kg DRY AIR)
+                                                                            B                                                                                                                            .016
+                                                                   B   UL
+                                                                ET
+                                                            W             20
+                                                                                                                                                                                                         .014
+
+
+
+                                                                                                                                                                                                         .012
+
+                                       15
+                                                                                                                                                                                                          .010
+                                                                                                                                                                                                        20
+
+
+           10                                                                                                                                                                                            .008
+
+                   Comfort zone moves left with:                                                                                                                       Comfort zone moves right with:
+                   • Higher clothing                                                                      0.1 m/s              0.5 m/s                                 • Lower clothing                  .006
+                   • Higher metabolic rate                                                                 zone                 zone                                   • Lower metabolic rate
+                   • Higher radiant temperature                                                                                                                        • Lower radiant temperature
+                   See Section 5.3.2                                                                                                                                   See Section 5.3.2
+                                                                                                                                                                                                         .004
+
+
+
+                                                                                                                                                                                                         .002
+
+
+                  No lower humidity limit.
+                                                                                                                                                                                                         .000
+             10                          15                                     20                                    25                              30                        35
+                                                                                                                      OPERATIVE TEMPERATURE (°C)
+                                                                                                                      (½ Dry bulb + ½ MRT for still air)
+
+
+
+Figure 5.3.2B Analytical Comfort Zone Method example (lightly shaded zone) compared to the Analytical Comfort Zone
+Method example (darkly shaded zone) from Figure 5.3.1.1.
+
+
+
+8                                                                                    ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017
+           © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                     print or digital form is not permitted without ASHRAE's prior written permission.
+
+
+
+
+Figure 5.3.3B5.3.2C Flowchart for determining limits to airspeed inputs in the Elevated Air Speed Comfort Zone Method.
+
+
+
+                Multioccupant spaces that are subdivided by movable walls shall have one control for each
+                space subdivision.
+
+                5.3.3.45.3.2.4 Average Air Speed Va without Occupant Control. If occupants do not
+            have control over the local air speed meeting the requirements of Section 5.3.3.35.3.2.3, the
+            following limits apply to the SET model and Figure 5.3.35.3.2A.
+
+            a. For operative temperatures to above 25.5°C (77.9°F), the upper limit to average air speed Va
+               shall be 0.8 m/s (160 fpm).
+            b. For operative temperatures to between 23.0°C and 25.5°C (73.4°F and 77.9°F), the upper
+               limit to average air speed (Va) shall follow an equal SET contour as described in Normative
+               Appendix D. In Figure 5.3.35.3.2A this curve is shown between the dark and light shaded
+               areas. It is permitted to determine the curve using the following equation:
+
+                                      Va = 50.49 – 4.4047(to) + 0.096425(to)2 (m/s, °C)
+
+                                    Va = 31375.7 – 857.295(to) + 5.86288(to)2 (fpm, °F)
+
+            c. For operative temperatures to below 23.0°C (73.4°F), the limit to average air speed Va shall
+               be 0.2 m/s (40 fpm).
+
+                Exception to 5.3.3.45.3.2.4(c):
+                    1. Representative occupants with clothing insulation Icl greater than 0.7 clo.
+                    2. Representative occupants with metabolic rates above 1.3 met.
+                Informative Note: These limits are shown by the light gray area in Figure 5.3.35.3.2A.
+             5.3.45.3.3 Local Thermal Discomfort
+               5.3.4.15.3.3.1 Applicability. The requirements specified in this section are required to be
+            met only when representative occupants meet both of the following criteria:
+
+            a. Have clothing insulation Icl less than 0.7 clo.
+            b. Are engaged in physical activity with metabolic rates below 1.3 met.
+
+
+            ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017                                                       9
+        © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                  print or digital form is not permitted without ASHRAE's prior written permission.
+     Table 5.3.4.25.3.3.2 Allowable Radiant Temperature Asymmetry
+
+      Radiant Temperature Asymmetry °C (°F)
+
+      Ceiling                   Ceiling                       Wall                          Wall
+      Warmer than Floor         Cooler than Floor             Warmer than Air               Cooler than Air
+
+      <5 (9.0)                  <14 (25.2)                    <23 (41.4)                    <10 (18.0)
+
+
+     Table 5.3.5.35.3.4.3 Limits on Temperature Drifts and Ramps
+
+      Time Period, h                                   0.25         0.5         1             2           4
+
+      Maximum Operative Temperature to                 1.1 (2.0)    1.7 (3.0)   2.2 (4.0)     2.8 (5.0)   3.3 (6.0)
+      Change Allowed, °C (°F)
+
+
+         For the purpose of compliance with this section, representative occupants’ ankle level is 0.1
+     m (4 in.) above the floor and head level is 1.1 m (43 in.) for seated occupants and 1.7 m (67 in.)
+     for standing occupants.
+         Informative Note: The Standard does not contain requirements for standing occupants
+     when all the representative occupants are seated. Many standing occupants have met rates
+     greater than 1.3 (see Section 5.2.1), and if so, then by criterion b. above, the requirements of
+     5.3.45.3.3 do not apply to them.
+         5.3.4.25.3.3.2 Radiant Temperature Asymmetry. Radiant temperature asymmetry shall
+     not exceed the values in Table 5.3.4.25.3.3.2. The radiant temperature asymmetry is quantified
+     in its definition in Section 3.
+         When direct beam solar radiation falls on a representative occupant, the radiant tempera-
+     ture asymmetry shall include the solar contribution as follows: The short-wave mean radiant
+     temperature trsw as determined in Normative Appendix C, shall be multiplied by two and
+     added to the plane radiant temperature tpr for each horizontal or vertical direction in which the
+     plane receives direct sunlight.
+         5.3.4.35.3.3.3 Vertical Air Temperature Difference. Air temperature difference between
+     head level and ankle level shall not exceed 3°C (5.4°F) for seated occupants or 4°C (7.2°F) for
+     standing occupants (see note in Section 5.3.4.15.3.3.1).
+         5.3.4.45.3.3.4 Floor Surface Temperature. When representative occupants are seated
+     with feet in contact with the floor, floor surface temperatures within the occupied zone shall be
+     19°C to 29°C (66.2°F to 84.2°F).
+     5.3.55.3.4 Temperature Variations with Time
+         5.3.5.15.3.4.1 Applicability. The fluctuation requirements of this section shall be met
+     when they are not under the direct control of the individual occupant.
+         5.3.5.25.3.4.2 Cyclic Variations. Cyclic variations in operative temperature to that have a
+     period not greater than 15 minutes shall have a peak-to-peak amplitude no greater than 1.1°C
+     (2.0°F).
+         5.3.5.35.3.4.3 Drifts or Ramps. Monotonic, noncyclic changes in operative temperature to
+     and cyclic variations with a period greater than 15 minutes shall not exceed the most restrictive
+     requirements from Table 5.3.5.35.3.4.3.
+         Informative Note: For example, the operative temperature shall not change more than
+     2.2°C (4.0°F) during a 1.0 h period, and more than 1.1°C (2.0°F) during any 0.25 h period
+     within that 1.0 h period.
+     Modify Section 6.2 as shown.
+     6.2 Documentation. The method and design conditions appropriate for the intended use of the
+     building shall be selected and documented as follows.
+         Informative Note: Some of the requirements in items (a) through (h) below are not appli-
+     cable to naturally conditioned buildings.
+     a. The method of design compliance shall be stated for each space and/or system: Graphic
+        Comfort Zone Method (Section 5.3.1), Analytical Comfort Zone Method (Section
+        5.3.25.3.1), Elevated Air Speed Comfort Zone Method (Section 5.3.35.3.2), or the use of
+        Section 5.4 for Occupant-Controlled Naturally Conditioned Spaces.
+
+
+10                                        ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017
+© ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+          print or digital form is not permitted without ASHRAE's prior written permission.
+ b. The design operative temperature (to) and humidity (including any tolerance or range), the
+    design outdoor conditions (see 2009 ASHRAE Handbook—Fundamentals1, Chapter 14),
+    and total indoor loads shall be stated. The design exceedance hours (see Section 3, “Defini-
+    tions”) shall be documented based on the design conditions used.
+ c. Values assumed for comfort parameters used in the calculation of thermal conditions,
+    including operative temperature to, humidity, average air speed Va, clothing insulation Icl,
+    and metabolic rate, shall be stated for heating and cooling design conditions. If an accept-
+    able level of comfort is not being provided to any representative occupants, this shall be
+    stated. Where Table 5.2.1.2 gives a range, the basis for selecting a single value within that
+    range shall be stated. If the clothing insulation or metabolic rate parameters for a given
+    space are outside the applicable bounds defined by the standard, or if the space is not regu-
+    larly occupied as defined in Section 2.3, the space shall be clearly identified as not under
+    the scope of the standard.
+ d. Local thermal discomfort shall be addressed, at a minimum, by a narrative explanation of
+    why an effect is not likely to exceed Section 5 limits. Where calculations are utilized to
+    determine the effect of local thermal discomfort in accordance with Section 5, the calcula-
+    tion inputs, methods, and results shall be stated.
+ e. System equipment capacity shall be provided for each space and/or system documenting
+    performance meeting the design criteria stated. For each unique space, the design system or
+    equipment heating and/or cooling capacity shall meet the thermal loads calculated under
+    the heating and cooling design conditions stated for compliance with this standard.
+ f. Where elevated air speed with occupant control is employed to provide acceptable thermal
+    conditions, documentation shall be provided to identify the method and equipment for
+    occupant control.
+ g. Air speed, radiant temperature asymmetry, vertical air-temperature difference, surface tem-
+    peratures, and temperature variations with time shall be determined in accordance with
+    generally accepted engineering standards (e.g., ASHRAE Handbook—HVAC Applications,
+    Chapter 57). The method used and quantified selection criteria, characteristics, sizes, and
+    indices that are applicable to the method shall be stated.
+ h. When direct beam solar radiation falls on a representative occupant, documentation shall
+    include solar design condition (solar altitude, direct beam intensity), the method in Section
+    5.3.2.2.15.3.1.2.1 used for compliance, and the resultant mean radiant temperature tr.
+ Modify Section 7.2.2.1 as shown.
+     7.2.2.1 Mechanically Conditioned Spaces. Use Section 5.3.1.2 to determine the PMV-
+ based comfort zone for the occupants’ expected clothing and metabolic rate. Use Section 5.3.1,
+ “Analytical Method,” to determine the comfort of occupants under the measured environmental
+ conditions. The modeled cClothing and activity levels of the occupants must be as observed or
+ as expected for the use of the indoor space in question. Use Section 5.3.35.3.2 to adjust the
+ comfort zone’s lower and upper operative temperature limits for elevated air movement. Occu-
+ pied zone conditions must also conform to requirements for avoiding local thermal discomfort
+ (as specified in Section 5.3.45.3.3) and to limits to rate of temperature change over time, as
+ specified in Section 5.3.55.3.4.
+     Parameters to be measured and/or recorded include the following:
+ a. Occupant metabolic rate (met) and clothing (clo) observations
+ b. Air temperature and humidity
+ c. Mean radiant temperature tr, unless it can be otherwise demonstrated that, within the space,
+    tr is within 1°C (2°F) of ta
+ d. Air speed, unless it can be otherwise demonstrated that, within the space, average air speed
+    Va meets the requirements of Section 5.3.35.3.2
+ Modify Section 7.3.2 as shown.
+   7.3.2 Physical Measurement Positions within the Building
+ a. Floor plan. Thermal environment measurements shall be made in the building at a repre-
+    sentative sample of locations where the occupants are known to, or are expected to, spend
+    their time. When performing evaluation of similar spaces in a building, it shall be permitted
+    to select a representative sample of such spaces.
+
+
+ ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017                                                       11
+          © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                    print or digital form is not permitted without ASHRAE's prior written permission.
+            If occupancy distribution cannot be observed or estimated, then the measurement loca-
+        tions shall include both of the following:
+        1. The center of the room or space
+        2. 1.0 m (3.3 ft) inward from the center of each of the room’s walls. In the case of exterior
+            walls with windows, the measurement location shall be 1.0 m (3.3 ft) inward from the
+            center of the largest window.
+            Measurements shall also be taken in locations where the most extreme values of the
+        thermal parameters are observed or estimated to occur (e.g., potentially occupied areas near
+        windows, diffuser outlets, corners, and entries).
+     b. Height above floor. Air temperature and average air speed Va shall be measured at the 0.1,
+        0.6, and 1.1 m (4, 24, and 43 in.) levels for seated occupants at the plan locations specified
+        above. Measurements for standing occupants shall be made at the 0.1, 1.1, and 1.7 m (4, 43,
+        and 67 in.) levels. Operative temperature or PMV shall be measured or calculated at the 0.6
+        m (24 in.) level for seated occupants and the 1.1 m (43 in.) level for standing occupants.
+        Floor temperature that may cause local discomfort shall be measured at the surface by con-
+        tact thermometer or infrared thermometer (Section 5.3.4.55.3.3.5).
+            Radiant temperature asymmetry that may cause local thermal discomfort (Sections
+        5.3.4.45.3.3.4) shall be measured in the affected occupants’ locations, with the sensor ori-
+        ented to capture the greatest surface temperature difference.
+     Modify Section 7.4.2.1 as shown.
+        7.4.2.1 Approaches to Predicting whether a Thermal Environment is Acceptable at a
+     Specific Instance in Time
+     a. Mechanically conditioned buildings:
+        1. Occupied spaces shall be evaluated using the PMV and SET comfort zone as defined in
+           Sections 5.3.1 and 5.3.35.3.2.
+        2. Local thermal discomfort shall be evaluated using the limits to environmental asymme-
+           try prescribed in Section 5.3.45.3.3.
+     b. Buildings with occupant-controlled operable windows:
+        1. Occupied spaces shall be evaluated using the indoor operative temperature to contours
+           of the adaptive model comfort zone in Section 5.4, including the contour extensions for
+           average air speeds Va above 0.3 m/s (59 fpm).
+     Add new normative references in Section 8 as shown. The remainder of Section 8 is
+     unchanged.
+
+     8. REFERENCES
+     [...]
+     4.  ASHRAE. 2016. ANSI/ASHRAE Standard 62.1-2016, Ventilation for Acceptable Indoor
+           Air Quality. Atlanta: ASHRAE
+     5. ASHRAE. 2016. ANSI/ASHRAE Standard 62.2-2016, Ventilation and Acceptable Indoor
+           Air Quality in Residential Buildings. Atlanta: ASHRAE
+     46. ISO. 2005. ISO 7730, Ergonomics of the Thermal Environment—Analytical Determina-
+           tion and Interpretation of Thermal Comfort using Calculation of the PMV and PPD
+           Indices and Local Thermal Comfort Criteria. Geneva, Switzerland: International Orga-
+           nization for Standardization.
+     57. ASHRAE. 2013. 2013 ASHRAE Handbook—Fundamentals. Atlanta: ASHRAE.
+     Modify Normative Appendix B normative reference number and example table as shown.
+     The reminder of Normative Appendix B is unchanged.
+
+     This is a normative appendix and is part of this standard.)
+
+     NORMATIVE APPENDIX B
+     COMPUTER PROGRAM FOR CALCULATION OF PMV-PPD
+     (Reference Annex D of ISO 773046. Used with permission from ISO. For additional technical
+     information and an I-P version of the equations in this appendix, refer to the ASHRAE Ther-
+
+
+12                                          ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017
+        © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                  print or digital form is not permitted without ASHRAE's prior written permission.
+                            3
+           mal Comfort Tool referenced in Section 8 of this standard. The Thermal Comfort Tool allows
+           for I-P inputs and outputs, but the algorithm is implemented in SI units.)
+           [...]
+           EXAMPLE—Values used to generate the comfort envelope in Figure 5.3.1.
+
+
+Run   Air Temp.             RH         Radiant Temp.                Air Speed
+
+#     °F           C        %          °F             C             fpm         m/s       met         clo    PMV        PPD %
+
+1     67.3         19.6     86         67.3           19.6          20          0.10      1.1         1      –0.5       10
+
+2     75.0         23.9     66         75.0           23.9          20          0.10      1.1         1      0.5        10
+
+3     78.2         25.7     15         78.2           25.7          20          0.10      1.1         1      0.5        10
+
+4     70.2         21.2     20         70.2           21.2          20          0.10      1.1         1      –0.5       10
+
+5     74.5         23.6     67         74.5           23.6          20          0.10      1.1         0.5    –0.5       10
+
+6     80.2         26.8     56         80.2           26.8          20          0.10      1.1         0.5    0.5        10
+
+7     82.2         27.9     13         82.2           27.9          20          0.10      1.1         0.5    0.5        10
+8     76.5         24.7     16         76.5           24.7          20          0.10      1.1         0.5    –0.5       10
+
+
+           Modify Section C1 introduction reference numbers as shown. The remainder of Section C1
+           is unchanged.
+
+           C1. CALCULATION PROCEDURE
+           Solar gain to the human body is calculated using the effective radiant field (ERF), a measure of
+           the net radiant energy flux to or from the human body (2013 ASHRAE Handbook—
+           Fundamentals 57, Chapter 9.24). ERF is expressed in W/m2 (Btuh/ft2), where “area” refers to
+           body surface area. The surrounding surface temperatures of a space are expressed as mean
+           radiant temperature t r , which equals long-wave mean radiant temperature t rlw when no solar
+           radiation is present. The ERF on the human body from long-wave exchange with surfaces is
+           related to t rlw by
+
+                                               ERF = feff h r  t rlw – t a                                    (C-1)
+
+           where feff is the fraction of the body surface exposed to radiation from the environment (=
+           0.696 for a seated person and 0.725 for a standing person), hr is the radiation heat transfer
+           coefficient (W/m2·K [Btuh/ft2·°F]), and ta is the air temperature (°C [°F]).
+           [...]
+           Modify Section D1 introduction as shown. The remainder of Section D1 is unchanged.
+
+           D1. CALCULATION OVERVIEW
+           Section 5.3 requires that the Elevated Air Speed Comfort Zone Method be used when average
+           air speed Va is greater than 0.20 m/s (40 fpm). The SET model shall be used to account for the
+           cooling effect of air speeds greater than the maximum allowed in the Graphic Comfort Zone or
+           Analytical Comfort Zone methods. This appendix describes the calculation procedures for the
+           Elevated Air Speed Comfort Zone Method.
+           [...]
+           Modify Section E1 introduction as shown.
+
+           E1. INTRODUCTION
+           Thermal comfort is that condition of mind that expresses satisfaction with the thermal environ-
+           ment. Because there are large variations, physiologically and psychologically, from person to
+           person, it is difficult to satisfy everyone in a space. The environmental conditions required for
+           comfort are not the same for everyone. Extensive laboratory and field data have been collected
+
+
+           ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017                                                            13
+        © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                  print or digital form is not permitted without ASHRAE's prior written permission.
+     that provide the necessary statistical data to define conditions that a specified percentage of
+     occupants will find thermally comfortable.
+         The operative temperature to and humidity shown on the psychrometric chart in Figure
+     5.3.1 (graphical method) are for 80% occupant acceptability. This is based on a 10% dissatis-
+     faction criterion for general (whole body) thermal comfort based on the PMV-PPD index, plus
+     an additional 10% dissatisfaction that may occur on average from local (partial body) thermal
+     discomfort (see below). Normative Appendix B provides a list of inputs and outputs used in the
+     PMV/PPD computer program to generate these graphs.
+     Modify Sections E4 and E5 section references as shown.
+
+     E4. TEMPORAL VARIATION
+     It is possible for all six of these factors to vary with time. This standard only addresses thermal
+     comfort in a steady state (with some limited specifications for temperature variations with time
+     in Section 5.3.55.3.4).
+          As a result, people entering a space that meets the requirements of this standard may not
+     immediately find the conditions comfortable if they have experienced different environmental
+     conditions just prior to entering the space. The effect of prior exposure or activity may affect
+     comfort perceptions for approximately one hour.
+
+     E5. LOCAL THERMAL DISCOMFORT
+     Nonuniformity is addressed in Section 5.3.45.3.3. Factors 1 through 6 may be nonuniform over
+     an occupant’s body, and this nonuniformity may be an important consideration in determining
+     thermal comfort.
+     Modify Informative Appendix H as shown.
+
+     (This appendix is not part of this standard. It is merely informative and does not contain
+     requirements necessary for conformance to the standard. It has not been processed
+     according to the ANSI requirements for a standard and may contain material that has
+     not been subject to public review or a consensus process. Unresolved objectors on infor-
+     mative material are not offered the right to appeal at ASHRAE or ANSI.)
+
+     INFORMATIVE APPENDIX H
+     COMFORT ZONE METHODS
+
+     H1. DETERMINING ACCEPTABLE THERMAL CONDITIONS
+     IN OCCUPIED SPACES
+     This standard recommends a specific percentage of occupants that constitutes acceptability and
+     values of the thermal environment associated with this percentage.
+         For given values of humidity, air speed, metabolic rate, and clothing insulation, a comfort
+     zone may be determined. The comfort zone is defined in terms of a range of operative tempera-
+     tures (to) that provide acceptable thermal environmental conditions or in terms of the combina-
+     tions of air temperature and mean radiant temperature tr that people find thermally acceptable.
+         This standard contains a simplified Graphical Comfort Zone Method for determining the
+     comfort zone that is acceptable for use for many typical applications. A computer program
+     based on a heat balance model will determine the comfort zone for a wider range of applica-
+     tions. For a given set of conditions, the results from the two methods are consistent, and either
+     method is acceptable for use as long as the criteria outlined in the respective section are met.
+         See Normative Appendix A and 2009 ASHRAE Handbook—Fundamentals, Chapter 9, for
+     procedures to calculate operative temperature to. Dry-bulb temperature is a proxy for operative
+     temperature under certain conditions described in Normative Appendix A.
+
+     H2. GRAPHICAL COMFORT ZONE METHOD
+     Use of this method is limited to representative occupants with metabolic rates between 1.0 and
+     1.3 met and clothing insulation between 0.5 and 1.0 clo in spaces with air speeds less than 0.2
+     m/s (40 fpm). Spaces with air distribution systems that are engineered such that HVAC-system-
+     supplied air streams do not enter the occupied zone will seldom have averaged air speeds that
+
+
+14                                        ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017
+© ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+          print or digital form is not permitted without ASHRAE's prior written permission.
+
+
+
+
+ Figure H32 Predicted percentage dissatisfied (PPD) as a function of predicted mean vote
+ (PMV).
+
+ Table H32 Acceptable Thermal Environment for General Comfort
+
+                        PPD                                               PMV Range
+
+                        <10                                           –0.5 < PMV < +0.5
+
+
+ exceed 0.2 m/s (40 fpm). See 2009 ASHRAE Handbook—Fundamentals, Chapter 21, for guid-
+ ance on selecting air distribution systems.
+     Figure 5.3.1 in the Graphical Comfort Zone Method section shows the comfort zone for
+ environments that meet the above criteria. Two zones are shown—one for 0.5 clo of clothing
+ insulation and one for 1.0 clo of insulation. These insulation levels are typical of clothing worn
+ when the outdoor environment is warm and cool, respectively.
+     Comfort zones for intermediate values of clothing insulation are determined by linear inter-
+ polation between the limits for 0.5 and 1.0 clo, using the relationships shown in this standard.
+     Elevated air speeds increase the lower and upper operative temperature (t0) limit for the
+ comfort zone if the criteria in Section 5.3.3 are met.
+
+ H3H2. ANALYTICAL COMFORT ZONE METHOD
+ This method applies to spaces where the occupants have activity levels that result in average
+ metabolic rates between 1.0 and 2.0 met and where clothing is worn that provides 1.5 clo or
+ less of thermal insulation.
+     The ASHRAE thermal sensation scale, which was developed for use in quantifying peo-
+ ple’s thermal sensation, is defined as follows:
+ +3        Hot
+ +2        Warm
+ +1        Slightly warm
+  0        Neutral
+ –1        Slightly cool
+ –2        Cool
+ –3        Cold
+     The predicted mean vote (PMV) model uses heat balance principles to relate the six key
+ factors for thermal comfort to the average response of people on the above scale. The predicted
+ percentage dissatisfied (PPD) index is related to the PMV as defined in Figure H3. It is based
+ on the assumption that people voting +2, +3, –2, or –3 on the thermal sensation scale are dis-
+ satisfied and on the simplification that PPD is symmetric around a neutral PMV.
+     Table H3 defines the recommended PPD and PMV range for typical applications. This is
+ the basis for the Graphical Comfort Zone Method in the standard.
+
+
+ ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017                                                       15
+        © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                  print or digital form is not permitted without ASHRAE's prior written permission.
+         The comfort zone is defined by the combinations of the six key factors for thermal comfort
+     for which the PMV is within the recommended limits specified in Table H3. The PMV model
+     is calculated with the air temperature and mean radiant temperature tr in question, along with
+     the applicable metabolic rate, clothing insulation, air speed, and humidity. If the resulting PMV
+     value generated by the model is within the recommended range, the conditions are within the
+     comfort zone.
+         Use of the PMV model in this standard is limited to air speeds below 0.20 m/s (40 fpm).
+     When air speeds exceed 0.20 m/s (40 fpm) the comfort zone boundaries are adjusted based on
+     the SET model described in the elevated air speed section and in Normative Appendix D.
+         There are several computer codes available that predict PMV-PPD. The computer code in
+     Normative Appendix B was developed for use with this standard and is incorporated into
+     ASHRAE Thermal Comfort Tool. If any other software is used, it is the user’s responsibility to
+     verify and document that the version used yields the same results as the code in Normative
+     Appendix B or the ASHRAE Thermal Comfort Tool for the conditions for which it is applied.
+     [...]
+
+     H4H3. ELEVATED AIR SPEED COMFORT ZONE METHOD
+     The outer boundary curves in Figure 5.3.35.3.2A shift toward the left or right depending on clo
+     and met level. An increase of 0.1 clo or 0.1 met corresponds approximately to a 0.8°C (1.4°F)
+     or 0.5°C (0.9°F) reduction in operative temperature (t0); a decrease of 0.1 clo or 0.1 met corre-
+     sponds approximately to a 0.8°C (1.4°F) or 0.5°C (0.9°F) increase in operative temperature.
+
+     H5H4. HUMIDITY LIMITS
+     When the Graphical Comfort Zone Method is used, systems must be able to maintain a humid-
+     ity ratio at or below 0.012, which corresponds to a water vapor pressure of 1.910 kPa (0.277
+     psi) at standard pressure or a dew-point temperature of 16.8°C (62.2°F).
+         There are no established lower humidity limits for thermal comfort; consequently, this stan-
+     dard does not specify a minimum humidity level. Nonthermal comfort factors, such as skin
+     drying, irritation of mucus membranes, dryness of the eyes, and static electricity generation,
+     may place limits on the acceptability of very low humidity environments.
+     Modify Informative Appendix I section references as shown. (Note: Tables and figures are
+     unchanged and have been omitted here.)
+
+     (This appendix is not part of this standard. It is merely informative and does not contain
+     requirements necessary for conformance to the standard. It has not been processed
+     according to the ANSI requirements for a standard and may contain material that has
+     not been subject to public review or a consensus process. Unresolved objectors on infor-
+     mative material are not offered the right to appeal at ASHRAE or ANSI.)
+
+     INFORMATIVE APPENDIX I
+     LOCAL DISCOMFORT AND VARIATIONS WITH TIME
+
+     I1. LOCAL THERMAL DISOMFORT
+     Avoiding local thermal discomfort, whether caused by a vertical air temperature difference
+     between the feet and the head, by an asymmetric radiant field, by local convective cooling (draft),
+     or by contact with a hot or cold floor, is essential to providing acceptable thermal comfort.
+         The requirements specified in Section 5.3.45.3.3 of this standard apply directly to a lightly
+     clothed person (with clothing insulation between 0.5 and 0.7 clo) engaged in near sedentary
+     physical activity (with metabolic rates between 1.0 and 1.3 met). With higher metabolic rates
+     and/or with more clothing insulation, people are less thermally sensitive and, consequently, the
+     risk of local discomfort is lower. Thus, it is acceptable to use the requirements of Section
+     5.3.45.3.3 for metabolic rates greater than 1.3 met and with clothing insulation greater than 0.7
+     clo, since they will be conservative. People are more sensitive to local discomfort when the
+     whole body is cooler than neutral and less sensitive to local discomfort when the whole body is
+     warmer than neutral. The requirements of Section 5.3.45.3.3 of this standard are based on envi-
+     ronmental temperatures near the center of the comfort zone. These requirements apply to the
+     entire comfort zone, but they may be conservative for conditions near the upper temperature
+
+
+16                                        ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017
+© ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+          print or digital form is not permitted without ASHRAE's prior written permission.
+ limits of the comfort zone and may underestimate discomfort at the lower temperature limits of
+ the comfort zone.
+     Table I1 shows the expected percent dissatisfied for each source of local thermal discom-
+ fort described in Sections 5.3.4.15.3.3.1 through 5.3.4.45.3.3.4. The criteria for all sources of
+ local thermal discomfort should be met simultaneously at the levels specified for an environ-
+ ment to meet the requirements of Section 5.3 of this standard. The expected percent dissatis-
+ fied for each source of local thermal discomfort described in Sections 5.3.4.15.3.3.1 through
+ 5.3.4.45.3.3.4 should be specified.
+ [...]
+
+ I3. DRAFT
+ Draft is unwanted local cooling of the body caused by air movement. It is most prevalent when
+ the whole body thermal sensation is cool (below neutral). Draft sensation depends on the air
+ speed, the air temperature, the activity, and the clothing. Sensitivity to draft is greatest where
+ the skin is not covered by clothing, especially the head region comprising the head, neck, and
+ shoulders and the leg region comprising the ankles, feet, and legs.
+     Use of elevated air speed to extend the thermal comfort range is appropriate when occu-
+ pants are slightly warm, as set forth in Section 5.3.35.3.2. When occupants are neutral to
+ slightly cool, such as under certain combinations of met rate and clo value with operative tem-
+ peratures (to) below 23.0°C (73.4°F), average air speeds within the comfort envelope of ±0.5
+ PMV should not exceed 0.20 m/s (40 fpm). This limit applies to air movement caused by the
+ building, its fenestration, and its HVAC system and not to air movement produced by office
+ equipment or occupants. This standard allows average air speed to exceed this draft limit if it is
+ under the occupants’ local control and it is within the elevated air speed comfort envelope
+ described in Section 5.3.35.3.2.
+
+ I4. VERTICAL AIR TEMPERATURE DIFFERENCE
+ Thermal stratification that results in the air temperature at the head level being warmer than
+ that at the ankle level may cause thermal discomfort. Section 5.3.4.35.3.3.3 of this standard
+ specifies allowable differences between the air temperature at head level and the air tempera-
+ ture at ankle level. Figure I4 shows the expected percentage of occupants who are dissatisfied
+ due to the air temperature difference where the head level is warmer than the ankle level. Ther-
+ mal stratification in the opposite direction is rare, is perceived more favorably by occupants,
+ and is not addressed in this standard.
+     The allowable difference in air temperature from ankle level to head level is based on Fig-
+ ure I4 and assumes that a maximum of 5% of occupants are dissatisfied by the vertical air strat-
+ ification.
+ [...]
+
+ I7. CYCLIC VARIATIONS
+ Cyclic variations refer to those situations where the operative temperature to repeatedly rises
+ and falls, and the period of these variations is not greater than 15 minutes. If the period of the
+ fluctuation cycle exceeds 15 minutes, the variation is treated as a drift or ramp in operative
+ temperature and the requirements of Section 5.3.5.25.3.4.2 apply. In some situations, varia-
+ tions with a period not greater than 15 minutes are superimposed on variations with a longer
+ period. In these situations, the requirements of Section 5.3.5.15.3.4.1 apply to the component
+ of the variation with a period not greater than 15 minutes, and the requirements of Section
+ 5.3.5.25.3.4.2 apply to the component of the variation with a period greater than 15 minutes.
+
+ I8. DRIFTS OR RAMPS
+ Temperature drifts and ramps are monotonic, noncyclic changes in operative temperature to.
+ The requirements of Section 5.3.5.25.3.4.2 also apply to cyclic variations with a period greater
+ than 15 minutes. Generally, drifts refer to passive temperature changes of the enclosed space,
+ and ramps refer to actively controlled temperature changes.
+    Section 5.3.5.25.3.4.2 specifies the maximum change in operative temperature to allowed
+ during a period of time. For any given time period, the most restrictive requirements from
+ Table 5.3.5.25.3.4.2 apply. For example, the operative temperature may not change more than
+
+
+ ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017                                                       17
+        © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                  print or digital form is not permitted without ASHRAE's prior written permission.
+     2.2°C (4.0°F) during a 1.0 h period, and it also may not change more than 1.1°C (2.0°F) during
+     any 0.25 h period within that 1.0 h period. If the user creates variations as a result of control or
+     adjustments, higher values may be acceptable.
+         These local thermal comfort criteria were developed in order to keep the expected percent
+     of occupants who are dissatisfied due to all of these local discomfort factors at or below 10%.
+     The operative temperature (to) ranges required in the standard were developed in order to keep
+     the predicted percent dissatisfied of occupants due to operative temperature only, without fac-
+     toring in local thermal factors. When both local discomfort factors and operative temperature
+     considerations are combined, the goal of this standard to standardize thermal conditions
+     acceptable to a substantial majority of occupants (80%) is achieved. This is especially true if
+     there is some overlap between those who are dissatisfied due to local factors and those who are
+     dissatisfied due to operative temperature.
+     Modify Informative Appendix J section references as shown. (Note: Figure and table are
+     unchanged and have been omitted here.)
+
+     (This appendix is not part of this standard. It is merely informative and does not contain
+     requirements necessary for conformance to the standard. It has not been processed
+     according to the ANSI requirements for a standard and may contain material that has
+     not been subject to public review or a consensus process. Unresolved objectors on infor-
+     mative material are not offered the right to appeal at ASHRAE or ANSI.)
+
+     INFORMATIVE APPENDIX J
+     OCCUPANT-CONTROLLED NATURALLY CONDITIONED SPACES
+     [...]
+         The allowable operative temperature (to) limits in Figure 5.4.2 may not be extrapolated to
+     outdoor temperatures above and below the end points of the curves in this figure. If the prevail-
+     ing mean outdoor temperature is less than 10°C (50°F) or greater than 33.5°C (92.3°F), this
+     option may not be used, and no specific guidance for such conditions is included in this stan-
+     dard.
+         Figure 5.4.2 accounts for local thermal discomfort effects in typical buildings, so it is not
+     necessary to address these factors when using this option. If there is reason to believe that local
+     thermal comfort is a problem, it is acceptable to apply the criteria in Section 5.3.45.3.3.
+         Figure 5.4.2 also accounts for people’s clothing adaptation in naturally conditioned spaces
+     by relating the acceptable range of indoor temperatures to the outdoor climate, so it is not nec-
+     essary to estimate the clothing values for the space. No humidity or air speed limits are
+     required when this option is used.
+         Figure 5.4.2 includes the effects of people’s indoor air speed adaptation in warm climates,
+     up to 0.3 m/s (59 fpm) in operative temperatures (to) warmer than 25°C (77°F). In naturally
+     conditioned spaces where air speeds within the occupied zone exceed 0.3 m/s (59 fpm), the
+     upper acceptability temperature limits in Figure 5.4.2 are increased by the corresponding ?t0 in
+     Table 5.4.2.4, which is based on equal SET values as illustrated in Section 5.3.35.3.2. For
+     example, increasing air speed within the occupied zone from 0.3 m/s (59 fpm) to 0.6 m/s (118
+     fpm) increases the upper acceptable temperature limits in Figure 5.4.2 by a ?t0 of 1.2°C
+     (2.2°F). These adjustments to the upper acceptability temperature limits apply only at t0 >
+     25°C (77°F) in which the occupants are engaged in near sedentary physical activity (with met-
+     abolic rates between 1.0 met and 1.3 met).
+     Modify Section L1.1 section references as shown.
+     L1.1 Overview of Comfort Prediction Using Physical Measurements. Measurements of
+     indoor environmental parameters are converted to predictions of occupants’ thermal satisfac-
+     tion through calculations and tests against comfort limits.
+     a. In the predicted-mean-vote-based (PMV) method (Section 5.3.25.3.1), environmental mea-
+        surements are combined with assumptions about clothing and activity level to calculate
+        PMV, a measure of an average occupant’s thermal sensation. In Standard 55, comfort zone is
+        defined as conditions falling within and including PMV levels from –0.5 PMV to +0.5 PMV.
+            At any given PMV level, a population’s proportion of dissatisfied members may be pre-
+        dicted via the predicted percentage dissatisfied (PPD) curve. This is an empirical profit fit
+
+
+18                                        ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017
+                           © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                                     print or digital form is not permitted without ASHRAE's prior written permission.
+Table L3 Comfort Evaluation Approaches for Various Applications
+
+                                       Nature of Application
+                                       Short-Term                                             Long-Term
+                           Occupant Right-Now/Point-in-Time Survey (must survey               Occupant Satisfaction Survey:
+                            Surveys relevant times and population):                           • Survey scores give % dissatisfied directly. (“dissatisfaction”
+                                    • Binning (TSENS scores) leads to % comfort                 may be interpreted to start either below –1, or below 0).
+                                      exceedance during period of survey.                     • Time period of interest can be specified to survey takers.
+ Measurement Method
+
+
+
+
+                                    • Needs coincident temperature to extrapolate to          (Used for building management, commissioning, rating
+                                      full range of conditions.                               operators and real estate value, compliance with green
+                                    (Used for research, problem diagnostics)                  building rating systems)
+                      Environmental Spot Measurements, Temporary (Mobile)            Logging Sensors over Period of Interest, or Trend Data
+                      Measurements Sensors (must select a relevant time to measure): from Permanently Installed (BAS) Sensors:
+                                    • Use measurements to determine PMV              • Exceedance hours: sum of hours over PMV or adaptive
+                                       (Sections 5.3.1, 5.3.35.3.2).                   model limits.
+                                    • Use measurements to determine compliance with • Binned exceedances may be weighted by their severity.
+                                      adaptive model (Section 5.4).                  • Instances of excessive rate-of-temperature change or of
+                                    (Used for real-time operation, testing and         local thermal discomfort can be counted.
+                                    validating system performance)                   (Used for evaluating system and operator performance over
+                                                                                     time)
+
+
+                                of thermal sensation (TSENS) survey scores obtained in a range of test environments in
+                                which dissatisfaction was assumed to occur at TSENS absolute values of 2 or greater. With
+                                this method, a PMV of ±0.5 predicts 90% of a population satisfied, or a 10% PPD.
+                                    However, in most buildings this 90% satisfied rating is rarely obtained, with maximum
+                                satisfaction around 80%. The difference has been ascribed to discomfort perceived in local
+                                parts of the body. The probability of local discomfort is predicted by testing environmental
+                                parameters measured in sensitive locations against empirically-determined limits. Rates of
+                                temperature change are also limited to avoid discomfort. Local discomfort effects are
+                                assumed to contribute an additional 10% PPD to the discomfort predicted by PMV, so that
+                                the total PPD expected in a building with PMV ±0.5 will be 20%.
+                             b. In the adaptive method, used for naturally ventilated spaces, environmental measurements
+                                are linked to satisfaction through an empirical model in which the prevailing mean air out-
+                                door temperature determines the position of percent satisfied contours bordering the com-
+                                fort zone. Section 5.4 defines prevailing mean outdoor air temperature. Local discomfort
+                                limits are not used in the adaptive method.Modify Table L3 as shown.
+                             Modify Section L3.2.1 section references as shown. The remainder of Section L3.2.1 is
+                             unchanged.
+                              L3.2.1 Point-in-Time (Short-Term) Analyses
+                             a. PMV Model
+                                1. Measures. PMV heat balance model prediction of thermal sensation and satisfaction
+                                    from environmental measurements are described in Section 5.3 (including air move-
+                                    ment extension in Section 5.3.35.3.2). Limits to local thermal discomfort are described
+                                    in Section 5.3.45.3.3 and rates of temperature change are described in Section
+                                    5.3.55.3.4.
+                                2. Criteria for Passing. –0.5 to +0.5 on the PMV scale, inclusive. This represents an esti-
+                                    mated 90% s<atisfied with the thermal environment. Expressed as a comfort zone on a
+                                    psychrometric chart, this represents a temperature range of 3K to 5K (5°F to 8°F),
+                                    depending on clothing level and humidity (Figure 5.2.1.1).
+                             b. Local Thermal Discomfort Limits. Local thermal should, by itself, not exceed the limits
+                                prescribed in Section 5.3.45.3.3. At a minimum, an assumed 10% dissatisfaction caused by
+                                local discomfort is added to PMV-predicted discomfort to obtain the overall thermal dissat-
+                                isfaction of an environment.
+                                    Solar radiation on occupants in neutral or warm conditions should not exceed 10% of
+                                outdoor solar radiation incident on the window. The best-practice upper limit is 5%
+                                (ASHRAE 2013).
+
+
+                             ANSI/ASHRAE Addendum d to ANSI/ASHRAE Standard 55-2017                                                                   19
+               © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                         print or digital form is not permitted without ASHRAE's prior written permission.
+                            POLICY STATEMENT DEFINING ASHRAE’S CONCERN
+                           FOR THE ENVIRONMENTAL IMPACT OF ITS ACTIVITIES
+
+ASHRAE is concerned with the impact of its members’ activities on both the indoor and outdoor environment.
+ASHRAE’s members will strive to minimize any possible deleterious effect on the indoor and outdoor environment of
+the systems and components in their responsibility while maximizing the beneficial effects these systems provide,
+consistent with accepted Standards and the practical state of the art.
+     ASHRAE’s short-range goal is to ensure that the systems and components within its scope do not impact the
+indoor and outdoor environment to a greater extent than specified by the Standards and Guidelines as established by
+itself and other responsible bodies.
+     As an ongoing goal, ASHRAE will, through its Standards Committee and extensive Technical Committee structure,
+continue to generate up-to-date Standards and Guidelines where appropriate and adopt, recommend, and promote
+those new and revised Standards developed by other responsible organizations.
+     Through its Handbook, appropriate chapters will contain up-to-date Standards and design considerations as the
+material is systematically revised.
+     ASHRAE will take the lead with respect to dissemination of environmental information of its primary interest and
+will seek out and disseminate information from other responsible organizations that is pertinent, as guides to updating
+Standards and Guidelines.
+     The effects of the design and selection of equipment and systems will be considered within the scope of the
+system’s intended use and expected misuse. The disposal of hazardous materials, if any, will also be considered.
+     ASHRAE’s primary concern for environmental impact will be at the site where equipment within ASHRAE’s scope
+operates. However, energy source selection and the possible environmental impact due to the energy source and
+energy transportation will be considered where possible. Recommendations concerning energy source selection
+should be made by its members.
+             © ASHRAE. Per international copyright law, additional reproduction, distribution, or transmission in either
+                       print or digital form is not permitted without ASHRAE's prior written permission.
+
+
+
+
+                         ASHRAE · 1791 Tullie Circle NE · Atlanta, GA 30329 · www.ashrae.org
+
+
+
+
+About ASHRAE
+
+Founded in 1894, ASHRAE is a global professional society committed to serve humanity by advancing the arts and
+sciences of heating, ventilation, air conditioning, refrigeration, and their allied fields.
+
+As an industry leader in research, standards writing, publishing, certification, and continuing education, ASHRAE
+and its members are dedicated to promoting a healthy and sustainable built environment for all, through strategic
+partnerships with organizations in the HVAC&R community and across related industries.
+
+To stay current with this and other ASHRAE Standards and Guidelines, visit www.ashrae.org/standards, and
+connect on LinkedIn, Facebook, Twitter, and YouTube.
+
+Visit the ASHRAE Bookstore
+ASHRAE offers its Standards and Guidelines in print, as immediately downloadable PDFs, and via ASHRAE Digital
+Collections, which provides online access with automatic updates as well as historical versions of publications.
+Selected Standards and Guidelines are also offered in redline versions that indicate the changes made between the
+active Standard or Guideline and its previous version. For more information, visit the Standards and Guidelines
+section of the ASHRAE Bookstore at www.ashrae.org/bookstore.
+
+
+
+
+                             IMPORTANT NOTICES ABOUT THIS STANDARD
+
+    To ensure that you have all of the approved addenda, errata, and interpretations for this
+    Standard, visit www.ashrae.org/standards to download them free of charge.
+
+    Addenda, errata, and interpretations for ASHRAE Standards and Guidelines are no longer
+    distributed with copies of the Standards and Guidelines. ASHRAE provides these addenda,
+    errata, and interpretations only in electronic form to promote more sustainable use of
+    resources.
+
+
+
+
+7/20
+

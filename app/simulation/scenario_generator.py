@@ -43,7 +43,6 @@ def get_scenario_configs(scenario_type: str,
     elif scenario_type == 'mixto':
         env_config = _mixed_scenario()
     else:
-        # Escenario por defecto: verano
         env_config = _summer_scenario()
     
     return sim_config, env_config

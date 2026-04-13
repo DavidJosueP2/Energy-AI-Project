@@ -42,12 +42,10 @@ class HouseModel:
         self.config = config
         self.dt = dt
         
-        # Estado actual
         self.temperature_indoor: float = config.initial_temperature
         self.hvac_power_level: float = 0.0  # [0, 1] nivel relativo
         self.hvac_consumption_kw: float = 0.0
         
-        # Historial para análisis
         self._step_count: int = 0
 
     def reset(self, initial_temp: Optional[float] = None):
@@ -77,27 +75,17 @@ class HouseModel:
         cfg = self.config
         dt = self.dt
         
-        # Normalizar nivel HVAC a [0, 1]
         hvac_norm = np.clip(hvac_level / 100.0, 0.0, 1.0)
         self.hvac_power_level = hvac_norm
         
-        # --- Calcular cada componente de la transición térmica ---
-        
-        # 1. Transferencia por conducción (paredes, ventanas, techo)
         delta_conduction = cfg.alpha * dt * (temp_outdoor - self.temperature_indoor)
         
-        # 2. Ganancia por ocupantes (calor metabólico)
         delta_occupants = cfg.beta * dt * occupancy
         
-        # 3. Ganancia solar (radiación a través de ventanas)
-        # Normalizar radiación: 1000 W/m² es el valor de referencia
         delta_solar = cfg.gamma * dt * (solar_radiation / 1000.0) * 10.0
         
-        # 4. Efecto del HVAC (refrigeración)
-        # El HVAC extrae calor proporcional a su nivel de potencia
         delta_hvac = cfg.delta * dt * hvac_norm
         
-        # --- Actualizar temperatura interior ---
         self.temperature_indoor += (
             delta_conduction 
             + delta_occupants 
@@ -105,12 +93,9 @@ class HouseModel:
             - delta_hvac
         )
         
-        # Limitar a rango físicamente razonable
         self.temperature_indoor = np.clip(self.temperature_indoor, 10.0, 50.0)
         
-        # --- Calcular consumo eléctrico del HVAC ---
         if hvac_norm > 0.01:
-            # Consumo = potencia máxima × nivel + standby
             self.hvac_consumption_kw = (
                 cfg.hvac_max_power_kw * hvac_norm / cfg.hvac_cop 
                 + cfg.hvac_standby_kw

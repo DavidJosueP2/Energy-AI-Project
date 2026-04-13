@@ -55,8 +55,7 @@ def plot_membership_functions(variable: FuzzyVariable,
         ax.plot(universe, membership, color=color, linewidth=2,
                 label=set_name.replace('_', ' ').title())
         ax.fill_between(universe, 0, membership, alpha=0.08, color=color)
-
-    # Marcar valor actual y activaciones
+    
     if current_value is not None:
         ax.axvline(current_value, color='white', linewidth=2,
                    linestyle='--', alpha=0.8, label=f'Valor: {current_value:.2f}')
@@ -123,7 +122,6 @@ def plot_all_membership_functions(variables: Dict[str, FuzzyVariable],
                     label=set_name.replace('_', ' ').title())
             ax.fill_between(universe, 0, membership, alpha=0.06, color=color)
 
-        # Marcar valor actual si existe
         if current_inputs and var_name in current_inputs:
             val = current_inputs[var_name]
             ax.axvline(val, color='white', linewidth=1.5,
@@ -134,7 +132,6 @@ def plot_all_membership_functions(variables: Dict[str, FuzzyVariable],
         ax.legend(fontsize=7, loc='upper right')
         ax.grid(True, alpha=0.2)
 
-    # Ocultar ejes sobrantes
     for idx in range(len(all_vars), len(axes_flat)):
         axes_flat[idx].set_visible(False)
 
@@ -199,7 +196,6 @@ def plot_rule_activations(rules_with_strength: List[Tuple[FuzzyRule, float]],
     ax.invert_yaxis()
     ax.grid(True, axis='x', alpha=0.3)
 
-    # Etiquetas de valor
     for bar, val in zip(bars, strengths):
         ax.text(bar.get_width() + 0.02, bar.get_y() + bar.get_height() / 2,
                 f'{val:.3f}', va='center', fontsize=8, color='#ccc')
@@ -232,7 +228,6 @@ def plot_aggregation_defuzzification(output_variable: FuzzyVariable,
 
     universe = output_variable.universe
 
-    # Graficar funciones de pertenencia originales (atenuadas)
     colors_list = ['#e94560', '#53d8fb', '#66bb6a', '#f5a623', '#ab47bc']
     for idx, (set_name, fuzzy_set) in enumerate(output_variable.sets.items()):
         color = colors_list[idx % len(colors_list)]
@@ -240,16 +235,13 @@ def plot_aggregation_defuzzification(output_variable: FuzzyVariable,
         ax.plot(universe, membership, color=color, linewidth=1,
                 alpha=0.3, linestyle='--')
 
-    # Graficar funcion agregada
     ax.fill_between(universe, 0, aggregated, alpha=0.5, color='#53d8fb',
                     label='Funcion agregada')
     ax.plot(universe, aggregated, color='#53d8fb', linewidth=2.5)
 
-    # Marcar centroide
     ax.axvline(centroid_value, color='#e94560', linewidth=2.5,
                linestyle='-', label=f'Centroide: {centroid_value:.2f}')
 
-    # Indicador del centroide con flecha
     max_agg = max(aggregated) if max(aggregated) > 0 else 0.5
     ax.annotate(
         f'Salida = {centroid_value:.2f}',
@@ -287,7 +279,6 @@ def plot_inference_summary(variables: Dict[str, FuzzyVariable],
     n_inputs = len(variables)
     fig = plt.figure(figsize=(16, 10))
 
-    # Fila 1: Variables de entrada (una columna por variable)
     gs_top = GridSpec(1, n_inputs, figure=fig,
                       left=0.05, right=0.95, top=0.95, bottom=0.55,
                       wspace=0.3)
@@ -315,7 +306,6 @@ def plot_inference_summary(variables: Dict[str, FuzzyVariable],
         ax.legend(fontsize=6, loc='upper right')
         ax.grid(True, alpha=0.2)
 
-    # Fila 2 izquierda: Top reglas
     gs_bot = GridSpec(1, 2, figure=fig,
                       left=0.05, right=0.95, top=0.48, bottom=0.05,
                       wspace=0.3)
@@ -354,7 +344,6 @@ def plot_inference_summary(variables: Dict[str, FuzzyVariable],
     ax_rules.set_title('Reglas Activadas (Top)', fontsize=10, fontweight='bold')
     ax_rules.grid(True, axis='x', alpha=0.2)
 
-    # Fila 2 derecha: Agregacion + centroide
     ax_agg = fig.add_subplot(gs_bot[0, 1])
     universe = output_variable.universe
 
@@ -400,7 +389,6 @@ def plot_mf_comparison(var_name: str,
     colors_list = ['#e94560', '#53d8fb', '#66bb6a', '#f5a623',
                    '#ab47bc', '#ff7043']
 
-    # Base
     for idx, (set_name, fuzzy_set) in enumerate(base_variable.sets.items()):
         color = colors_list[idx % len(colors_list)]
         membership = fuzzy_set.evaluate(base_variable.universe)
@@ -416,7 +404,6 @@ def plot_mf_comparison(var_name: str,
     ax1.legend(fontsize=8)
     ax1.grid(True, alpha=0.2)
 
-    # Optimizado
     for idx, (set_name, fuzzy_set) in enumerate(optimized_variable.sets.items()):
         color = colors_list[idx % len(colors_list)]
         membership = fuzzy_set.evaluate(optimized_variable.universe)

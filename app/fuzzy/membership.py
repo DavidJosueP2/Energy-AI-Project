@@ -35,24 +35,18 @@ def triangular_mf(x: np.ndarray, params: List[float]) -> np.ndarray:
     
     result = np.zeros_like(x, dtype=float)
     
-    # Rampa ascendente
     if b > a:
         mask_up = (x > a) & (x <= b)
         result[mask_up] = (x[mask_up] - a) / (b - a)
     
-    # Rampa descendente
     if c > b:
         mask_down = (x > b) & (x < c)
         result[mask_down] = (c - x[mask_down]) / (c - b)
     
-    # Pico
     result[x == b] = 1.0
     
-    # Caso especial: a == b (hombro izquierdo)
     if a == b:
         result[x <= a] = 1.0
-    
-    # Caso especial: b == c (hombro derecho)
     if b == c:
         result[x >= c] = 1.0
     
@@ -80,20 +74,16 @@ def trapezoidal_mf(x: np.ndarray, params: List[float]) -> np.ndarray:
     
     result = np.zeros_like(x, dtype=float)
     
-    # Rampa ascendente
     if b > a:
         mask = (x > a) & (x < b)
         result[mask] = (x[mask] - a) / (b - a)
     
-    # Meseta
     result[(x >= b) & (x <= c)] = 1.0
     
-    # Rampa descendente
     if d > c:
         mask = (x > c) & (x < d)
         result[mask] = (d - x[mask]) / (d - c)
     
-    # Casos especiales: hombros
     if a == b:
         result[x <= a] = 1.0
     if c == d:
@@ -119,7 +109,6 @@ class FuzzySet:
         self.mf_type = mf_type
         self.params = list(params)
         
-        # Seleccionar función
         if mf_type == 'triangular':
             self._mf_func = triangular_mf
         elif mf_type == 'trapezoidal':
@@ -136,7 +125,6 @@ class FuzzySet:
         Calcula el grado de pertenencia de un valor escalar.
         Usa interpolación sobre el universo de discurso.
         """
-        # Evaluación directa con la función de pertenencia
         membership = self._mf_func(np.array([value]), self.params)
         return float(membership[0])
     
@@ -218,11 +206,9 @@ class FuzzyVariable:
         """Valida que los conjuntos cubran razonablemente el universo."""
         if not self.sets:
             return False
-        # Verificar que existe al menos un grado de pertenencia > 0 para cada punto
         total_membership = np.zeros_like(self.universe)
         for fs in self.sets.values():
             total_membership += fs.evaluate(self.universe)
-        # Debería haber cobertura en la mayor parte del universo
         coverage = np.mean(total_membership > 0.01)
         return coverage > 0.8
     

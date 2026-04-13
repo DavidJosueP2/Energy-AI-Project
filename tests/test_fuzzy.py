@@ -16,6 +16,7 @@ from app.fuzzy.membership import (
 from app.fuzzy.rules import create_default_rule_base
 from app.fuzzy.inference import MamdaniInference
 from app.fuzzy.controller import FuzzyController
+from app.simulation.devices import build_device_spec
 
 
 class TestMembershipFunctions:
@@ -61,6 +62,15 @@ class TestMembershipFunctions:
         assert result[1] == 1.0  # Antes de b
         assert result[3] == 0.0  # Después de c
 
+    def test_trapezoidal_right_shoulder(self):
+        """Función trapezoidal con hombro derecho explícito."""
+        x = np.array([70.0, 90.0, 100.0, 110.0])
+        result = trapezoidal_mf(x, [82.0, 100.0, 100.0, 100.0])
+        assert result[0] == 0.0
+        assert result[1] > 0.0
+        assert result[2] == 1.0
+        assert result[3] == 1.0
+
 
 class TestFuzzyVariable:
     """Pruebas para variables difusas."""
@@ -91,6 +101,17 @@ class TestFuzzyVariable:
         var.add_set('medio', 'triangular', [3, 5, 7])
         var.add_set('alto', 'triangular', [5, 10, 10])
         assert var.validate()
+
+    def test_mixed_triangular_and_trapezoidal_sets(self):
+        """Una variable puede mezclar triángulos internos con hombros trapezoidales."""
+        var = FuzzyVariable('test', (0, 10), 100)
+        var.add_set('bajo', 'trapezoidal', [0, 0, 0, 3])
+        var.add_set('medio', 'triangular', [2, 5, 8])
+        var.add_set('alto', 'trapezoidal', [7, 10, 10, 10])
+        assert var.validate()
+        result = var.fuzzify(1.0)
+        assert result['bajo'] > 0.0
+        assert result['alto'] == 0.0
 
 
 class TestRuleSet:
@@ -138,17 +159,22 @@ class TestFuzzyController:
                 })
                 assert 0 <= result <= 100, f"Salida fuera de rango: {result}"
 
-    def test_hot_higher_than_cold(self):
-        """Con calor alto, la climatización debe ser mayor que con frío."""
+    def test_signed_error_demands_more_than_comfort(self):
+        """Errores frios o calientes deben exigir mas control que una condicion confortable."""
         hot = self.controller.evaluate({
-            'temp_error': 8.0, 'occupancy': 3.0,
+            'temp_error': 8.0, 'occupancy': 3.0, 'humidity': 0.5,
             'tariff_normalized': 0.3, 'consumption_normalized': 0.3,
         })
         cold = self.controller.evaluate({
-            'temp_error': -3.0, 'occupancy': 3.0,
+            'temp_error': -3.0, 'occupancy': 3.0, 'humidity': 0.5,
             'tariff_normalized': 0.3, 'consumption_normalized': 0.3,
         })
-        assert hot > cold, f"Hot ({hot}) should be > Cold ({cold})"
+        comfort = self.controller.evaluate({
+            'temp_error': 0.0, 'occupancy': 3.0, 'humidity': 0.5,
+            'tariff_normalized': 0.3, 'consumption_normalized': 0.3,
+        })
+        assert hot > comfort, f"Hot ({hot}) should be > Comfort ({comfort})"
+        assert cold > comfort, f"Cold ({cold}) should be > Comfort ({comfort})"
 
     def test_clone(self):
         """Clonar debe crear una copia independiente."""
@@ -189,6 +215,23 @@ class TestFuzzyController:
         
         # Modificar y re-establecer
         self.controller.set_membership_params(params)
+
+    def test_device_specs_use_explicit_trapezoidal_extremes(self):
+        """Los extremos del baseline deben quedar declarados como trapezoidales explícitos."""
+        hvac = build_device_spec("hvac")
+        refri = build_device_spec("refrigerador")
+
+        assert hvac.get_variable("temp_error").get_mf_type("baja") == "trapezoidal"
+        assert hvac.get_variable("tariff").get_mf_type("cara") == "trapezoidal"
+        assert hvac.output_variable.get_mf_type("muy_baja") == "trapezoidal"
+        assert len(hvac.get_variable("temp_error").sets["baja"]) == 4
+        assert len(hvac.output_variable.sets["muy_alta"]) == 4
+
+        assert refri.get_variable("device_temperature").get_mf_type("muy_alta") == "trapezoidal"
+        assert refri.get_variable("door_openings").get_mf_type("baja") == "trapezoidal"
+        assert refri.output_variable.get_mf_type("muy_alta") == "trapezoidal"
+        assert len(refri.get_variable("load_level").sets["alta"]) == 4
+        assert len(refri.output_variable.sets["muy_baja"]) == 4
 
 
 if __name__ == '__main__':

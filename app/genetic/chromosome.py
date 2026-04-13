@@ -109,7 +109,8 @@ class ChromosomeEncoder:
 
         for set_name in ordered_names:
             params = sets_dict[set_name]
-            sets_dict[set_name] = self._normalize_set(params, low, high, min_sep)
+            template = variable_spec["sets"][set_name]
+            sets_dict[set_name] = self._normalize_set(params, low, high, min_sep, template)
 
         for prev_name, curr_name in zip(ordered_names, ordered_names[1:]):
             prev_params = sets_dict[prev_name]
@@ -135,8 +136,20 @@ class ChromosomeEncoder:
 
                 prev_params[-1] = new_prev_end
                 curr_params[0] = new_curr_start
-                sets_dict[prev_name] = self._normalize_set(prev_params, low, high, min_sep)
-                sets_dict[curr_name] = self._normalize_set(curr_params, low, high, min_sep)
+                sets_dict[prev_name] = self._normalize_set(
+                    prev_params,
+                    low,
+                    high,
+                    min_sep,
+                    variable_spec["sets"][prev_name],
+                )
+                sets_dict[curr_name] = self._normalize_set(
+                    curr_params,
+                    low,
+                    high,
+                    min_sep,
+                    variable_spec["sets"][curr_name],
+                )
 
         first_name = ordered_names[0]
         last_name = ordered_names[-1]
@@ -152,17 +165,33 @@ class ChromosomeEncoder:
             first[0] = low
             first[1] = low
             first[2] = max(first[2], low + min_sep)
+        elif len(first_template) == 4 and first_template[0] == first_template[1]:
+            first[0] = low
+            first[1] = low
+            first[2] = max(first[2], low + min_sep)
+            first[3] = max(first[3], first[2] + min_sep)
 
         if len(last_template) == 3 and last_template[1] == last_template[2]:
             last[0] = min(last[0], high - min_sep)
             last[1] = high
             last[2] = high
+        elif len(last_template) == 4 and last_template[2] == last_template[3]:
+            last[0] = min(last[0], high - 2 * min_sep)
+            last[1] = min(last[1], high - min_sep)
+            last[2] = high
+            last[3] = high
 
         sets_dict[first_name] = first
         sets_dict[last_name] = last
 
     @staticmethod
-    def _normalize_set(params: List[float], low: float, high: float, min_sep: float) -> List[float]:
+    def _normalize_set(
+        params: List[float],
+        low: float,
+        high: float,
+        min_sep: float,
+        template: Optional[List[float]] = None,
+    ) -> List[float]:
         """Ordena y acota los parametros de una MF sin perder su tipo."""
         clipped = np.clip(np.array(params, dtype=float), low, high)
         ordered = np.sort(clipped)
@@ -178,6 +207,26 @@ class ChromosomeEncoder:
             return [float(a), float(b), float(c)]
 
         if len(ordered) == 4:
+            if template and template[0] == template[1]:
+                anchor = min(ordered[0], high - 2 * min_sep)
+                c = min(max(ordered[2], anchor + min_sep), high - min_sep)
+                d = max(ordered[3], c + min_sep)
+                d = min(d, high)
+                c = min(c, d - min_sep)
+                anchor = min(anchor, c - min_sep)
+                anchor = max(anchor, low)
+                return [float(anchor), float(anchor), float(c), float(d)]
+
+            if template and template[2] == template[3]:
+                a = min(ordered[0], high - min_sep)
+                b = min(max(ordered[1], a + min_sep), high - min_sep)
+                plateau = max(ordered[3], b + min_sep)
+                plateau = min(plateau, high)
+                b = min(b, plateau - min_sep)
+                a = min(a, b - min_sep)
+                a = max(a, low)
+                return [float(a), float(b), float(plateau), float(plateau)]
+
             a = min(ordered[0], high - 3 * min_sep)
             b = min(max(ordered[1], a + min_sep), high - 2 * min_sep)
             c = min(max(ordered[2], b + min_sep), high - min_sep)

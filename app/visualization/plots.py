@@ -64,6 +64,12 @@ def _device_consumption_series(df: pd.DataFrame) -> pd.Series:
         return df["device_consumption_kw"]
     return df["hvac_consumption_kw"]
 
+
+def _device_temperature_series(df: pd.DataFrame) -> pd.Series:
+    if "device_temperature" in df.columns:
+        return df["device_temperature"]
+    return df["temperature_indoor"]
+
 COLORS = {
     'primary': '#e94560',
     'secondary': '#0f3460',
@@ -102,7 +108,7 @@ def plot_temperatures(df: pd.DataFrame, target_temp: float = 22.0,
     # Temperaturas
     ax.plot(time, df['temperature_outdoor'], color=COLORS['warm'],
             linewidth=1.5, alpha=0.8, label='T. Exterior')
-    ax.plot(time, df['temperature_indoor'], color=COLORS['cool'],
+    ax.plot(time, _device_temperature_series(df), color=COLORS['cool'],
             linewidth=2, label='T. Interior')
     
     ax.set_xlabel('Tiempo (horas)')
@@ -212,7 +218,7 @@ def plot_comfort(df: pd.DataFrame, target_temp: float = 22.0) -> Figure:
     time = df['time_hours']
     
     # Panel superior: desviación de temperatura
-    deviation = df['temperature_indoor'] - target_temp
+    deviation = _device_temperature_series(df) - target_temp
     colors_arr = np.where(deviation > 0, COLORS['red'], COLORS['cool'])
     ax1.bar(time, deviation, width=0.8, color=[COLORS['red'] if d > 0 else COLORS['cool'] 
             for d in deviation], alpha=0.6)
@@ -275,13 +281,13 @@ def plot_comparison(df_base: pd.DataFrame,
     ax = axes[0]
     ax.axhspan(target_temp - comfort_range, target_temp + comfort_range,
                alpha=0.12, color=COLORS['green'])
-    ax.fill_between(time, target_temp, df_base['temperature_indoor'],
+    ax.fill_between(time, target_temp, _device_temperature_series(df_base),
                     alpha=0.08, color=COLORS['base'])
-    ax.fill_between(time, target_temp, df_opt['temperature_indoor'],
+    ax.fill_between(time, target_temp, _device_temperature_series(df_opt),
                     alpha=0.08, color=COLORS['optimized'])
-    ax.plot(time, df_base['temperature_indoor'], color=COLORS['base'],
+    ax.plot(time, _device_temperature_series(df_base), color=COLORS['base'],
             linewidth=1.8, label='T. Interior (Base)', alpha=0.85)
-    ax.plot(time, df_opt['temperature_indoor'], color=COLORS['optimized'],
+    ax.plot(time, _device_temperature_series(df_opt), color=COLORS['optimized'],
             linewidth=1.8, label='T. Interior (Optimizado)', alpha=0.85)
     ax.plot(time, df_base['temperature_outdoor'], color='#f5a623',
             linewidth=2.0, alpha=0.85, linestyle='--', label='T. Exterior')

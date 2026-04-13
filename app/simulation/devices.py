@@ -158,6 +158,7 @@ def _build_hvac_definition() -> DeviceDefinition:
     # - capacidad nominal de enfriamiento: 22,400 BTU/h = 6.56 kW termicos
     # - COP a 47 F: 3.46
     # - potencia electrica nominal en cooling: 1,800 W
+    # - Temperatura de operacion: ashrae (20 a 24 °C)
     #
     # Supuestos que permanecen como calibracion del modelo:
     # - control_gain: se escala respecto al modelo anterior para reflejar la
@@ -188,15 +189,27 @@ def _build_hvac_definition() -> DeviceDefinition:
             VariableSpec(
                 name="temp_error",
                 display_name="Error termico",
-                universe_range=(-8.0, 12.0),
+                universe_range=(-8.0, 8.0),
                 input_key="temp_error",
-                description="Diferencia entre la temperatura interior y la meta termica.",
+                description=(
+                    "Diferencia con signo entre la temperatura interior y la meta termica. "
+                    "Valores negativos indican ambiente mas frio que el objetivo; "
+                    "valores positivos indican ambiente mas caliente."
+                ),
                 unit="C",
                 sets={
-                    "baja": [-8.0, -8.0, -1.5],
-                    "confortable": [-2.5, 0.0, 2.5],
-                    "alta": [1.5, 4.5, 7.5],
-                    "muy_alta": [6.0, 12.0, 12.0],
+                    # Base tecnica:
+                    # - Mitsubishi distingue cercania al setpoint entre 1 y 2 C.
+                    # - A partir de ~2 C el equipo sigue operando para alcanzar la consigna.
+                    # - ASHRAE respalda una zona de confort como banda, no como punto.
+                    "baja": [-8.0, -8.0, -6.0, -1.5],
+                    "confortable": [-1.5, 0.0, 1.5],
+                    "alta": [1.0, 2.0, 4.0],
+                    "muy_alta": [3.0, 5.5, 8.0, 8.0],
+                },
+                mf_types={
+                    "baja": "trapezoidal",
+                    "muy_alta": "trapezoidal",
                 },
             ),
             VariableSpec(
@@ -207,9 +220,13 @@ def _build_hvac_definition() -> DeviceDefinition:
                 description="Humedad relativa normalizada.",
                 unit="fraccion",
                 sets={
-                    "baja": [0.0, 0.0, 0.35],
+                    "baja": [0.0, 0.0, 0.15, 0.35],
                     "media": [0.20, 0.50, 0.75],
-                    "alta": [0.60, 1.0, 1.0],
+                    "alta": [0.60, 0.85, 1.0, 1.0],
+                },
+                mf_types={
+                    "baja": "trapezoidal",
+                    "alta": "trapezoidal",
                 },
             ),
             VariableSpec(
@@ -220,10 +237,14 @@ def _build_hvac_definition() -> DeviceDefinition:
                 description="Numero de ocupantes presentes.",
                 unit="personas",
                 sets={
-                    "vacia": [0.0, 0.0, 1.0],
+                    "vacia": [0.0, 0.0, 0.4, 1.0],
                     "baja": [0.5, 1.5, 2.5],
                     "media": [2.0, 3.0, 4.0],
-                    "alta": [3.5, 5.0, 6.0],
+                    "alta": [3.5, 5.0, 6.0, 6.0],
+                },
+                mf_types={
+                    "vacia": "trapezoidal",
+                    "alta": "trapezoidal",
                 },
             ),
             VariableSpec(
@@ -234,9 +255,13 @@ def _build_hvac_definition() -> DeviceDefinition:
                 description="Tarifa electrica normalizada.",
                 unit="fraccion",
                 sets={
-                    "barata": [0.0, 0.0, 0.30],
+                    "barata": [0.0, 0.0, 0.12, 0.30],
                     "media": [0.20, 0.50, 0.75],
-                    "cara": [0.60, 1.0, 1.0],
+                    "cara": [0.60, 0.85, 1.0, 1.0],
+                },
+                mf_types={
+                    "barata": "trapezoidal",
+                    "cara": "trapezoidal",
                 },
             ),
         ],
@@ -248,11 +273,15 @@ def _build_hvac_definition() -> DeviceDefinition:
             description="Potencia relativa del climatizador.",
             unit="%",
             sets={
-                "muy_baja": [0.0, 0.0, 8.0],
+                "muy_baja": [0.0, 0.0, 3.0, 8.0],
                 "baja": [5.0, 16.0, 30.0],
                 "media": [24.0, 44.0, 62.0],
                 "alta": [56.0, 76.0, 90.0],
-                "muy_alta": [82.0, 100.0, 100.0],
+                "muy_alta": [82.0, 95.0, 100.0, 100.0],
+            },
+            mf_types={
+                "muy_baja": "trapezoidal",
+                "muy_alta": "trapezoidal",
             },
         ),
     )
@@ -316,10 +345,14 @@ def _build_refrigerator_definition() -> DeviceDefinition:
                 description="Temperatura interna del compartimento refrigerado.",
                 unit="C",
                 sets={
-                    "baja": [-2.0, -2.0, 2.5],
+                    "baja": [-2.0, -2.0, 0.0, 2.5],
                     "confortable": [1.5, 4.0, 6.0],
                     "alta": [5.0, 8.0, 11.0],
-                    "muy_alta": [9.5, 14.0, 14.0],
+                    "muy_alta": [9.5, 12.0, 14.0, 14.0],
+                },
+                mf_types={
+                    "baja": "trapezoidal",
+                    "muy_alta": "trapezoidal",
                 },
             ),
             VariableSpec(
@@ -330,9 +363,13 @@ def _build_refrigerator_definition() -> DeviceDefinition:
                 description="Frecuencia relativa de apertura de puerta.",
                 unit="fraccion",
                 sets={
-                    "baja": [0.0, 0.0, 0.30],
+                    "baja": [0.0, 0.0, 0.12, 0.30],
                     "media": [0.20, 0.50, 0.75],
-                    "alta": [0.60, 1.0, 1.0],
+                    "alta": [0.60, 0.85, 1.0, 1.0],
+                },
+                mf_types={
+                    "baja": "trapezoidal",
+                    "alta": "trapezoidal",
                 },
             ),
             VariableSpec(
@@ -343,9 +380,13 @@ def _build_refrigerator_definition() -> DeviceDefinition:
                 description="Nivel relativo de carga termica por contenido interno.",
                 unit="fraccion",
                 sets={
-                    "baja": [0.0, 0.0, 0.30],
+                    "baja": [0.0, 0.0, 0.12, 0.30],
                     "media": [0.20, 0.50, 0.75],
-                    "alta": [0.60, 1.0, 1.0],
+                    "alta": [0.60, 0.85, 1.0, 1.0],
+                },
+                mf_types={
+                    "baja": "trapezoidal",
+                    "alta": "trapezoidal",
                 },
             ),
             VariableSpec(
@@ -356,9 +397,13 @@ def _build_refrigerator_definition() -> DeviceDefinition:
                 description="Tarifa electrica normalizada.",
                 unit="fraccion",
                 sets={
-                    "barata": [0.0, 0.0, 0.30],
+                    "barata": [0.0, 0.0, 0.12, 0.30],
                     "media": [0.20, 0.50, 0.75],
-                    "cara": [0.60, 1.0, 1.0],
+                    "cara": [0.60, 0.85, 1.0, 1.0],
+                },
+                mf_types={
+                    "barata": "trapezoidal",
+                    "cara": "trapezoidal",
                 },
             ),
         ],
@@ -370,11 +415,15 @@ def _build_refrigerator_definition() -> DeviceDefinition:
             description="Potencia relativa del compresor.",
             unit="%",
             sets={
-                "muy_baja": [0.0, 0.0, 18.0],
+                "muy_baja": [0.0, 0.0, 6.0, 18.0],
                 "baja": [10.0, 24.0, 38.0],
                 "media": [32.0, 50.0, 66.0],
                 "alta": [58.0, 76.0, 90.0],
-                "muy_alta": [84.0, 100.0, 100.0],
+                "muy_alta": [84.0, 95.0, 100.0, 100.0],
+            },
+            mf_types={
+                "muy_baja": "trapezoidal",
+                "muy_alta": "trapezoidal",
             },
         ),
     )
@@ -480,8 +529,9 @@ class ControlledDevice:
         - Delta_control = k_c * ctrl_norm
 
         Para HVAC:
-            si T > T_obj + deadband  -> enfria  -> Delta_control con signo negativo
-            si T < T_obj - deadband  -> calienta -> Delta_control con signo positivo
+            se usa una banda muerta alrededor del setpoint. Fuera de ella,
+            el equipo aplica la potencia pedida por el controlador; dentro
+            de ella queda inactivo para evitar oscilaciones innecesarias.
 
         Para refrigerador:
             siempre enfria cuando hay control activo.
@@ -490,25 +540,22 @@ class ControlledDevice:
         if control_level is None:
             control_level = usage_load
             usage_load = 0.0
-        ctrl_norm = float(np.clip(control_level / 100.0, 0.0, 1.0))
-        self.power_level = ctrl_norm
+        requested_ctrl_norm = float(np.clip(control_level / 100.0, 0.0, 1.0))
+        effective_ctrl_norm = requested_ctrl_norm
+        self.power_level = effective_ctrl_norm
 
-        # Intercambio con el ambiente exterior o con el recinto donde esta el
-        # dispositivo. Si T_amb > T, el sistema gana calor; si T_amb < T, lo pierde.
         delta_ambient = cfg.ambient_coupling * self.dt * (ambient_temperature - self.temperature)
-        # Carga interna por presencia humana, usada solo por HVAC.
         delta_occupancy = cfg.occupancy_gain * self.dt * occupancy
-        # Ganancia por radiacion solar incidente, usada solo por HVAC.
         delta_solar = cfg.solar_gain * self.dt * (solar_radiation / 1000.0) * 10.0
-        # Perturbacion de uso: aperturas, carga interna u otras fuentes de calor.
         delta_usage = cfg.usage_gain * self.dt * usage_load
-        # Capacidad termica efectiva del actuador para el paso temporal actual.
-        delta_control = cfg.control_gain * self.dt * ctrl_norm
+        delta_control = cfg.control_gain * self.dt * effective_ctrl_norm
 
         temp_error = self.temperature - self.target_temperature
         if self.descriptor.key == "hvac":
-            # La banda muerta evita oscilaciones innecesarias alrededor del setpoint.
-            deadband = max(self.comfort_range * 0.5, 0.15)
+            deadband = max(self.comfort_range / 2.0, 0.15)
+            effective_ctrl_norm = requested_ctrl_norm
+            self.power_level = effective_ctrl_norm
+
             if temp_error > deadband:
                 control_effect = -delta_control
                 self.control_mode = "cooling"
@@ -519,16 +566,16 @@ class ControlledDevice:
                 control_effect = 0.0
                 self.control_mode = "idle"
         else:
+            effective_ctrl_norm = requested_ctrl_norm
+            self.power_level = effective_ctrl_norm
             control_effect = -delta_control
-            self.control_mode = "cooling" if ctrl_norm > 0.01 else "idle"
+            self.control_mode = "cooling" if effective_ctrl_norm > 0.01 else "idle"
 
         self.temperature += delta_ambient + delta_occupancy + delta_solar + delta_usage + control_effect
         self.temperature = float(np.clip(self.temperature, cfg.min_temperature, cfg.max_temperature))
 
-        if ctrl_norm > 0.01:
-            # Consumo electrico simplificado:
-            #   P = P_max * u / COP + P_standby
-            self.consumption_kw = cfg.max_power_kw * ctrl_norm / max(cfg.cop, 0.1) + cfg.standby_kw
+        if effective_ctrl_norm > 0.01:
+            self.consumption_kw = cfg.max_power_kw * effective_ctrl_norm / max(cfg.cop, 0.1) + cfg.standby_kw
         else:
             self.consumption_kw = 0.0
 

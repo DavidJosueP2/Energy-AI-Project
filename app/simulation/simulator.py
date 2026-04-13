@@ -2,7 +2,6 @@
 Motor de simulacion temporal multi-dispositivo.
 """
 
-from dataclasses import replace
 from typing import Callable, Dict, List, Optional
 
 import numpy as np
@@ -85,34 +84,34 @@ class Simulator:
 
         for step in range(sim_c.num_steps):
             env_state = environment.get_state_at(step)
-            # Entradas crisp que luego seran fuzzificadas por el controlador.
             controller_inputs = self._build_controller_inputs(device, env_state)
-
             try:
                 control_level = float(np.clip(controller_fn(controller_inputs), 0.0, 100.0))
             except Exception:
                 control_level = 0.0
 
-            device_state = device.step(
-                ambient_temperature=self._resolve_ambient_temperature(sim_cfg.device_key, env_state),
-                occupancy=env_state["occupancy"] if sim_cfg.device_key == "hvac" else 0.0,
-                solar_radiation=env_state["solar_radiation"] if sim_cfg.device_key == "hvac" else 0.0,
-                usage_load=env_state["door_openings"] + 0.35 * env_state["load_level"] if sim_cfg.device_key == "refrigerador" else 0.0,
-                control_level=control_level,
-            )
+            ambient_temperature = self._resolve_ambient_temperature(sim_cfg.device_key, env_state)
+            step_inputs = {
+                "ambient_temperature": ambient_temperature,
+                "occupancy": env_state["occupancy"] if sim_cfg.device_key == "hvac" else 0.0,
+                "solar_radiation": env_state["solar_radiation"] if sim_cfg.device_key == "hvac" else 0.0,
+                "usage_load": (
+                    env_state["door_openings"] + 0.35 * env_state["load_level"]
+                    if sim_cfg.device_key == "refrigerador"
+                    else 0.0
+                ),
+                "control_level": control_level,
+            }
+            device_state = device.step(**step_inputs)
 
-            # Balance electrico horario:
-            #   P_total = P_base + P_dispositivo
             total_consumption = env_state["base_consumption"] + device_state["device_consumption_kw"]
-            # Costo horario:
-            #   costo_step = P_total * tarifa * Delta_t
             step_cost = total_consumption * env_state["tariff"] * sim_cfg.time_step_hours
-            cumulative_cost += step_cost
-            cumulative_energy += total_consumption * sim_cfg.time_step_hours
-
-            # El confort se evalua respecto a una banda alrededor del setpoint.
+            step_energy_kwh = total_consumption * sim_cfg.time_step_hours
             temp_deviation = abs(device_state["device_temperature"] - target_temp)
             comfort_index = self._compute_comfort_index(temp_deviation, comfort_range)
+
+            cumulative_cost += step_cost
+            cumulative_energy += step_energy_kwh
 
             record = {
                 "step": step,
@@ -120,7 +119,7 @@ class Simulator:
                 "hour_of_day": env_state["hour_of_day"],
                 "device_key": sim_cfg.device_key,
                 "device_display_name": device.display_name,
-                "ambient_temperature": self._resolve_ambient_temperature(sim_cfg.device_key, env_state),
+                "ambient_temperature": ambient_temperature,
                 "temperature_outdoor": env_state["temperature_outdoor"],
                 "room_temperature": env_state["room_temperature"],
                 "humidity": env_state["humidity"],
@@ -145,12 +144,6 @@ class Simulator:
                 "cumulative_energy_kwh": cumulative_energy,
                 "comfort_index": comfort_index,
                 "temp_deviation": temp_deviation,
-                # Aliases de compatibilidad con la capa existente
-                "temperature_indoor": device_state["device_temperature"],
-                "hvac_level": control_level,
-                "hvac_power_level": device_state["device_power_level"],
-                "hvac_consumption_kw": device_state["device_consumption_kw"],
-                "consumption_normalized": min(env_state["base_consumption"] / max(env_c.base_consumption_max, 0.1), 1.0),
             }
             records.append(record)
 
@@ -166,7 +159,7 @@ class Simulator:
             x = [T_interna, aperturas, carga, tarifa_norm]
 
         HVAC:
-            x = [|T_interior - T_objetivo|, humedad, ocupacion, tarifa_norm]
+            x = [T_interior - T_objetivo, humedad, ocupacion, tarifa_norm]
 
         En HVAC se conserva tambien ``raw_temp_error`` para trazabilidad y para
         ajustar la sensibilidad segun ``comfort_range`` dentro del controlador.
@@ -174,6 +167,8 @@ class Simulator:
         if self.config.simulation.device_key == "refrigerador":
             return {
                 "device_temperature": device.temperature,
+                "target_temperature": device.target_temperature,
+                "comfort_range": device.comfort_range,
                 "door_openings": env_state["door_openings"],
                 "load_level": env_state["load_level"],
                 "tariff_normalized": env_state["tariff_normalized"],
@@ -182,7 +177,7 @@ class Simulator:
 
         raw_temp_error = device.get_temp_error()
         return {
-            "temp_error": abs(raw_temp_error),
+            "temp_error": raw_temp_error,
             "raw_temp_error": raw_temp_error,
             "comfort_range": device.comfort_range,
             "humidity": env_state["humidity"],

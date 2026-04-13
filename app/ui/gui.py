@@ -89,11 +89,6 @@ class OptimizationWorker(QThread):
         if self.optimizer:
             self.optimizer.stop()
 
-
-# ==============================================================================
-# Widget de grafico matplotlib
-# ==============================================================================
-
 class MplCanvas(QWidget):
     """Widget con figura matplotlib embebida."""
 
@@ -142,11 +137,6 @@ class MplCanvas(QWidget):
         self._apply_canvas_sizing()
         self.canvas.draw()
 
-
-# ==============================================================================
-# Ventana principal
-# ==============================================================================
-
 class MainWindow(QMainWindow):
     """Ventana principal de la aplicacion."""
 
@@ -156,7 +146,6 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(1320, 820)
         self.resize(1480, 920)
 
-        # Estado
         self.config = AppConfig()
         self.base_controller: Optional[FuzzyController] = None
         self.optimized_controller: Optional[FuzzyController] = None
@@ -168,11 +157,9 @@ class MainWindow(QMainWindow):
         self.manual_combo_inputs = {}
         self.manual_numeric_inputs = {}
 
-        # Componentes linguisticos
         self.linguistic_input = LinguisticInput()
         self.linguistic_output = LinguisticOutput()
 
-        # Workers
         self._sim_worker: Optional[SimulationWorker] = None
         self._opt_worker: Optional[OptimizationWorker] = None
 
@@ -182,9 +169,6 @@ class MainWindow(QMainWindow):
         self._init_controller()
         self._log("Sistema iniciado. Configure los parametros y ejecute la simulacion.")
 
-    # ------------------------------------------------------------------
-    # Tema oscuro
-    # ------------------------------------------------------------------
     def _apply_dark_theme(self):
         self.setStyleSheet("""
             QMainWindow { background-color: #0a0a1a; }
@@ -252,9 +236,6 @@ class MainWindow(QMainWindow):
             QScrollArea { background-color: #0a0a1a; border: none; }
         """)
 
-    # ------------------------------------------------------------------
-    # Construccion de la interfaz
-    # ------------------------------------------------------------------
     def _build_ui(self):
         central = QWidget()
         self.setCentralWidget(central)
@@ -263,12 +244,10 @@ class MainWindow(QMainWindow):
 
         splitter = QSplitter(Qt.Horizontal)
 
-        # --- Panel izquierdo: Configuracion y acciones ---
         left_panel = self._build_left_panel()
         left_panel.setMaximumWidth(370)
         left_panel.setMinimumWidth(310)
 
-        # --- Panel derecho: Pestanas de resultados ---
         right_panel = QWidget()
         right_layout = QVBoxLayout(right_panel)
         right_layout.setContentsMargins(4, 4, 4, 4)
@@ -293,32 +272,25 @@ class MainWindow(QMainWindow):
         layout = QVBoxLayout(inner)
         layout.setContentsMargins(4, 4, 4, 4)
 
-        # Titulo
         title = QLabel("Gestion Energetica IA")
         title.setFont(QFont('Segoe UI', 15, QFont.Bold))
         title.setStyleSheet("color: #e94560; padding: 5px;")
         title.setAlignment(Qt.AlignCenter)
         layout.addWidget(title)
 
-        # Selector de dispositivo
         layout.addWidget(self._build_device_selector())
 
-        # Parametros de simulacion
         layout.addWidget(self._build_sim_params_group())
 
-        # Parametros GA
         layout.addWidget(self._build_ga_params_group())
 
-        # Botones de accion
         layout.addWidget(self._build_actions_group())
 
-        # Progreso
         self.progress_bar = QProgressBar()
         self.progress_bar.setRange(0, 100)
         self.progress_bar.setValue(0)
         layout.addWidget(self.progress_bar)
 
-        # Log
         log_group = QGroupBox("Log de Actividad")
         log_layout = QVBoxLayout(log_group)
         self.log_text = QTextEdit()
@@ -459,48 +431,34 @@ class MainWindow(QMainWindow):
 
         return group
 
-    # ------------------------------------------------------------------
-    # Pestanas
-    # ------------------------------------------------------------------
     def _build_tabs(self):
         """Construye todas las pestanas de resultados."""
-
-        # Tab 0: Dashboard (Base only)
         self.canvas_dashboard = MplCanvas()
         self.tabs.addTab(self.canvas_dashboard, "Dashboard")
 
-        # Tab 1: Temperaturas
         self.canvas_temp = MplCanvas()
         self.tabs.addTab(self.canvas_temp, "Temperaturas")
 
-        # Tab 2: Humedad
         self.canvas_humidity = MplCanvas()
         self.tabs.addTab(self.canvas_humidity, "Humedad")
 
-        # Tab 3: HVAC
         self.canvas_hvac = MplCanvas()
         self.tabs.addTab(self.canvas_hvac, "Control")
 
-        # Tab 4: Consumo
         self.canvas_consumption = MplCanvas()
         self.tabs.addTab(self.canvas_consumption, "Consumo")
 
-        # Tab 5: Costo
         self.canvas_cost = MplCanvas()
         self.tabs.addTab(self.canvas_cost, "Costo")
 
-        # Tab 6: Confort
         self.canvas_comfort = MplCanvas()
         self.tabs.addTab(self.canvas_comfort, "Confort")
 
-        # Tab 7: Analisis Difuso (Por Hora)
         self.tabs.addTab(self._build_hourly_inference_tab(), "Analisis Difuso")
 
-        # Tab 8: Optimizacion GA
         self.canvas_ga = MplCanvas()
         self.tabs.addTab(self.canvas_ga, "Optimizacion GA")
 
-        # Tab 9: Funciones de Pertenencia
         self.canvas_mf = MplCanvas(auto_resize_to_figure=True)
         self.scroll_mf = QScrollArea()
         self.scroll_mf.setWidget(self.canvas_mf)
@@ -509,11 +467,9 @@ class MainWindow(QMainWindow):
         self.scroll_mf.setFrameShape(QFrame.NoFrame)
         self.tabs.addTab(self.scroll_mf, "Funciones de Pertenencia")
 
-        # Tab 10: Comparacion global
         self.canvas_compare = MplCanvas()
         self.tabs.addTab(self.canvas_compare, "Comparacion Global")
 
-        # Tab 11: Metricas tabla
         self.metrics_table = QTableWidget()
         self.metrics_table.setColumnCount(4)
         self.metrics_table.setHorizontalHeaderLabels([
@@ -573,7 +529,6 @@ class MainWindow(QMainWindow):
 
         main_layout.addWidget(manual_group)
 
-        # Controles superiores de inspeccion temporal
         control_panel = QWidget()
         control_layout = QHBoxLayout(control_panel)
         control_panel.setMaximumHeight(60)
@@ -589,17 +544,15 @@ class MainWindow(QMainWindow):
         self.slider_hour.setValue(0)
         self.slider_hour.setTickPosition(QSlider.TicksBelow)
         self.slider_hour.setTickInterval(6)
-        self.slider_hour.setEnabled(False) # Activar tras simular base
+        self.slider_hour.setEnabled(False)
         self.slider_hour.valueChanged.connect(self._on_hour_changed)
         control_layout.addWidget(self.slider_hour, stretch=1)
         
         main_layout.addWidget(control_panel)
 
-        # Tablas y resultados
         middle_panel = QWidget()
         middle_layout = QHBoxLayout(middle_panel)
-        
-        # Tabla de reglas
+
         rules_group = QGroupBox("Reglas Activadas en esta Hora")
         rules_layout = QVBoxLayout(rules_group)
         self.rules_table = QTableWidget()
@@ -610,7 +563,6 @@ class MainWindow(QMainWindow):
         rules_layout.addWidget(self.rules_table)
         middle_layout.addWidget(rules_group, stretch=1)
         
-        # Inputs y Output (Display numerico)
         info_group = QGroupBox("Estado del Entorno")
         info_layout = QVBoxLayout(info_group)
         self.lbl_fuzzy_inputs = QLabel("Sin datos. Ejecute la simulación base.")
@@ -627,7 +579,6 @@ class MainWindow(QMainWindow):
 
         main_layout.addWidget(middle_panel)
 
-        # Graficos
         bottom_panel = QWidget()
         bottom_layout = QVBoxLayout(bottom_panel)
 
@@ -648,9 +599,6 @@ class MainWindow(QMainWindow):
 
         return tab
 
-    # ------------------------------------------------------------------
-    # Inicializacion
-    # ------------------------------------------------------------------
     def _init_controller(self):
         self.base_controller = FuzzyController(
             self.config.fuzzy,
@@ -660,7 +608,6 @@ class MainWindow(QMainWindow):
         self.linguistic_output.set_controller(self.base_controller)
         self._rebuild_manual_inputs()
         self._log(f"Controlador difuso inicializado: {self.base_controller}")
-        # Mostrar funciones de pertenencia iniciales
         self._update_mf_plot()
 
     def _update_config(self):
@@ -722,9 +669,6 @@ class MainWindow(QMainWindow):
             self.optimized_result = None
             self.optimized_metrics = None
 
-    # ------------------------------------------------------------------
-    # Inferencia Difusa Interactiva
-    # ------------------------------------------------------------------
     def _on_hour_changed(self, value):
         """Disparado al mover el slider, recalcula inferencia para la hora seleccionada."""
         self.lbl_hour.setText(f"Seleccione la Hora de Simulación ({value} h):")
@@ -733,7 +677,6 @@ class MainWindow(QMainWindow):
         
         try:
             df = self.base_result.data
-            # Encontrar la fila mas cercana a esa hora
             df_hour = df.iloc[(df['time_hours'] - value).abs().argsort()[:1]]
             if df_hour.empty:
                 return
@@ -763,13 +706,11 @@ class MainWindow(QMainWindow):
         self.rules_table.setRowCount(len(top_rules))
 
         for row, (rule, strength) in enumerate(top_rules):
-            # Regla
             ant = " Y ".join(f"{v} es {s}" for v, s in rule.antecedents)
             con = rule.consequent[1]
             rule_text = f"SI {ant} ENTONCES {con}"
             self.rules_table.setItem(row, 0, QTableWidgetItem(rule_text))
 
-            # Fuerza
             item = QTableWidgetItem(f"{strength:.3f}")
             if strength > 0.5:
                 item.setForeground(QColor('#66bb6a'))
@@ -783,7 +724,6 @@ class MainWindow(QMainWindow):
         """Actualiza los graficos de la pestana de inferencia difusa."""
         try:
             controller = controller or self.base_controller
-            # Grafico 1: Funciones de pertenencia con valores marcados
             fig = fuzzy_plots.plot_all_membership_functions(
                 controller.input_variables,
                 controller.output_variable,
@@ -791,7 +731,6 @@ class MainWindow(QMainWindow):
             )
             self.canvas_fuzzy_mf.update_figure(fig)
 
-            # Grafico 2: Agregacion y centroide
             if detail.aggregated_output is not None:
                 fig = fuzzy_plots.plot_aggregation_defuzzification(
                     controller.output_variable,
@@ -889,9 +828,6 @@ class MainWindow(QMainWindow):
             lines.append(f"- {variable_spec.display_name}: {value:.2f}")
         return "\n".join(lines)
 
-    # ------------------------------------------------------------------
-    # Acciones principales
-    # ------------------------------------------------------------------
     def _on_run_base(self):
         self._update_config()
         self._init_controller()
@@ -919,7 +855,7 @@ class MainWindow(QMainWindow):
         self._log(f"   Energia: {metrics.total_energy_kwh:.1f} kWh | "
                   f"Costo: ${metrics.total_cost:.2f} | "
                   f"Confort: {metrics.comfort_percentage:.1f}%")
-        
+               
         self._update_all_plots()
         self._update_metrics_table()
 
@@ -933,7 +869,7 @@ class MainWindow(QMainWindow):
         self.btn_export_csv.setEnabled(True)
         self._set_buttons_enabled(True)
         self.statusBar().showMessage("Simulacion base completada")
-        self.tabs.setCurrentIndex(0) # Poner en Dashboard
+        self.tabs.setCurrentIndex(0)
 
     def _on_run_ga(self):
         self._update_config()
@@ -974,7 +910,7 @@ class MainWindow(QMainWindow):
         self._log(f"   Energia opt: {self.optimized_metrics.total_energy_kwh:.1f} kWh | "
                   f"Costo: ${self.optimized_metrics.total_cost:.2f} | "
                   f"Confort: {self.optimized_metrics.comfort_percentage:.1f}%")
-
+        
         self._update_all_plots()
         self._update_ga_plot()
         self._update_metrics_table()
@@ -985,7 +921,7 @@ class MainWindow(QMainWindow):
         self.btn_compare.setEnabled(True)
         self._set_buttons_enabled(True)
         self.statusBar().showMessage("Optimizacion GA completada")
-        self.tabs.setCurrentIndex(10) # Comparacion Global
+        self.tabs.setCurrentIndex(10)
 
     def _on_compare(self):
         if not self.base_result or not self.optimized_result:
@@ -1059,9 +995,6 @@ class MainWindow(QMainWindow):
         cursor.movePosition(cursor.End)
         self.log_text.setTextCursor(cursor)
 
-    # ------------------------------------------------------------------
-    # Actualizacion de graficos - SIEMPRE COMPARATIVOS
-    # ------------------------------------------------------------------
     def _update_mf_plot(self):
         """Actualiza el grafico de funciones de pertenencia."""
         if not self.base_controller:
@@ -1087,13 +1020,11 @@ class MainWindow(QMainWindow):
         device_name = str(df_base['device_display_name'].iloc[0]) if 'device_display_name' in df_base.columns else "Dispositivo"
 
         try:
-            # Dashboard BASE (Nunca comparativo)
             fig = dashboard.create_simulation_dashboard(
                 df_base, target, comfort, f"Dashboard - {device_name} - Base"
             )
             self.canvas_dashboard.update_figure(fig)
 
-            # Comparacion Global Dashboard (Para tab 10)
             if df_opt is not None and self.optimized_metrics:
                 fig_comp = dashboard.create_comparison_dashboard(
                     df_base, df_opt,
@@ -1102,15 +1033,13 @@ class MainWindow(QMainWindow):
                 )
                 self.canvas_compare.update_figure(fig_comp)
 
-            # Temperaturas - comparativo
             fig = self._create_comparative_plot(
-                df_base, df_opt, 'temperature_indoor',
+                df_base, df_opt, 'device_temperature',
                 self.base_controller.spec.temperature_display_name, 'Temperatura (C)',
                 target=target, comfort=comfort, show_outdoor=True
             )
             self.canvas_temp.update_figure(fig)
 
-            # Humedad - comparativo
             if df_opt is not None and 'humidity' in df_opt.columns:
                 fig = self._create_comparative_plot(
                     df_base, df_opt, 'humidity',
@@ -1121,7 +1050,6 @@ class MainWindow(QMainWindow):
                 fig = plots.plot_humidity(df_base)
             self.canvas_humidity.update_figure(fig)
 
-            # HVAC - comparativo
             fig = self._create_comparative_plot(
                 df_base, df_opt, 'control_level',
                 self.base_controller.spec.control_display_name, 'Nivel (%)',
@@ -1129,7 +1057,6 @@ class MainWindow(QMainWindow):
             )
             self.canvas_hvac.update_figure(fig)
 
-            # Consumo - comparativo
             fig = self._create_comparative_plot(
                 df_base, df_opt, 'total_consumption_kw',
                 'Consumo Electrico Total', 'Consumo (kW)',
@@ -1137,7 +1064,6 @@ class MainWindow(QMainWindow):
             )
             self.canvas_consumption.update_figure(fig)
 
-            # Costo - comparativo
             fig = self._create_comparative_plot(
                 df_base, df_opt, 'cumulative_cost',
                 'Costo Acumulado', 'Costo ($)',
@@ -1145,16 +1071,12 @@ class MainWindow(QMainWindow):
             )
             self.canvas_cost.update_figure(fig)
 
-            # Confort - comparativo
             fig = self._create_comparative_plot(
                 df_base, df_opt, 'comfort_index',
                 'Indice de Desempeno', 'Indice',
                 fill=True
             )
             self.canvas_comfort.update_figure(fig)
-
-
-            # MF comparison si hay optimizado
             if self.optimized_controller:
                 self._update_mf_comparison_plot()
 
@@ -1171,25 +1093,21 @@ class MainWindow(QMainWindow):
         fig, ax = plt.subplots(figsize=(12, 5))
         time = df_base['time_hours']
 
-        # Zona de confort
         if target is not None and comfort is not None:
             ax.axhspan(target - comfort, target + comfort,
                        alpha=0.12, color=plots.COLORS['green'], label='Zona confort')
             ax.axhline(target, color=plots.COLORS['green'],
                        linewidth=0.8, linestyle='--', alpha=0.5)
 
-        # Temperatura exterior
         if show_outdoor and 'temperature_outdoor' in df_base.columns:
             ax.plot(time, df_base['temperature_outdoor'], color='#f5a623',
                     linewidth=2.0, alpha=0.85, linestyle='--', label='T. Exterior')
 
-        # Base
         if fill:
             ax.fill_between(time, 0, df_base[column], alpha=0.2, color=plots.COLORS['base'])
         ax.plot(time, df_base[column], color=plots.COLORS['base'],
                 linewidth=1.8, label='Base', alpha=0.85)
 
-        # Optimizado (si existe)
         if df_opt is not None and column in df_opt.columns:
             if fill:
                 ax.fill_between(time, 0, df_opt[column], alpha=0.15, color=plots.COLORS['optimized'])
@@ -1252,12 +1170,6 @@ class MainWindow(QMainWindow):
                 self.metrics_table.setItem(row, 3, item)
             else:
                 self.metrics_table.setItem(row, 3, QTableWidgetItem('-'))
-
-
-# ==============================================================================
-# Funcion de lanzamiento
-# ==============================================================================
-
 def launch_gui():
     """Lanza la interfaz grafica de la aplicacion."""
     app = QApplication(sys.argv)

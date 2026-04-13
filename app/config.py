@@ -1,21 +1,7 @@
-# ==============================================================================
-# config.py - Configuración centralizada del sistema
-# ==============================================================================
-"""
-Módulo de configuración global del proyecto.
-Contiene todos los parámetros ajustables organizados por subsistema:
-simulación, modelo térmico, controlador difuso, algoritmo genético,
-métricas de evaluación y rutas de archivos.
-"""
-
 from dataclasses import dataclass, field
 from typing import Dict, List, Tuple
 import os
 
-
-# ==============================================================================
-# CONFIGURACIÓN DE SIMULACIÓN
-# ==============================================================================
 @dataclass
 class SimulationConfig:
     """Parámetros de la simulación temporal."""
@@ -284,7 +270,6 @@ class MetricsConfig:
 class PathsConfig:
     """Rutas de archivos y directorios del proyecto."""
     
-    # Directorio raíz del proyecto
     project_root: str = field(default_factory=lambda: os.path.dirname(
         os.path.dirname(os.path.abspath(__file__))
     ))
@@ -325,7 +310,6 @@ class AppConfig:
     def __post_init__(self):
         """Inicialización post-creación: asegura directorios."""
         self.paths.ensure_dirs()
-        # Sincronizar confort entre simulation y metrics
         self.metrics.comfort_min = self.simulation.target_temperature - self.simulation.comfort_range
         self.metrics.comfort_max = self.simulation.target_temperature + self.simulation.comfort_range
 

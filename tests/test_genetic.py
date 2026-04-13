@@ -44,7 +44,7 @@ class TestChromosomeEncoder:
         assert 'hvac_output' in decoded
 
     def test_repair_enforces_order(self):
-        """Reparar debe garantizar a <= b <= c."""
+        """Reparar debe garantizar parámetros no decrecientes."""
         ch = self.encoder.encode_default()
         # Desordenar algunos genes
         ch[0] = 10.0
@@ -55,8 +55,27 @@ class TestChromosomeEncoder:
         
         for var_name, sets_dict in decoded.items():
             for set_name, params in sets_dict.items():
-                assert params[0] <= params[1] <= params[2], \
-                    f"{var_name}.{set_name}: {params} no cumple a<=b<=c"
+                assert all(params[idx] <= params[idx + 1] for idx in range(len(params) - 1)), \
+                    f"{var_name}.{set_name}: {params} no cumple orden no decreciente"
+
+    def test_repair_preserves_explicit_trapezoidal_shoulders(self):
+        """Las familias extremas trapezoidales deben seguir siendo hombros tras repair()."""
+        ch = self.encoder.encode_default()
+        repaired = self.encoder.repair(ch)
+        decoded = self.encoder.decode(repaired)
+
+        left = decoded["temp_error"]["baja"]
+        right = decoded["hvac_output"]["muy_alta"]
+
+        assert len(left) == 4
+        assert left[0] == left[1]
+        assert left[2] > left[1]
+        assert left[3] > left[2]
+
+        assert len(right) == 4
+        assert right[2] == right[3]
+        assert right[1] < right[2]
+        assert right[0] < right[1]
 
     def test_random_generation(self):
         """Generar cromosoma aleatorio debe producir vector válido."""

@@ -72,6 +72,12 @@ def create_hvac_rule_base(output_name: str = "control_output") -> RuleSet:
         "Zona confortable con poca ocupacion.",
     )
     rb.add_rule(
+        [("temp_error", "confortable"), ("occupancy", "media")],
+        (output_name, "baja"),
+        0.95,
+        "Zona confortable con ocupacion media: se mantiene acondicionamiento suave.",
+    )
+    rb.add_rule(
         [("temp_error", "confortable"), ("occupancy", "alta"), ("humidity", "alta")],
         (output_name, "media"),
         0.95,
@@ -84,18 +90,43 @@ def create_hvac_rule_base(output_name: str = "control_output") -> RuleSet:
         "Confort alcanzado con tarifa cara.",
     )
 
-    # Error bajo o frio: no sobre-enfriar
+    # Error bajo o frio: el sistema debe calentar, pero con distinta
+    # agresividad segun ocupacion y costo.
     rb.add_rule(
-        [("temp_error", "baja")],
-        (output_name, "muy_baja"),
+        [("temp_error", "baja"), ("occupancy", "vacia")],
+        (output_name, "baja"),
+        0.90,
+        "Ambiente frio con vivienda vacia: calentamiento minimo de mantenimiento.",
+    )
+    rb.add_rule(
+        [("temp_error", "baja"), ("occupancy", "baja")],
+        (output_name, "media"),
+        0.95,
+        "Ambiente frio con poca ocupacion: calentamiento moderado.",
+    )
+    rb.add_rule(
+        [("temp_error", "baja"), ("occupancy", "media")],
+        (output_name, "alta"),
         1.0,
-        "Ambiente por debajo de la meta.",
+        "Ambiente frio con ocupacion media: se requiere recuperacion termica clara.",
+    )
+    rb.add_rule(
+        [("temp_error", "baja"), ("occupancy", "alta")],
+        (output_name, "muy_alta"),
+        1.0,
+        "Ambiente frio con ocupacion alta: prioridad de confort.",
+    )
+    rb.add_rule(
+        [("temp_error", "baja"), ("tariff", "cara"), ("occupancy", "vacia")],
+        (output_name, "muy_baja"),
+        0.85,
+        "Ambiente frio, casa vacia y tarifa cara: se modera el calentamiento.",
     )
     rb.add_rule(
         [("temp_error", "baja"), ("humidity", "alta"), ("occupancy", "alta")],
-        (output_name, "muy_baja"),
-        0.60,
-        "Ambiente por debajo de la meta: se evita enfriar de mas aun con alta ocupacion.",
+        (output_name, "muy_alta"),
+        0.95,
+        "Ambiente frio con alta ocupacion y humedad: se preserva confort.",
     )
 
     # Temperatura alta
@@ -216,27 +247,27 @@ def create_refrigerator_rule_base(output_name: str = "control_output") -> RuleSe
     # Temperatura alta
     rb.add_rule(
         [("device_temperature", "alta"), ("door_openings", "baja"), ("load_level", "baja")],
-        (output_name, "media"),
-        0.90,
-        "Temperatura alta sin perturbacion fuerte.",
+        (output_name, "alta"),
+        0.95,
+        "Temperatura alta: se requiere enfriamiento sostenido incluso sin perturbacion fuerte.",
     )
     rb.add_rule(
         [("device_temperature", "alta"), ("door_openings", "media")],
-        (output_name, "alta"),
-        0.95,
+        (output_name, "muy_alta"),
+        1.0,
         "Aperturas frecuentes elevan la demanda.",
     )
     rb.add_rule(
         [("device_temperature", "alta"), ("load_level", "alta")],
-        (output_name, "alta"),
-        0.95,
+        (output_name, "muy_alta"),
+        1.0,
         "Carga interna alta requiere mas enfriamiento.",
     )
     rb.add_rule(
         [("device_temperature", "alta"), ("tariff", "cara"), ("door_openings", "baja")],
-        (output_name, "media"),
-        0.85,
-        "Ajuste moderado cuando la tarifa es cara.",
+        (output_name, "alta"),
+        0.90,
+        "La tarifa cara modera menos cuando la temperatura ya esta alta.",
     )
 
     # Temperatura muy alta

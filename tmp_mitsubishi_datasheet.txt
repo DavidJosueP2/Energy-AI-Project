@@ -1,0 +1,349 @@
+                                                SUBMITTAL DATA: MSZ-GL24NA & MUZ-GL24NA
+  M-SERIES                                            24,000 BTU/H WALL-MOUNTED HEAT PUMP SYSTEM
+ Job Name:
+
+ System Reference:                                                                                                                            Date:
+
+
+ Indoor Unit:                                                                Outdoor Unit:                                                            Wireless Remote Controller
+ MSZ-GL24NA                                                                  □ MUZ-GL24NA-U1
+                                                                             □ MUZ-GL24NA-U2
+
+
+
+
+GENERAL FEATURES
+• Slim wall-mounted indoor units provide zone comfort control
+• The outdoor unit powers the indoor unit, and should a power outage occur, the system is automatically restarted when power returns
+• INVERTER-driven compressor and LEV provide high efficiency and comfort while using only the energy needed to maintain maximum performance
+• Multiple fan speed options: Quiet, Low, Medium, High, Super-high, Auto
+• Multiple control options available:
+  - Hand-held Remote Controller (provided with unit)
+  - kumo cloud® smart device app for remote access
+  - Third-party interface options
+  - Wired or wireless controllers
+• Quiet operation
+• Smart Set: recalls a preferred preset temperature setting at the touch of a button
+• Blue Fin anti-corrosion treatment applied to the outdoor unit heat exchanger for increased coil protection and longer life
+
+
+
+
+Specifications are subject to change without notice.                                                   © 2022 Mitsubishi Electric Trane HVAC US LLC. All rights reserved.
+                                             SPECIFICATIONS: MSZ-GL24NA & MUZ-GL24NA
+
+                           Maximum Capacity                                                                     BTU/H                        31,400
+
+                           Rated Capacity                                                                       BTU/H                        22,400
+
+                           Minimum Capacity                                                                     BTU/H                        8,200
+
+                           Maximum Power Input                                                                    W                          3,522
+Cooling1
+                           Rated Power Input                                                                      W                          1,800
+
+                           Moisture Removal                                                                     Pints/h                        5.1
+
+                           Sensible Heat Factor                                                                                               0.75
+
+                           Power Factor                                                                           %                          99 / 99
+
+                           Maximum Capacity                                                                     BTU/H                        36,900
+
+                           Rated Capacity                                                                       BTU/H                        27,600
+
+                           Minimum Capacity                                                                     BTU/H                        7,500
+Heating at 47°F2
+                           Maximum Power Input                                                                    W                          3,592
+
+                           Rated Power Input                                                                      W                          2,340
+
+                           Power Factor                                                                           %                          99 / 99
+
+                           Maximum Capacity                                                                     BTU/H                        24,600
+
+                           Rated Capacity                                                                       BTU/H                        16,000
+Heating at 17°F3
+                           Maximum Power Input                                                                    W                          3,232
+
+                           Rated Power Input                                                                      W                          1,712
+
+                           Maximum Capacity                                                                     BTU/H                        19,320
+Heating at 5°F4
+                           Maximum Power Input                                                                    W                          2,990
+
+Heating at -4°F5           Maximum Capacity                                                                     BTU/H                        15,450
+
+                           SEER | SEER2                                                                                                   20.5 | 20.4
+
+                           EER1 | EER21                                                                                                   12.5 | 12.5
+
+                           HSPF (IV) | HSPF2 (IV)                                                                                         10.0 | 10.0
+
+                           COP at 47°F2                                                                                                       3.46
+Efficiency
+                           COP at 17°F in Maximum Capacity3                                                                                   2.23
+
+                           COP at 5°F in Maximum Capacity4                                                                                    1.89
+
+                           ENERGY STAR® certified units (ENERGY STAR products are third-party certified by an EPA-recognized                  YES
+                           Certification Body.)
+
+                           Voltage, Phase, Frequency                                                                                208/230V, 1 phase, 60Hz
+
+                           Guaranteed Voltage Range                                                              V AC                      187 - 253
+
+                           Voltage: Indoor - Outdoor, S1-S2                                                      V AC                      208 / 230
+
+Electrical                 Voltage: Indoor - Outdoor, S2-S3                                                      V DC                          24
+
+                           Short-circuit Current Rating (SCCR)                                                    kA                            5
+
+                           Recommended Fuse/Breaker Size (Outdoor)                                                A                            20
+
+                           Recommended Wire Size (Indoor - Outdoor)                                              AWG                           14
+
+                           MCA                                                                                    A                             1
+
+                           MOCP                                                                                   A                            20
+
+                           Blower Motor Full Load Amperage                                                        A                           0.76
+
+                           Blower Motor Output                                                                    W                            56
+
+                           Airflow Rate at Cooling, Dry                                                          CFM                 738-628-544-469-388
+
+                           Airflow Rate at Cooling, Wet                                                          CFM                 661-562-487-420-347
+
+                           Airflow Rate at Heating, Dry                                                          CFM                 738-628-544-469-388
+
+Indoor Unit                Sound Pressure Level (Cooling)                                                       dB(A)                   53-49-45-41-34
+
+                           Sound Pressure Level (Heating)                                                       dB(A)                   52-49-45-41-32
+
+                           Drain Pipe Size                                                                     In. (mm)                   5/8 (15.88)
+
+                           Heat Exchanger Type                                                                                            Plate fin coil
+
+                           External Finish Color                                                                                      Munsell 1.0Y 9.2/0.2
+
+                                                                                                              W: In. (mm)               43-5/16 (1,100)
+
+                           Unit Dimensions                                                                    D: In. (mm)                 9-3/8 (238)
+
+                                                                                                              H: In. (mm)               12-13/16 (325)
+
+
+
+
+Specifications are subject to change without notice.                                            © 2022 Mitsubishi Electric Trane HVAC US LLC. All rights reserved.
+                                             SPECIFICATIONS: MSZ-GL24NA & MUZ-GL24NA
+
+                                                                                          W: In. (mm)                    45-1/2 (1,160)
+
+                           Package Dimensions                                             D: In. (mm)                     12-3/4 (320)
+
+                                                                                          H: In. (mm)                     15-1/2 (390)
+
+                           Unit Weight                                                     Lbs. (kg)                        37 (17)
+
+                           Package Weight                                                  Lbs. (kg)                        42 (19)
+
+                           Cooling Intake Air Temp (Maximum / Minimum)*                       °F                  90 DB, 73 WB / 67 DB, 57 WB
+Indoor Unit Operating
+Temperature Range
+                           Heating Intake Air Temp (Maximum / Minimum)                        °F                         80 DB / 70 DB
+
+                           MCA                                                                A                               17.1
+
+                           MOCP                                                               A                                20
+
+                           Fan Motor Full Load Amperage                                       A                               0.93
+
+                           Fan Motor Output                                                   W                                77
+
+                           Airflow Rate                                                      CFM                         1,769 / 1,701
+
+                           Refrigerant Control                                                                                LEV
+
+                           Defrost Method                                                                                Reverse cycle
+
+                           Heat Exchanger Type                                                                            Plate fin coil
+
+                           Sound Pressure Level, Cooling1                                   dB(A)                              55
+
+                           Sound Pressure Level, Heating2                                   dB(A)                              55
+
+                           Compressor Type                                                                           DC INVERTER-driven
+
+                           Compressor Model                                                                             SNB172FQKMT
+
+Outdoor Unit               Compressor Rated Load Amps                                         A                               12.9
+
+                           Compressor Locked Rotor Amps                                       A                               16.1
+
+                           Compressor Oil Type // Charge                                      oz.                        FV50S // 13.5
+
+                           External Finish Color                                                                       Munsell 3Y 7.8/1/1
+
+                           Base Pan Heater                                                                                  Optional
+
+                                                                                          W: In. (mm)                    33-1/16 (840)
+
+                           Unit Dimensions                                                D: In. (mm)                       13 (330)
+
+                                                                                          H: In. (mm)                     34-5/8 [880]
+
+                                                                                          W: In. (mm)                    38-9/16 (980)
+
+                           Package Dimensions                                             D: In. (mm)                    16-9/16 (420)
+
+                                                                                          H: In. (mm)                       39 (990)
+
+                           Unit Weight                                                     Lbs. (kg)                        119 [54]
+
+                           Package Weight                                                  Lbs. (kg)                        138 (63)
+
+                           Cooling Air Temp (Maximum / Minimum)*                              °F                            115 / 14
+
+                           Cooling Thermal Lock-out / Re-start Temperatures**                 °F                              -4 / 0
+Outdoor Unit Operating
+Temperature Range
+                           Heating Air Temp (Maximum / Minimum)                               °F                             75 / -4
+
+                           Heating Thermal Lock-out / Re-start Temperatures**                 °F                             -9 / -4
+
+                           Type                                                                                              R410A
+Refrigerant
+                           Charge                                                           Lbs, oz                           4, 3
+
+                           Gas Pipe Size O.D. (Flared)                                     In. (mm)                       5/8 (15.88)
+
+                           Liquid Pipe Size O.D. (Flared)                                  In. (mm)                        3/8 (9.52)
+
+Piping                     Maximum Piping Length                                            Ft. (m)                         100 (30)
+
+                           Maximum Height Difference                                        Ft. (m)                         50 (15)
+
+                           Maximum Number of Bends                                                                             10
+
+
+
+
+Specifications are subject to change without notice.                            © 2022 Mitsubishi Electric Trane HVAC US LLC. All rights reserved.
+                                                  SPECIFICATIONS: MSZ-GL24NA & MUZ-GL24NA
+
+Notes
+
+                                  1Cooling (Indoor // Outdoor)                                                       °F                           80 DB, 67 WB // 95 DB, 75 WB
+AHRI Rated Conditions (Rated
+data is determined at a fixed     2Heating at 47°F (Indoor // Outdoor)                                               °F                           70 DB, 60 WB // 47 DB, 43 WB
+compressor speed)
+                                  3Heating at 17°F (Indoor // Outdoor)                                               °F                           70 DB, 60 WB // 17 DB, 15 WB
+                                  4Heating at 5°F (Indoor // Outdoor)                                                °F                            70 DB, 60 WB // 5 DB, 4 WB
+Conditions
+                                  5Heating at -4°F (Indoor // Outdoor)                                               °F                           70 DB, 60 WB // -4 DB, -5 WB
+
+*Applications should be restricted to comfort cooling only; equipment cooling applications are not recommended for low ambient temperature conditions.
+**System cuts out in heating mode to avoid thermistor error and automatically restarts at these temperatures.
+
+
+
+
+Specifications are subject to change without notice.                                                        © 2022 Mitsubishi Electric Trane HVAC US LLC. All rights reserved.
+                                                       DIMENSIONS: MSZ-GL24NA
+
+                                                                                                                     Unit: inch
+
+
+
+
+Specifications are subject to change without notice.                 © 2022 Mitsubishi Electric Trane HVAC US LLC. All rights reserved.
+                                                           DIMENSIONS: MUZ-GL24NA
+
+                                                                                                                                                                       Unit: inch
+
+                                                                    REQUIRED SPACE
+
+
+
+
+                                                                                                                                        Clear *1
+                                                                   *1 20 in. or more when front
+                                                                      and sides of the unit are clear
+
+                            16-7/16
+                                                   Drain hole   1-5/8                                                                                                               ore
+                                 Air in                                                                                                                                     .   or m
+                                                   1-9/16                                        4 in
+                                                                                                     . or                                                              4 in
+                                                                                                            mo
+                                                                                                              re
+
+
+
+
+                                                                14-3/16
+                                                                          15-3/8
+         2
+13
+
+
+
+
+         Air in
+
+
+
+                                                                                                                                       2
+                                        Air out                                                                                   re *                 14
+                                                                                                                            r   mo                        in   . or
+                                                     2-holes 13/32 13/16                                              in. o                                           mo
+                                                                                                                   20                                                      re
+                    6-7/8              19-11/16
+                                                                                                                        *2 When any 2 sides of left, right
+                                                                                                                           and rear of the unit are clear
+                                         33-1/16          3-3/16
+                                      4-5/16                                                                                       Service panel
+
+
+
+
+                                                                                                                                        Liquid refrigerant pipe joint
+                                                                                                                                        Refrigerant pipe (flared) Ø 1/4 (18 kBtu/h)
+                                                                                                                                        Refrigerant pipe (flared) Ø 3/8 (24 kBtu/h)
+34-5/8
+         17-25/32
+
+
+
+
+                                                                                                                                   35
+                                                                                                                           44
+                                                                                       3-29/32
+                                                                               6-1/2
+
+
+
+
+                                                                                                                                     Gas refrigerant pipe joint
+                                                                                                                                     Refrigerant pipe (flared) Ø 1/2 (18 kBtu/h)
+                                                                                                                                     Refrigerant pipe (flared) Ø 5/8 (24 kBtu/h)
+                                                                                                              7-11/16
+
+
+
+
+                                                                                                                                                                  1340 Satellite Boulevard, Suwanee, GA 30024
+                                                                                                                                                                     Toll Free: 800-433-4822 www.mehvac.com
+
+
+
+
+FORM# MSZ-GL24NA / MUZ-GL24NA - 202209
+
+
+
+
+Specifications are subject to change without notice.                                                        © 2022 Mitsubishi Electric Trane HVAC US LLC. All rights reserved.
+

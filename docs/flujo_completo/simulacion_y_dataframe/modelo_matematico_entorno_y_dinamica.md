@@ -126,28 +126,57 @@ x_{hvac} = [temp\_error, humidity, occupancy, tariff_{norm}]
 donde:
 
 \[
-raw\_temp\_error = T_{int} - T_{obj}
-\]
-
-\[
-temp\_error = |raw\_temp\_error|
+temp\_error = T_{int} - T_{obj}
 \]
 
 Además, el controlador ajusta la sensibilidad del error según la banda de
-confort:
+confort, pero de forma acotada para no volver inestable la respuesta:
 
 \[
-temp\_error^{adj} = temp\_error \cdot \frac{comfort\_range_{ref}}{comfort\_range}
+s_{comfort} = \mathrm{clip}
+\left(
+\sqrt{\frac{comfort\_range_{ref}}{comfort\_range}},
+s_{min},
+s_{max}
+\right)
 \]
 
-Un rango de confort menor vuelve al controlador más sensible.
+\[
+temp\_error^{adj} = temp\_error \cdot s_{comfort}
+\]
+
+Valores negativos indican ambiente más frío que la meta; valores positivos
+indican ambiente más caliente. Un rango de confort menor vuelve al
+controlador un poco más sensible, pero sin multiplicar la entrada de forma
+explosiva.
 
 ### Refrigerador
 
 El controlador del refrigerador recibe:
 
 \[
-x_{refri} = [T_{refri}, door\_openings, load\_level, tariff_{norm}]
+x_{refri} = [T_{refri}^{adj}, door\_openings, load\_level, tariff_{norm}]
+\]
+
+Como la base difusa del refrigerador fue diseñada alrededor del setpoint
+nominal de `4 C`, la temperatura interna se reexpresa alrededor de ese centro
+cuando cambia el objetivo runtime:
+
+\[
+T_{refri}^{adj} = T_{ref,base} + g \cdot (T_{refri} - T_{obj})
+\]
+
+donde `g` es un factor acotado que depende de la banda de confort. Esto
+permite desplazar la interpretación del controlador hacia el nuevo objetivo
+sin deformar agresivamente la dinámica física del dispositivo.
+
+\[
+g = g_{base} \cdot \mathrm{clip}
+\left(
+\sqrt{\frac{comfort\_range_{ref}}{comfort\_range}},
+g_{min},
+g_{max}
+\right)
 \]
 
 ## 10. Dinámica térmica general

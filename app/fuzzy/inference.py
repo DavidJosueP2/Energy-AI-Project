@@ -103,16 +103,9 @@ class MamdaniInference:
         Returns:
             Valor crisp final de la variable de salida.
         """
-        # 1. Fuzzificación
         membership_degrees = self._fuzzify(crisp_inputs)
-        
-        # 2-3. Evaluación de reglas y activación de consecuentes
         activated_outputs = self._evaluate_rules(membership_degrees)
-        
-        # 4. Agregación
         aggregated = self._aggregate(activated_outputs)
-        
-        # 5. Desfuzzificación
         crisp_output = self._defuzzify(aggregated)
         
         return crisp_output
@@ -169,13 +162,10 @@ class MamdaniInference:
         activated = []
         
         for rule in self.rule_base.get_rules():
-            # En Mamdani clásico, la conjunción se implementa con mínimo.
             firing_strength = self._compute_firing_strength(rule, memberships)
             
-            # El peso permite modular la importancia relativa de una regla.
             firing_strength *= rule.weight
             
-            # Reglas nulas no alteran la salida agregada.
             if firing_strength > 1e-10:
                 output_set_name = rule.consequent[1]
                 activated.append((output_set_name, firing_strength))
@@ -210,13 +200,11 @@ class MamdaniInference:
             if var_name in memberships and set_name in memberships[var_name]:
                 strengths.append(memberships[var_name][set_name])
             else:
-                # Una regla con antecedentes no evaluables no puede dispararse.
                 return 0.0
         
         if not strengths:
             return 0.0
         
-        # Mamdani: el antecedente compuesto se modela con el mínimo.
         return min(strengths)
     
     def _aggregate(self, 
@@ -250,11 +238,8 @@ class MamdaniInference:
         for set_name, strength in activated_outputs:
             if set_name in self.output_variable.sets:
                 output_set = self.output_variable.sets[set_name]
-                # Membresía original del consecuente sobre el universo de salida.
                 mf_values = output_set.evaluate(universe)
-                # Implicación Mamdani: recorte por mínimo.
                 clipped = np.minimum(mf_values, strength)
-                # Agregación: unión difusa vía máximo.
                 aggregated = np.maximum(aggregated, clipped)
         
         return aggregated
@@ -263,13 +248,19 @@ class MamdaniInference:
         """
         Convierte la salida difusa agregada en un valor crisp por centroide.
 
-        Matemáticamente:
+        Definición teórica continua:
 
-            centroide = integral(x * mu(x)) / integral(mu(x))
+                        \int_{\Omega} x \,\mu_{agg}(x)\,dx
+            y^* = ------------------------------------------
+                        \int_{\Omega} \mu_{agg}(x)\,dx
 
-        En la implementación discreta:
+        Aproximación numérica usada en esta implementación:
 
-            sum(universe * aggregated) / sum(aggregated)
+                        \sum_i x_i \,\mu_{agg}(x_i)
+            y^* \approx -------------------------------
+                            \sum_i \mu_{agg}(x_i)
+
+        donde ``x_i`` son los puntos discretizados del universo de salida.
 
         Si el área agregada es prácticamente cero, no hay evidencia suficiente
         para favorecer una región concreta de la salida. En ese caso se usa
@@ -285,7 +276,6 @@ class MamdaniInference:
         total_area = np.sum(aggregated)
         
         if total_area < 1e-10:
-            # Sin activación efectiva: usar un punto neutro del universo.
             return (self.output_variable.universe_range[0] + 
                     self.output_variable.universe_range[1]) / 2.0
         

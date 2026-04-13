@@ -161,8 +161,8 @@ class TestSimulator:
         
         assert isinstance(result, SimulationResult)
         assert len(result.data) == 24  # 24 horas con paso de 1h
-        assert 'temperature_indoor' in result.data.columns
-        assert 'hvac_level' in result.data.columns
+        assert 'device_temperature' in result.data.columns
+        assert 'control_level' in result.data.columns
 
     def test_metrics_calculation(self):
         """Las métricas deben calcularse correctamente."""
@@ -192,7 +192,7 @@ class TestSimulator:
 
         assert float(result.data['target_temperature'].iloc[0]) == pytest.approx(30.0)
         assert result.data['temp_error'].iloc[0] == pytest.approx(
-            result.data['temperature_indoor'].iloc[0] - 30.0,
+            result.data['device_temperature'].iloc[0] - 30.0,
             abs=1e-3,
         )
 
@@ -215,6 +215,56 @@ class TestSimulator:
         high_target_result = Simulator(high_target_cfg).run(high_target_controller.get_controller_function())
 
         assert high_target_result.data['control_level'].mean() < low_target_result.data['control_level'].mean()
+
+    def test_refrigerator_target_temperature_changes_operating_profile(self):
+        """El refrigerador debe reaccionar distinto cuando cambia el setpoint."""
+        from app.fuzzy.controller import FuzzyController
+
+        cold_cfg = AppConfig()
+        cold_cfg.simulation.horizon_hours = 24
+        cold_cfg.simulation.device_key = 'refrigerador'
+        cold_cfg.simulation.scenario_type = 'verano'
+        cold_cfg.simulation.target_temperature = 2.0
+        cold_controller = FuzzyController(cold_cfg.fuzzy, device_key='refrigerador')
+        cold_result = Simulator(cold_cfg).run(cold_controller.get_controller_function())
+
+        warm_cfg = AppConfig()
+        warm_cfg.simulation.horizon_hours = 24
+        warm_cfg.simulation.device_key = 'refrigerador'
+        warm_cfg.simulation.scenario_type = 'verano'
+        warm_cfg.simulation.target_temperature = 8.0
+        warm_controller = FuzzyController(warm_cfg.fuzzy, device_key='refrigerador')
+        warm_result = Simulator(warm_cfg).run(warm_controller.get_controller_function())
+
+        assert cold_result.data['device_temperature'].mean() < warm_result.data['device_temperature'].mean()
+        assert cold_result.data['control_level'].mean() > warm_result.data['control_level'].mean()
+
+    def test_refrigerator_narrow_comfort_range_increases_control_sensitivity(self):
+        """Un rango de confort estrecho debe volver mas exigente el control del refri."""
+        from app.fuzzy.controller import FuzzyController
+
+        controller = FuzzyController(AppConfig().fuzzy, device_key='refrigerador')
+
+        narrow = controller.evaluate({
+            'device_temperature': 5.0,
+            'target_temperature': 4.0,
+            'comfort_range': 0.5,
+            'door_openings': 0.1,
+            'load_level': 0.1,
+            'tariff_normalized': 0.3,
+            'tariff': 0.3,
+        })
+        wide = controller.evaluate({
+            'device_temperature': 5.0,
+            'target_temperature': 4.0,
+            'comfort_range': 2.0,
+            'door_openings': 0.1,
+            'load_level': 0.1,
+            'tariff_normalized': 0.3,
+            'tariff': 0.3,
+        })
+
+        assert narrow > wide
 
     def test_summer_and_winter_change_environment_profile(self):
         """El escenario seleccionado debe modificar realmente la temperatura exterior."""
@@ -247,7 +297,7 @@ class TestSimulator:
         controller = FuzzyController(cfg.fuzzy, device_key='hvac')
         result = Simulator(cfg).run(controller.get_controller_function())
 
-        assert result.data['temperature_indoor'].mean() > 21.0
+        assert result.data['device_temperature'].mean() > 21.0
         assert 'heating' in result.data['control_mode'].values
 
 

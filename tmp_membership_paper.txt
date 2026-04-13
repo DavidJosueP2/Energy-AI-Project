@@ -1,0 +1,441 @@
+                                        Fuzzy Sets and Systems 118 (2001) 297–306
+                                                                                                      www.elsevier.com/locate/fss
+
+
+
+
+                  Determination of fuzzy logic membership functions
+                              using genetic algorithms
+                                            Ahmet Arslan ∗ , Mehmet Kaya
+               Department of Computer Engineering, Faculty of Engineering, Firat University, 23279 Elazig, Turkey
+
+                                    Received March 1998; received in revised form October 1998
+
+
+
+Abstract
+  Genetic algorithm (GA) is an adaptive search technique based on natural selection and genetic rules. GA takes place in
+various scienti c applications and it can be also used to determine the membership functions in a fuzzy system. The aim
+of the study is to adjust the shape of membership functions and a novice aspect of the study is to determine the kind of
+membership functions. Proposed method has been implemented using a developed GA program for a single input and output
+fuzzy system. c 2001 Elsevier Science B.V. All rights reserved.
+
+
+Keywords: Genetic algorithms; Membership functions; Optimization
+
+
+
+
+1. Introduction                                                       application and the issues to be determined are the
+                                                                      parameters that de ne the triangles. These parameters
+   A fuzzy set is fully de ned by its membership func-                are usually based on the control engineer’s experi-
+tions. For most control applications, the sets that have              ence and=or are generated automatically. However for
+to be de ned are easily identi able. However, for other               many other applications, triangular membership func-
+applications they have to be determined by knowl-                     tions are not appropriate as they do not represent ac-
+edge acquisition from an expert or group of experts.                  curately the linguistic terms being modeled and the
+Once the fuzzy sets have been established, one must                   shape of the membership functions have to be elicited
+consider their associated membership functions. How                   directly from the expert, by a statistical approach or
+best to determine the membership function is the rst                  by automatic generation of the shapes.
+question that has to be tackled.                                         GA methods, which are basically random search
+   The approach adopted for acquiring the shape of                    techniques have been applied to many di erent
+any particular membership function often depends on                   problems like function optimization, routing prob-
+the application. For most fuzzy logic control prob-                   lem, scheduling, design of neural networks, system
+lems, the membership functions are assumed to be lin-                 identi cation, digital signal processing, computer vi-
+ear and usually triangular in shape. So, typically the                sion, control and machine learning [2,4,12]. GA was
+sets that describe various factors of importance in the               used rst by Karr [7] in determination of member-
+                                                                      ship functions. Karr applies GAs to design of fuzzy
+  ∗ Corresponding author.                                             logic controller (FLC) for the cart pole problem. He
+
+0165-0114/01/$ - see front matter c 2001 Elsevier Science B.V. All rights reserved.
+PII: S 0 1 6 5 - 0 1 1 4 ( 9 9 ) 0 0 0 6 5 - 2
+298                           A. Arslan, M. Kaya / Fuzzy Sets and Systems 118 (2001) 297–306
+
+presents two examples: a non-adaptive GA designed
+FLC and a GA designed adaptive FLC where the
+membership functions are adapted in real time. The
+membership functions here are Gaussian in nature
+and the objective is to minimize an objective function
+( tness function in GA terminology) that minimizes
+the squared di erence between the cart and centre of                            Fig. 1. A typical GA cycle.
+the track that the cart is on, whilst at the same time
+keeping the pole balanced.
+   Meredith et al. [10] have applied GAs to the ne tun-         random construction of population individuals heuris-
+ing of membership functions in a FLC for a helicopter.          tically via parameter values that are known to be close
+Initial guesses for the membership functions are made           to the solution.
+by the control engineer and the GAs that adjust the pa-            The next step of pre-evolution phase is to evaluate
+rameters that de ne them by using them minimize the             the initial individuals and it is needed to determine the
+movement of a hovering helicopter. Again, triangular            next generations that will constitute the subpopulation.
+membership functions are used.                                  Initial population may possibly include the solution.
+   Lee and Takagi [9] also tackle the cart problem.             After this stage, the evolution phase loops until a so-
+They take a holistic approach by using GAs to design            lution is found or the generation number reaches the
+the whole system (determine the optimal number of               pre-determined maximum generation number or there
+rules as well as the membership functions). The mem-            has been no mutation combination left to try and any
+bership functions are triangular.                               increase in the average success of population could
+   GAs o er a convenient way to model membership                not be achieved.
+functions. However, there is no obligation of member-
+ship functions to be triangular shape. By using GAs,            2.1. Operations during a GA process
+the suggested method is relevant for any membership
+function whose mathematical model is known.                        1. Encoding: Encoding is the rst and an important
+   In Section 2, basic principles and features of GA            part of a GA process, because problem releated infor-
+are discussed and a simple GA process is examined.              mation is encoded in a structure called chromosome
+In Section 3, how the membership functions that are             or string. Chromosome is generally a sequence of the
+in a given shape can be suitably placed was discussed.          variables of problem in an organized manner. Every
+A GA program in C++ for a single input=output fuzzy             variable sequenced to construct the chromosome is
+system and a discussion of the results has also been            called gene:
+given. As a result of GA process, the shape of the              Phenotype       Genotype
+membership functions has been determined.                       (5; 8; 14) → (0101 1000 1110)
+                                                                    2. Fitness techniques: Evaluation function is a main
+2. Genetic algorithms                                           source to providing the mechanism for evaluating the
+                                                                status of each chromosome and is an important link
+   The GA is searching process based on the laws of             between the GA and the system. Function accepts
+natural selections and genetics. Generally, a simple            decoded chromosome (Phenotype) and produces an
+GA contains three basic operations: selection, genetic          objective value as a measure of the performance of
+operations and replacement. A typical GA cycle is               chromosome. These values are used in tness function
+shown in Fig. 1.                                                to calculate the tness of an individual.
+   If Fig. 1 is examined, it will be seen that the rst              Fitness values are scaled so as to reorganize the
+step needed to start the GA process is construction             individuals for which the tness values are calcu-
+of initial population. Initial population is the potential      lated. Windowing increases the reproductive chances
+solutions set that is generalized randomly or heuris-           of the strongest chromosomes but eliminates the least-
+tically. The general method used at this stage is a               t chromosome from producing o spring. Windowing
+                             A. Arslan, M. Kaya / Fuzzy Sets and Systems 118 (2001) 297–306                        299
+
+scaling can be formalized as fwi = fi −flowest where fi        of size n, entirely replaces the new generation with all
+is the unscaled tness value and fwi is the windowing           of its chromosome. The other method is steady-state
+scaled tness value of ith chromosome.                          reproduction which replaces only a few individuals in
+   3. Parent selection: Parent selection mimics the sur-       a generation.
+vival of the best ones in the nature. There are di erent
+methods for an e ective parent selection procedure             2.2. Genetic algorithms performance factors
+including tournament, proportionate scheme, ranking,
+and selection of appropriate individuals is common to             Population size is a factor that e ects the GA per-
+all this methods.                                              formance. Increasing the population means a longer
+   In proportionate scheme, for example, if the t-             computation time, on the other hand, if the population
+ness of chromosome x in tth evolution phase is f(x; t)         size is decreased, the accuracy of the solution is also
+then the usage number of this individual as parent is          decreased because of reduced variation of chromo-
+tsr(x; t) = f(x; t)=F(t), where F(t) is the average t-         somes. In GA design there must be a balance between
+ness of population in tth evolution.                           the generation numbers and population size. For ex-
+   4. Genetic operations:                                      ample, a population of 100 chromosomes can reach a
+   1. Information exchange of the individuals is called        solution in 10 generations. However, the solution in
+crossover and is a basic property of GAs those pro-            a population of 20 chromosomes and 20 generations
+duce a new chromosome from two parents. After se-              can take four times shorter than the rst one.
+lection of individuals according to their tness values            Population size has another e ect in GA. Popula-
+and gathering of selected individuals into a gene pool         tion size reduces the e ect of highest tness valued
+they are crossovered. Crossover is achieved in three           chromosomes. For example, in a population of 10
+stages. The rst stage is matching. Matching is selec-          chromosomes, if one of the chromosomes has a t-
+tion of two individuals in the gene pool randomly. In          ness value of 9 while the others have a tness value of
+the second stage a crossover point is determined in            1, half of the parents will be chosen from among the
+each of the individuals. In the nal stage two parts of         relatively low tness valued chromosomes though the
+the individuals are replaced with each other.                  best tness valued chromosome is nine times better.
+   2. Mutation means a random change in the infor-                Evaluation of chromosomes and tness calculations
+mation of a chromosome that does not depend on a               are the most time consuming parts of on GA. If the
+reason. In other words, mutation is an operation that          evaluation operation is reduced, GA process will work
+de nes the variation in a chromosome. This variation           faster and this can be achieved by reducing the popu-
+may be local or global. A probability test determines          lation size and numbers of generation need to reach a
+whether a mutation will be carried out or not. For ex-         solution.
+ample, if the average tness of the new generation is
+smaller than average tness of the previous genera-
+tion, bit y of the chromosome x can be changed. A bit          3. Computation of membership function
+mutation applied to a chromosome is shown below:               using genetic algorithms
+Before mutation: 100|1|1101                                       GA is used to nd the optimum solution optimum
+After mutation: 100|0|1101                                     problem but it can also be used in computation of
+                                                               membership functions in fuzzy logic system. The most
+Mutation is very important for population. Since the           appropriate placement of membership functions with
+initial population can be a subset of all possible so-         respect to fuzzy variables can be found for a fuzzy sys-
+lutions and an important bit of all the chromosomes            tem whose rules table and shape of membership func-
+may be 0 while it must be 1. Crossover may not solve           tions were given previously. There are no restrictions
+this and mutation is inevitable for the solution.              for shape of membership functions. They can be gen-
+   There are two proposed methods for replacing a              erally used but it can be mathematical function whose
+subpopulation to its ancestors. One of the methods is          model is known. By the way, the most appropriate
+generational-replacement. In this method, a population         solution can be found by comparison with respect to
+300                           A. Arslan, M. Kaya / Fuzzy Sets and Systems 118 (2001) 297–306
+
+
+
+
+                            Fig. 2. The membership functions of a fuzzy system for input and output.
+
+previously known reference values by variation of                     The conclusion expected from a GA is to nd the
+shape of membership functions for the same fuzzy                   base lengths of right triangles. If the base length of
+system. In this way, the kind of the most appropriate              each membership function is represented by 6-bit, the
+membership functions for reference values can also                 genes Base1Base2Base3Base4 containing solution of
+be determined. How appropriately the program, which                problem has 6 ∗ 4 = 24 bits. In this case the maximum
+was implemented in C++ for single input–output sys-                value each base can take is 26 − 1 = 63. The domain
+tem and placed the membership functions on input and               intervals for input and output variables are 0 –7 and
+output axis to meet this purpose is presented below.               0 – 49, respectively. The base values are re ected un-
+                                                                   der these values. This is formulated as follows:
+3.1. Implementation results                                                            d
+                                                                   Xi = Xmini +              × (Xmaxi − Xmini ):
+                                                                                  (2L − 1)
+   It was assumed that there was two di erent mem-
+bership functions for input and output of considered               L is the length of related variable (in this case, it is
+system and it is assumed that one of them is made up               gene) in bits, d is the decimal value of this variable,
+right triangle. The membership functions are called                Xmin is the minimum value of region to be transformed,
+input(x) and output(y); x uses slow and fast; y uses               and Xmax is the maximum value of this region, then Xi
+easy and dicult. In this case, the linguistic rules are           is the transformed gure of that variable.
+as follows:                                                           With respect to these de nitions, for the inputs
+                                                                   of handled fuzzy system, Xmin = 0; Xmax = 7, for the
+Rule 1: If x is slow then y is easy                                outputs, Xmin = 0; Xmax = 49. When the domain in-
+                                                                   tervals of input and output are constant and the bit
+Rule 2: If x is fast then y is dicult                             representation of bases are enlarged, the precision
+   If the range of input variable x as 0–7 and the range           of oating point of variable increases. But, it in-
+of output variable y as 0–49 are assumed, then the                 creases the process duration of GA as well. Here,
+membership functions of fuzzy system for input and                 it should be noted that both [0 –7] input range and
+output variables will be as shown in Fig. 2.                       [0 – 49] output range are represented by 6 bits. This
+   Right sides of right-triangle are restricted by lower           means that input range is more sensible to a change in
+and upper limits. The output values must be known                  1-bit. If both input and output are expected to be sen-
+amongst the input values for computation of tness                  sible at the same degree, then they should be coded
+function. The optimum selection necessary for system               into di erent bit lengths. As an example, output bit
+gets better as much as the number of reference values              length here can be increased to 8. Bit length used to
+increase.                                                          represent the base length can be changed to a value
+                                                                   suitable for the application. However, it should be kept
+Input: xi = {1; 3; 57};                                            in mind that reducing the bit length means reducing
+                                                                   accuracy and increase in the bit length may degrade
+Output: yi = {1; 9; 25; 49}; i = 1; 2; 3; 4:                       the GA performance. Thereafter, the necessary thing
+                                    A. Arslan, M. Kaya / Fuzzy Sets and Systems 118 (2001) 297–306                          301
+
+Table 1
+Initial population (generation 0)
+
+1                                   2       3       4        5       6         7         8           9       10        11
+Chromosomes                         Base    Base    Base     Base    Base1     Base2     Base3       Base4   Fitness   Number
+                                    1       2       3        4       (ref)     (ref)     (ref)       (ref)             of copies
+
+110011110000100100001011            51      48      36       11      5.66      5.33      28.0         8.55   4430.46   2
+011010101111001100011101            26      47      12       29      2.88      5.22       9.33       22.5    3722.68   1
+011110001001111100110001            30       9      60       49      3.33      1.0       46.6        38.1    2597.0    0
+101111101011010101010110            47      43      21       22      5.22      4.77      16.3        17.1    4387.68   1
+010111100000011101011111            23      32      29       31      2.55      3.55      22.5        24.1    4236.58   1
+111000011111001101111101            56      31      13       61      6.22      3.44      10.1        47.4    4450.03   2
+101001001100110111111000            41      12      55       56      4.55      1.33      42.7        43.5    3417.08   0
+000101100100010010101110             5      36      18       46      0.55      4.0       14.0        35.7    4360.65   1
+001001011110111100010110             9      30      60       22      1.0       3.33      46.6        17.1    4209.39   1
+110011111111111100011000            51      63      60       24      5.66      7.0       46.6        18.6    3919.29   1
+
+  Minimum tness: 2597.0; Maximum tness: 4450.03; Average tness: 3973.08.
+
+to be done is to create the initial population with 10                This is formulated by
+chromosomes randomly, and let begin GA process.
+Table 1 expresses the initial population. Columns                     (Scaled tness ∗ population size)
+                                                                                                       :
+2–5, are the decimal values of lengths of related chro-                      Total scaled tness
+mosomes. Columns 6–9 are the cases of these lengths                   The solution of the rst chromosome in the initial
+re ected to domain intervals. Before the computation                  population is seen in Fig. 3.
+of tness function, total error is calculated as follows:                 The base values for x are 5.66 and 5.33. In the same
+4
+X                                                                     way, the base values for y are 28.0 and 8.55.
+      (yi − yGAi )2 ;                                                    In this case, output is evaluated for any input refer-
+i=1                                                                   ence such that, grade of membership of input is 0.823
+                                                                      for assumed input reference at x = 1. At given fuzzy
+where yi is the output of ith reference input YGAi which              system rules, “If x is slow then y is easy” is seen. If y
+is obtained by GA, is output for ith reference input.                 value is directly assumed as defuzzi cation processes,
+The aim is to approximate the total error to zero as                  according to this case, y point of easy membership
+close as possible. Because total error is as likely to                function, whose degree is 0.823 is found, that is, it is
+approach to zero, yGAi is close to yi too, and this case              4.94 whereas the real output value is 1. So error at this
+is the suitable solution. Fitness function is converted               point is (1 − 4:94)2 = 15:52.
+to 4480-total error, in this way, minimization process                   In this GA program, two point crossover is used
+is also converted to maximization process (Column                     and, its probability is selected as 1. Probability of mu-
+10). In order to prevent tness function from getting                  tation depends on average ÿtness of new generation
+negative values, the maximum number 4480 is used                      ¡ average ÿtness of old generation condition.
+and this number is also P  maximum error at the same                     Under these conditions, initial population for the
+                             4
+time. It is evaluated by i=1 (yi − 49)2 ; where 49 is                 one time evolution is seen in Table 2. The di erence
+the biggest output value for                                          of this table from the previous one is that the output
+                                                                      of chromosomes is shown for the input references.
+Base1 ¡ First Ref : Input(x = 1) and (7 − Base2)                         Population created by generation 1 is made to be
+        ¡ First Ref : Input(x = 1) and Base4 = 0:                     better than previous one on the basis of tness of max-
+                                                                      imum and average.
+   After chromosomes whose tnesses were evaluated                        For any input reference in the ow of program, the
+are scaled by windowing, the copy numbers of the next                 membership functions are seen in Fig. 4a–d. Optimal
+generation which are seen at Column 11 are found.                     solution contained in the 17th generation is shown in
+302                                A. Arslan, M. Kaya / Fuzzy Sets and Systems 118 (2001) 297–306
+
+
+
+
+                                   Fig. 3. The solution of the rst chromosome in the initial population.
+
+Table 2
+Generation 1
+
+Phenotype                            Re ected phenotype                  Output values                               Fitness   Number of
+                                                                                                                               copies
+Base1   Base2     Base3    Base4     Base1    Base2    Base3    Base4    y1         y2        y3           y4
+                                     (ref)    (ref)    (ref)    (ref)    (x = 1)    (x = 3)   (x = 5)      (x = 7)
+
+51      48         4       11        5.66     5.33      3.11     8.55     0.54       1.64     45.79        49.0      3993.4    1
+56      31        29       61        6.22     3.44     22.55    47.44     3.62      10.87     21.45        49.0      4457.0    2
+26      47        44       29        2.88     5.22     34.22    22.55    11.86      31.72     40.36        49.0      3610.0    0
+41      12        23       56        4.55     1.33     17.88    43.55     3.92      11.78      0.0         49.0      3838.7    0
+56      31        29       61        6.22     3.44     22.55    47.44     3.62      10.87     21.45        49.0      4457.0    2
+ 5      36        50       46        0.55     4.0      38.88    35.77     0.0        0.0      31.11        49.0      4360.6    1
+47      43         5       22        5.22     4.77      3.88    17.11     0.74       2.23     41.83        49.0      4150.6    1
+ 9      30        60       22        1.0      3.00     46.66    17.11     0.0        0.0      38.73        49.0      4209.3    1
+23      32        13       31        2.55     3.55     10.11    24.11     3.95       0.0      35.43        49.0      4281.3    1
+51      63        60       24        5.66     7.0      46.66    18.66     8.23      24.70     41.17        49.0      3919.3    1
+
+  Minimum tness: 3610.02; Maximum tness: 4457.03; Average tness: 4127.75.
+
+                                                                         Table 3. There is an important point to be noti ed:
+                                                                         There are more than one individuals to have optimal
+                                                                         solution 4476.4.
+                                                                            Fuzzy system, that can be understood from input
+                                                                         reference, takes the square of number between 0 and 7.
+                                                                         As seen in Table 3, the chromosome in the third row
+                                                                         has maximum tness but it is not the optimal solution,
+                                                                         because as Fig. 5 shows, it does not satisfy the condi-
+                                                                         tions Base1¿(7 − Base2) and Base3¿(49 − Base4).
+                                                                         This yields the output at x = 3:88 to be zero.
+                                                                            In the same way, output does not yield a result be-
+                                                                         tween 10.88 and 11.66. So that the optimal solution
+                                                                         is the fourth row chromosome of Fig. 6 whose tness
+                                                                         value is the same as the third row chromosome of
+                                                                         Fig. 5. The complexity of the developed GA program
+                                                                         whose data were given previously to determine the
+Fig. 4. Possible membership functions shapes: (a) In this case 1st
+rule is processed; (b) 1st and 2nd rules are processed separately.       fuzzy system membership function is (nm(k + r)),
+One of them whose error is less than the other, is selected;             where, n is the generation number, m is the population
+(c) None of the rules is processed and output y = 0; (d) 2nd rule        size, r is the reference number and k is the chromo-
+is only processed.                                                       some length.
+                            A. Arslan, M. Kaya / Fuzzy Sets and Systems 118 (2001) 297–306                                 303
+
+Table 3
+Generation 17
+
+Chromosomes                 Base1    Base2       Base3     Base4      y1           y2           y3         y4           Fitness
+                            (ref)    (ref)       (ref)     (ref)      (x = 1)      (x = 3)      (x = 5)    (x = 7)
+
+100011011100001111110001    3.88     3.11        11.66     38.11      3.0          9.0          24.5       49.0         4475.7
+100011011100001111110000    3.88     3.11        11.66     37.33      3.0          9.0          25.0       49.0         4476.0
+100011011100001110110000    3.88     3.11        10.88     37.33      2.8          8.4          25.0       49.0         4476.4
+111001011011010111101110    6.33     3.0         17.88     35.77      2.8          8.4          25.1       49.0         4476.4
+111001011010010111101111    6.33     2.88        17.88     36.55      2.8          8.4          23.6       49.0         4474.6
+111001011011010111101110    6.33     3.0         17.88     35.77      2.8          8.4          25.1       49.0         4476.4
+100011011100001110110000    3.88     3.11        10.88     37.33      2.8          8.4          25.0       49.0         4476.4
+111001011011010111101110    6.33     3.0         17.88     35.77      2.8          8.4          25.1       49.0         4476.4
+110000100011010001111011    5.33     3.88        13.22     45.88      2.4          7.4          25.4       49.0         4475.2
+100011011100001110110000    3.88     3.11        10.88     37.33      2.8          8.4          25.0       49.0         4476.4
+
+
+
+
+                                            Fig. 5. The third row chromosome.
+
+
+
+
+                                                Fig. 6. Optimal solution.
+
+
+   GA process is stopped when the chromosomes sub-              Rules:
+ject to evolution become similar to each other. Ran-              1: If a is g1 then b is o1;
+dom mutation can be used to examine whether the                   2: If a is g2 then b is o2;
+population has optimum solution. If mutated popula-               3: If a is g3 then b is o3.
+tion evolves to same solution after some generations,
+                                                                Reference Data:
+this solution is supposed to be optimum.
+   Another example fuzzy system which had input and             ai = {1; 2; 3; 4; 5};        bi = {4; 9; 16; 20; 26};
+output membership function of triangular type has also
+been considered. Rules and referential data used to                i = 1; 2; 3; 4; 5
+determine the base values of these membership func-               Since g2 and o2 functions are piecewise as shown,
+tions shown in Fig. 7 are as follows:                           two bases values should be determined to de ne these
+304                          A. Arslan, M. Kaya / Fuzzy Sets and Systems 118 (2001) 297–306
+
+
+
+
+                          Fig. 7. Input and output membership functions belong to a fuzzy system.
+
+
+
+
+                        Fig. 8. The possible membership functions responses gure for input reference.
+
+
+
+functions. A1 and A2 are abcissa values of vertices              If reference value does not coincide any mem-
+that are opposite to the bases of these triangles to be          bership functions, that is, (Base1¡Ref.Input and
+handled as two right triangles. A1 and A2 is also in-            (A1− Base2¿Ref.Input) and (6-Base4)¿Ref.Input)
+cluded in the GA process to determine the location               then b = 0. On the contrary, in the obeying of more
+of these triangles. Thus, a chromosome consists of               than one rule case, the rule with less error is executed.
+genes: Base1 Base2A1 Base3 Base4 Base5 Base6A2                   Because A1 and A2 are in between boundary values,
+Base7Base8.                                                      a value taken from base – Base2 – of membership
+   It should be noted how base values are re ected               function – so called g2, as an input, the output value
+to domain intervals of input and output. For exam-               is re ected to the base – Base6 – of membership
+ple, the upper and lower bound of input variable is as           function – so called o2. The same condition is valid
+follows                                                          for Base3 and Base7. This case is shown in Fig. 8.
+                                                                    The rst value GA for the above gure is
+Base1: Xmax = 6; Xmin = 0;
+Base2: Xmax = A1; Xmin = 0;                                       If (Ref : Input − y1)2 ¡ (Ref : Output − y2)2
+Base3: Xmax = 6; Xmin = A1;                                          then b = y1     else b = y2:
+Base4: Xmax = 6; Xmin = 0:
+                                                                 The appropriate base values for triangles are found
+   Input membership functions coincided with ref-                for A points value, after GA process. The 24th gener-
+erence values are re ected to output by looking at               ation that involved the optimum solution after the 4th
+the rules table as seen in the previous example.                 mutation in a population of 20 chromosomes each of
+                                 A. Arslan, M. Kaya / Fuzzy Sets and Systems 118 (2001) 297–306                                        305
+
+Table 4
+Generation 24
+
+Base1 Base2 A1         Base3 Base4 Base5 Base6 A2           Base7 Base8 b1      b2      b3      b4      b5      Fitness
+                                                                                                                        P
+                                                                        (a = 1) (a = 2) (a = 3) (a = 4) (a = 5) 2449 − err.
+
+3.23   3.61     3.61   0.94   3.23   14.76   0.0     6.66   22.96   15.23   4.55     9.11     15.88     20.58     25.29    2447.81
+3.61   1.30     2.0    1.07   4.85   16.19   2.53    5.71    6.55   22.85   3.76     8.94     15.88     20.58     25.29    2448.08
+2.19   2.49     2.76   1.54   4.19   10.00   0.0     3.80    9.14   19.52   3.80     9.13     16.02     20.68     25.34    2448.04
+4.28   0.37     2.95   2.75   4.76   19.52   0.0     3.33   25.39   22.85   4.55     9.11     15.6      20.4      25.2     2447.71
+4.28   0.08     0.66   4.82   4.76   19.52   0.0     3.33   25.39   22.85   4.55     9.11     15.6      20.4      26.14    2448.33
+5.90   3.13     3.23   0.21   5.61   25.71   1.58   16.66    7.83   26.66   4.35     8.70     15.76     20.50     25.25    2447.91
+3.04   0.01     0.19   5.25   2.0    13.33   0.49    0.95   26.74   29.04   4.37     8.75     15.24     20.33     25.42    2447.78
+3.61   1.30     2.0    1.07   4.85   16.19   2.53    5.71    6.55   22.85   3.76     8.94     15.88     20.58     25.29    2448.08
+4.28   0.37     2.95   2.75   4.76   19.52   0.0     3.33   25.39   22.85   4.55     9.11     15.6      20.4      25.2     2447.71
+4.28   0.08     0.66   4.82   4.76   19.52   0.0     3.33   25.39   22.85   4.55     9.11     15.6      20.4      26.14    2448.33
+0.0    1.30     1.90   1.17   2.28   14.28   2.58    2.85    7.32   27.14   1.05     3.45      9.71      6.25     18.12    2118.97
+4.28   0.08     0.66   4.82   4.76   19.52   0.0     3.33   25.39   22.85   4.55     9.11     15.6      20.4      26.14    2448.33
+2.19   2.49     2.76   1.54   4.19   10.0    0.0     3.80    9.14   19.52   3.80     9.13     16.02     20.68     25.34    2448.04
+0.0    1.30     1.90   1.49   3.61   14.28   2.58    2.85    7.32   27.14   1.05     3.32      8.22     15.0      22.5     2310.38
+4.28   0.08     0.66   4.82   4.76   19.52   0.0     3.33   25.39   22.85   4.55     9.11     15.6      20.4      26.14    2448.33
+4.85   0.64     3.71   1.99   4.19   23.80   7.46   12.38    1.39   18.57   4.90     9.80     16.70     19.60     25.56    2446.70
+4.85   0.64     3.71   1.99   4.19   23.80   7.46   12.38    1.39   18.57   4.90     9.80     16.70     19.60     25.56    2446.70
+4.28   0.08     0.66   4.82   4.76   19.52   0.0     3.33   25.39   22.85   4.55     9.11     15.6      20.4      26.14    2448.33
+2.19   2.49     2.76   1.54   4.19   10.0    0.0     3.80    9.14   19.52   3.80     9.13     16.02     20.68     25.34    2448.04
+0.0    1.30     1.90   1.17   2.28   14.28   2.58    2.85    7.32   27.14   1.05     3.45      9.71      6.25     18.12    2118.97
+
+
+
+
+length 6 ∗ 10 = 60 bits under the consideration of data               solution or the membership functions which converge
+and rules is given in Table 4.                                        to optimum solution.
+
+
+4. Conclusion                                                         References
+
+   Although GA is simple, it can be used to solve                      [1] D.G. Burkhardt, P.P. Bonisonne, Automated fuzzy knowledge
+complicated problems. GAs are search techniques for                        base generation and tuning, Proc. 1st IEEE Fuzzy System
+                                                                           Conf., 1992.
+problems that have wide parameter ranges, since they                   [2] M. Dorigo, U. Schnepf, Genetic-based machine learning
+approach the solution range with a set of values in-                       and behavior-based robotics: A new synthesis, IEEE Trans.
+stead of individual parameter values. Knowledge ob-                        Systems Man Cybernet. 23 (1) (1993).
+tained from a generation can be transferred to the next                [3] S. Forrest, Genetic algorithms: Principles of natural selections
+generation, status of a generation is transferred to the                   applied to computation, Science 261 (1993).
+                                                                       [4] D.E. Goldberg, Genetic Algorithms in Search, Optimization
+next generation so the search is shifted to a more suit-                   and Machine Learning, Addison-Wesley, Reading, MA, 1989.
+able parameter region. Use of the mutation prevents                    [5] J.H. Holland, Adaptation in Natural and Arti cial Systems,
+local solution problems. One of its application area is                    University of Michigan Press, Ann Arbor, MI, 1975.
+the membership function determination in fuzzy logic,                  [6] W.M. Jenkins, Towards structural optimization via the genetic
+and it can nd the optimum solution without looking                         algorithm, Comput. Structures 40 (5) (1991) 1321–1327.
+                                                                       [7] C.L. Karr, Design of an adaptive fuzzy controller using
+at the gure of membership functions. Although tri-
+                                                                           a genetic algorithm, Proc. 4th Intl. Conf. on Genetic
+angular membership functions are used, method is ap-                       Algorithms, 1991.
+propriate for each membership functions which have                     [8] C.L. Karr, E.J. Gentry, Fuzzy control of pH using genetic
+mathematical model. Either, GA nds the optimum                             algorithms, IEEE Trans. Fuzzy System 1 (1) (1993).
+306                               A. Arslan, M. Kaya / Fuzzy Sets and Systems 118 (2001) 297–306
+
+ [9] M.A. Lee, H. Takagi, Integrating design stages of fuzzy        [11] J.-Y. Potvin, S. Bengio, The vehicle routing problem with
+     systems using genetic algorithms, 2nd IEEE Intl. Conf. on           time windows Part II: Genetic Search, INFORMS J. Comput.
+     Fuzzy Systems, 1993.                                                8 (2) (1996).
+[10] D.L. Meredith, C.L. Karr, K. Krishna Kumar, The use of         [12] K.S. Tang, K.F. Man, S. Kwong, Q. He, Genetic algorithms
+     genetic algorithms in the design of fuzzy logic controllers,        and their applications, IEEE Signal Process. Magazine
+     3rd Workshop on Neural Network WNN’92, 1992.                        1053–5888=96, 1996.
+

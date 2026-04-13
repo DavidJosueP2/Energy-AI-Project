@@ -90,6 +90,12 @@ Se usan funciones:
 - trapezoidales;
 - o una combinación de ambas.
 
+En la configuración base actual:
+
+- los conjuntos internos se modelan principalmente con triángulos;
+- los conjuntos extremos como `baja`, `muy_alta`, `barata`, `cara`, `muy_baja` y `muy_alta` de salida se modelan como hombros trapezoidales explícitos;
+- esto hace visible que los extremos representan regiones abiertas hacia el borde del universo sin rediseñar la semántica del controlador.
+
 Estas funciones permiten mapear un valor numérico a grados de pertenencia.
 
 Ejemplo conceptual:

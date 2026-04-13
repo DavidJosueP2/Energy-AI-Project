@@ -95,6 +95,13 @@ la etiqueta lingüística sigue siendo `alta`, pero la región del universo dond
 
 Eso modifica la sensibilidad del controlador difuso sin cambiar sus reglas.
 
+En el baseline actual no todos los conjuntos son triangulares:
+
+- los conjuntos internos suelen tener 3 parámetros;
+- los extremos se declaran como trapezoides explícitos de 4 parámetros para representar hombros izquierdo o derecho.
+
+Por tanto, el cromosoma mezcla genes de familias triangulares y trapezoidales.
+
 ## Qué genes existen realmente
 
 El codificador recorre:
@@ -112,19 +119,17 @@ Para `HVAC`, hoy se optimizan estas familias:
 - `tariff`
 - `control_output`
 
-Si cada conjunto triangular tiene 3 parámetros, entonces el espacio de búsqueda es continuo y de varias decenas de dimensiones.
-
 En la configuración HVAC actual:
 
-- `temp_error`: 4 conjuntos x 3 parámetros = 12 genes
-- `humidity`: 3 conjuntos x 3 parámetros = 9 genes
-- `occupancy`: 4 conjuntos x 3 parámetros = 12 genes
-- `tariff`: 3 conjuntos x 3 parámetros = 9 genes
-- `control_output`: 5 conjuntos x 3 parámetros = 15 genes
+- `temp_error`: 2 extremos trapezoidales y 2 conjuntos internos = 14 genes
+- `humidity`: 2 extremos trapezoidales y 1 conjunto interno = 11 genes
+- `occupancy`: 2 extremos trapezoidales y 2 conjuntos internos = 14 genes
+- `tariff`: 2 extremos trapezoidales y 1 conjunto interno = 11 genes
+- `control_output`: 2 extremos trapezoidales y 3 conjuntos internos = 17 genes
 
 Total aproximado:
 
-- `57` genes reales
+- `67` genes reales
 
 Por tanto, el GA no busca sobre una sola variable, sino sobre una configuración completa del sistema difuso.
 

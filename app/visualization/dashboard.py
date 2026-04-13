@@ -31,6 +31,12 @@ def _control_series(df: pd.DataFrame) -> pd.Series:
     return df["hvac_level"]
 
 
+def _device_temperature_series(df: pd.DataFrame) -> pd.Series:
+    if "device_temperature" in df.columns:
+        return df["device_temperature"]
+    return df["temperature_indoor"]
+
+
 def create_simulation_dashboard(df: pd.DataFrame,
                                  target_temp: float = 22.0,
                                  comfort_range: float = 2.0,
@@ -59,7 +65,7 @@ def create_simulation_dashboard(df: pd.DataFrame,
                alpha=0.12, color=COLORS['green'])
     ax.plot(time, df['temperature_outdoor'], color=COLORS['warm'],
             linewidth=1.2, alpha=0.7, label='Exterior')
-    ax.plot(time, df['temperature_indoor'], color=COLORS['cool'],
+    ax.plot(time, _device_temperature_series(df), color=COLORS['cool'],
             linewidth=1.8, label='Interior')
     ax.axhline(target_temp, color=COLORS['green'], linewidth=0.8,
                linestyle='--', alpha=0.5)
@@ -148,13 +154,13 @@ def create_comparison_dashboard(df_base: pd.DataFrame,
     ax = fig.add_subplot(gs[0, 0])
     ax.axhspan(target_temp - comfort_range, target_temp + comfort_range,
                alpha=0.10, color=COLORS['green'])
-    ax.fill_between(time, target_temp, df_base['temperature_indoor'],
+    ax.fill_between(time, target_temp, _device_temperature_series(df_base),
                     alpha=0.10, color=COLORS['base'])
-    ax.fill_between(time, target_temp, df_opt['temperature_indoor'],
+    ax.fill_between(time, target_temp, _device_temperature_series(df_opt),
                     alpha=0.10, color=COLORS['optimized'])
-    ax.plot(time, df_base['temperature_indoor'], color=COLORS['base'],
+    ax.plot(time, _device_temperature_series(df_base), color=COLORS['base'],
             linewidth=1.5, alpha=0.8, label='T. Interior (Base)')
-    ax.plot(time, df_opt['temperature_indoor'], color=COLORS['optimized'],
+    ax.plot(time, _device_temperature_series(df_opt), color=COLORS['optimized'],
             linewidth=1.5, alpha=0.8, label='T. Interior (Opt)')
     if 'temperature_outdoor' in df_base.columns:
         ax.plot(time, df_base['temperature_outdoor'], color='#f5a623',

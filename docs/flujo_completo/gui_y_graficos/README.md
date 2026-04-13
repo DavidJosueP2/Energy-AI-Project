@@ -177,7 +177,7 @@ Si el objetivo es defender el origen de un gráfico, lo correcto es imprimir las
 Ejemplo para temperatura desde `gui.py`:
 
 ```python
-print(self.base_result.data[['time_hours', 'temperature_indoor', 'temperature_outdoor']].head(15))
+print(self.base_result.data[['time_hours', 'device_temperature', 'temperature_outdoor']].head(15))
 ```
 
 Ejemplo para costo:

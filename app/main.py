@@ -1,20 +1,10 @@
-# ==============================================================================
-# main.py - Punto de entrada principal de la aplicación
-# ==============================================================================
-"""
-Coordina la ejecución del sistema completo.
-Puede ejecutarse en modo GUI o en modo CLI para simulaciones headless.
-"""
-
 import sys
 import os
 import argparse
 
-# Asegurar que el directorio raíz del proyecto esté en el path
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
-
 
 def main():
     """Punto de entrada principal."""
@@ -63,7 +53,6 @@ def run_cli(args):
     print("  Modo: Línea de Comandos")
     print("=" * 60)
     
-    # Configurar
     config = AppConfig()
     config.simulation.horizon_hours = args.hours
     config.simulation.random_seed = args.seed
@@ -73,11 +62,9 @@ def run_cli(args):
     
     print(f"\nEscenario: {args.scenario} | Duración: {args.hours}h | Semilla: {args.seed}")
     
-    # Controlador base
     controller = FuzzyController(config.fuzzy, device_key=config.simulation.device_key)
     print(f"Controlador: {controller}")
     
-    # Simulación base
     print("\n--- Ejecutando simulación base ---")
     simulator = Simulator(config)
     base_result = simulator.run(
@@ -94,7 +81,6 @@ def run_cli(args):
     for k, v in base_metrics.to_dict().items():
         print(f"  {k}: {v}")
     
-    # Optimización (opcional)
     opt_result = None
     opt_metrics = None
     ga_result = None
@@ -114,7 +100,6 @@ def run_cli(args):
         print(f"Mejor fitness: {ga_result.best_fitness:.4f}")
         print(f"Tiempo total: {ga_result.total_time_seconds:.1f}s")
         
-        # Simulación optimizada
         print("\n--- Ejecutando simulación optimizada ---")
         opt_sim_result = simulator.run(
             opt_controller.get_controller_function(), label="optimizado"

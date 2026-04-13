@@ -125,6 +125,46 @@ class FuzzyController:
 
     def _apply_runtime_adjustments(self, normalized: Dict[str, float], raw_inputs: Dict[str, float]):
         """Ajusta entradas segun el contexto runtime del dispositivo."""
+        def bounded_comfort_factor(
+            reference_range: float,
+            runtime_range: float,
+            min_factor: float,
+            max_factor: float,
+        ) -> float:
+            """Modula sensibilidad sin volver inestable al controlador.
+
+            Un rango de confort menor puede volver la decision un poco mas
+            exigente, pero no debe multiplicar la sensibilidad de forma
+            explosiva. Usamos la raiz cuadrada de la razon y la acotamos
+            para preservar interpretabilidad y evitar sobre-reaccion.
+            """
+            ratio = max(reference_range, 1e-6) / max(runtime_range, 1e-6)
+            return float(np.clip(np.sqrt(ratio), min_factor, max_factor))
+
+        if self.device_key == "refrigerador" and "device_temperature" in normalized:
+            reference_target = float(self.spec.descriptor.default_target_temperature)
+            reference_range = max(float(self.spec.descriptor.default_comfort_range), 1e-6)
+            runtime_target = float(raw_inputs.get("target_temperature", reference_target))
+            runtime_comfort = max(float(raw_inputs.get("comfort_range", reference_range)), 1e-6)
+            raw_temperature = float(normalized["device_temperature"])
+            base_shift_gain = 2.5
+            comfort_factor = bounded_comfort_factor(
+                reference_range=reference_range,
+                runtime_range=runtime_comfort,
+                min_factor=0.90,
+                max_factor=1.20,
+            )
+            shift_gain = base_shift_gain * comfort_factor
+            shifted_temperature = reference_target + shift_gain * (raw_temperature - runtime_target)
+
+            temp_spec = self.spec.get_variable("device_temperature")
+            low, high = temp_spec.universe_range
+            normalized["device_temperature"] = float(np.clip(shifted_temperature, low, high))
+            normalized["target_temperature"] = runtime_target
+            normalized["comfort_range"] = runtime_comfort
+            normalized["raw_device_temperature"] = raw_temperature
+            return
+
         if self.device_key != "hvac" or "temp_error" not in normalized:
             return
 
@@ -132,7 +172,13 @@ class FuzzyController:
         comfort_range = max(float(raw_inputs.get("comfort_range", reference_range)), 1e-6)
         raw_error = float(raw_inputs.get("raw_temp_error", normalized["temp_error"]))
         control_error = float(normalized["temp_error"])
-        scaled_error = control_error * (reference_range / comfort_range)
+        comfort_factor = bounded_comfort_factor(
+            reference_range=reference_range,
+            runtime_range=comfort_range,
+            min_factor=0.85,
+            max_factor=1.35,
+        )
+        scaled_error = control_error * comfort_factor
 
         temp_error_spec = self.spec.get_variable("temp_error")
         low, high = temp_error_spec.universe_range
@@ -194,6 +240,21 @@ class FuzzyController:
                 f" El error termico bruto fue {raw_error:.2f} y se ajusto a "
                 f"{scaled_error:.2f} usando rango de confort {comfort_range:.2f}."
             )
+        elif self.device_key == "refrigerador":
+            raw_temperature = detail.crisp_inputs.get("raw_device_temperature")
+            runtime_target = detail.crisp_inputs.get("target_temperature")
+            shifted_temperature = detail.crisp_inputs.get("device_temperature")
+            comfort_range = detail.crisp_inputs.get("comfort_range")
+            if raw_temperature is not None and runtime_target is not None and shifted_temperature is not None:
+                comfort_note = (
+                    f" La temperatura interna real fue {raw_temperature:.2f} C y se "
+                    f"reexpreso como {shifted_temperature:.2f} C respecto al setpoint "
+                    f"runtime {runtime_target:.2f} C"
+                )
+                if comfort_range is not None:
+                    comfort_note += f" usando rango de confort {comfort_range:.2f} C."
+                else:
+                    comfort_note += "."
         return (
             f"Entradas evaluadas: {readable_inputs}. "
             f"La regla dominante fue '{rule.description or str(rule)}' "

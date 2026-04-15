@@ -1,12 +1,3 @@
-# ==============================================================================
-# scenario_generator.py - Generador de escenarios predefinidos
-# ==============================================================================
-"""
-Genera configuraciones de escenarios ambientales para diferentes estaciones
-y condiciones. Cada escenario ajusta los parámetros del ambiente para
-representar condiciones realistas.
-"""
-
 from app.config import EnvironmentConfig, SimulationConfig
 from typing import Tuple
 
@@ -14,7 +5,7 @@ from typing import Tuple
 def get_scenario_configs(scenario_type: str, 
                          horizon_hours: int = 72,
                          seed: int = 42,
-                         target_temp: float = 22.0) -> Tuple[SimulationConfig, EnvironmentConfig]:
+                         target_temp: float = 23.75) -> Tuple[SimulationConfig, EnvironmentConfig]:
     """
     Genera configuraciones para un escenario específico.
     

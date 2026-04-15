@@ -1,28 +1,3 @@
-"""
-Evaluación de fitness para la optimización genética del controlador difuso.
-
-Este módulo define cómo se juzga si un cromosoma representa una mejora real
-respecto al controlador base. La idea central es importante:
-
-- el GA no optimiza directamente temperaturas, costos o reglas aisladas;
-- optimiza parámetros de membresía del sistema difuso;
-- y cada candidato se evalúa ejecutando una simulación completa.
-
-Por eso el fitness aquí no es una fórmula abstracta desconectada del sistema,
-sin la traducción numérica de una comparación operativa entre:
-
-- el controlador difuso base;
-- y una variante difusa construida a partir de un cromosoma.
-
-La política de evaluación prioriza:
-
-- ahorro económico;
-- ahorro energético;
-- mantenimiento del confort;
-- y rechazo de soluciones que, aunque tengan score aparente, sean poco
-  defendibles frente al controlador base.
-"""
-
 from dataclasses import dataclass
 from typing import Optional
 
@@ -171,7 +146,7 @@ class FitnessEvaluator:
         - penalizaciones por degradación térmica;
         - y una bonificación mínima por mejora de confort.
 
-        El principio dominante es deliberado: una solución no debe ganar solo
+        Una solución no debe ganar solo
         porque ahorra un poco si a cambio empeora de forma apreciable el
         comportamiento térmico.
 

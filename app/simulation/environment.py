@@ -1,17 +1,3 @@
-"""
-Generacion de perfiles ambientales y de uso.
-
-Este modulo define las perturbaciones exogenas de la simulacion. Las
-expresiones son deliberadamente simples para que el proyecto siga siendo
-interpretable:
-
-- temperatura exterior: oscilacion senoidal diaria + ruido suavizado;
-- humedad: oscilacion diaria desfasada respecto a la temperatura;
-- radiacion solar: envolvente diurna tipo sin^2;
-- ocupacion y tarifa: perfiles piecewise por franja horaria;
-- refrigerador: apertura de puerta y carga interna como perfiles de uso.
-"""
-
 from typing import Dict
 
 import numpy as np

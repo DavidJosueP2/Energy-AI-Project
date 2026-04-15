@@ -911,9 +911,6 @@ class MainWindow(QMainWindow):
                   f"Costo: ${self.optimized_metrics.total_cost:.2f} | "
                   f"Confort: {self.optimized_metrics.comfort_percentage:.1f}%")
         
-        #print(f"Base Result {self.base_result.data[["control_level"]]}"
-        #      + f"Optmized Result {self.optimized_result.data[["control_level"]]}")
-                   
         self._update_all_plots()
         self._update_ga_plot()
         self._update_metrics_table()

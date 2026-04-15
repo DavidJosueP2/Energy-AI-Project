@@ -119,7 +119,6 @@ def gaussian_mutation(chromosome: np.ndarray,
     
     for i in range(len(mutated)):
         if rng.random() < mutation_prob:
-            # La intensidad real de la mutación depende del dominio del gen.
             gene_range = gene_specs[i]['max'] - gene_specs[i]['min']
             scaled_sigma = sigma * (gene_range / 20.0)
             mutated[i] += rng.normal(0, scaled_sigma)
@@ -155,13 +154,10 @@ def apply_elitism(old_population: np.ndarray,
     if elite_count <= 0:
         return new_population, new_fitnesses
     
-    # Encontrar los mejores de la generación anterior
     elite_indices = np.argsort(old_fitnesses)[-elite_count:]
     
-    # Encontrar los peores de la nueva generación
     worst_indices = np.argsort(new_fitnesses)[:elite_count]
     
-    # Reemplazar
     result_pop = new_population.copy()
     result_fit = new_fitnesses.copy()
     

@@ -61,11 +61,9 @@ class GeneticOptimizer:
         self.ga_config = config.genetic
         self.base_controller = base_controller
         
-        # Componentes
         self.encoder = ChromosomeEncoder(controller=base_controller)
         self.evaluator = FitnessEvaluator(config, base_controller)
         
-        # Estado
         self.rng = np.random.RandomState(self.ga_config.random_seed)
         self._is_running = False
         self._should_stop = False
@@ -89,45 +87,35 @@ class GeneticOptimizer:
         
         result = OptimizationResult()
         
-        # 1. Generar población inicial
         population = self._init_population()
-        
-        # 2. Evaluar fitness inicial
         fitnesses = self.evaluator.evaluate_population(population)
         
-        # Registrar generación 0
         stats = self._compute_stats(0, population, fitnesses, start_time)
         result.history.append(stats)
         
         if progress_callback:
             progress_callback(0, ga.num_generations, stats.best_fitness)
         
-        # 3. Bucle generacional
         for gen in range(1, ga.num_generations + 1):
             if self._should_stop:
                 break
             
-            # a-d. Crear nueva generación
             new_population = self._create_next_generation(population, fitnesses)
             
-            # e. Evaluar nueva generación
             new_fitnesses = self.evaluator.evaluate_population(new_population)
             
-            # f. Aplicar elitismo
             population, fitnesses = apply_elitism(
                 population, fitnesses,
                 new_population, new_fitnesses,
                 ga.elitism_count
             )
             
-            # g. Registrar estadísticas
             stats = self._compute_stats(gen, population, fitnesses, start_time)
             result.history.append(stats)
             
             if progress_callback:
                 progress_callback(gen, ga.num_generations, stats.best_fitness)
         
-        # 4. Compilar resultado final
         best_candidate = self.evaluator.get_best_candidate()
         if best_candidate is not None:
             result.best_chromosome = best_candidate.chromosome.copy()
@@ -158,10 +146,8 @@ class GeneticOptimizer:
         
         population = np.zeros((pop_size, n_genes))
         
-        # Primer individuo: parámetros por defecto (asegurar baseline)
         population[0] = self.encoder.encode_default()
         
-        # Resto: perturbaciones aleatorias del default
         for i in range(1, pop_size):
             population[i] = self.encoder.generate_random(
                 self.rng, ga.init_perturbation
@@ -180,7 +166,6 @@ class GeneticOptimizer:
         
         i = 0
         while i < pop_size:
-            # Selección
             parent1 = tournament_selection(
                 population, fitnesses, ga.tournament_size, self.rng
             )
@@ -188,7 +173,6 @@ class GeneticOptimizer:
                 population, fitnesses, ga.tournament_size, self.rng
             )
             
-            # Cruce
             if self.rng.random() < ga.crossover_probability:
                 child1, child2 = blx_alpha_crossover(
                     parent1, parent2, ga.blx_alpha, self.rng
@@ -196,7 +180,6 @@ class GeneticOptimizer:
             else:
                 child1, child2 = parent1.copy(), parent2.copy()
             
-            # Mutación
             child1 = gaussian_mutation(
                 child1, ga.mutation_probability, ga.mutation_sigma,
                 self.encoder, self.rng
@@ -206,11 +189,9 @@ class GeneticOptimizer:
                 self.encoder, self.rng
             )
             
-            # Reparar restricciones
             child1 = self.encoder.repair(child1)
             child2 = self.encoder.repair(child2)
             
-            # Insertar en nueva población
             new_pop[i] = child1
             i += 1
             if i < pop_size:

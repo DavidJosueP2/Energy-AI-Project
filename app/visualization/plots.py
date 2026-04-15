@@ -1,24 +1,7 @@
-# ==============================================================================
-# plots.py - Generación de gráficos con matplotlib
-# ==============================================================================
-"""
-Genera todos los gráficos requeridos para el análisis del sistema:
-1. Temperatura interior vs exterior
-2. Nivel de climatización
-3. Consumo total por hora
-4. Costo acumulado
-5. Confort térmico
-6. Evolución del fitness del GA
-7. Comparación base vs optimizado
-8. Distribución de consumo
-9. Ocupación y tarifa
-10. Radar de métricas comparativas
-"""
-
 import numpy as np
 import pandas as pd
 import matplotlib
-matplotlib.use('Agg')  # Backend no interactivo por defecto
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.gridspec import GridSpec
@@ -27,7 +10,6 @@ from typing import Optional, List, Dict, Tuple
 from app.simulation.metrics import PerformanceMetrics
 
 
-# ---- Estilo global de gráficos ----
 STYLE_CONFIG = {
     'figure.facecolor': '#1a1a2e',
     'axes.facecolor': '#16213e',
@@ -91,8 +73,8 @@ def apply_style():
     plt.rcParams.update(STYLE_CONFIG)
 
 
-def plot_temperatures(df: pd.DataFrame, target_temp: float = 22.0,
-                      comfort_range: float = 2.0) -> Figure:
+def plot_temperatures(df: pd.DataFrame, target_temp: float = 23.75,
+                      comfort_range: float = 1.75) -> Figure:
     """Gráfico 1: Temperatura interior vs exterior con zona de confort."""
     apply_style()
     fig, ax = plt.subplots(figsize=(12, 5))
@@ -210,7 +192,7 @@ def plot_cumulative_cost(df: pd.DataFrame) -> Figure:
     return fig
 
 
-def plot_comfort(df: pd.DataFrame, target_temp: float = 22.0) -> Figure:
+def plot_comfort(df: pd.DataFrame, target_temp: float = 23.75) -> Figure:
     """Gráfico 5: Desviación de confort térmico."""
     apply_style()
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 6), height_ratios=[2, 1])
@@ -269,8 +251,8 @@ def plot_ga_evolution(fitness_history: List[float],
 
 def plot_comparison(df_base: pd.DataFrame,
                      df_opt: pd.DataFrame,
-                     target_temp: float = 22.0,
-                     comfort_range: float = 2.0) -> Figure:
+                     target_temp: float = 23.75,
+                     comfort_range: float = 1.75) -> Figure:
     """Gráfico 7: Comparación base vs optimizado (multiplot)."""
     apply_style()
     fig, axes = plt.subplots(3, 1, figsize=(14, 10), sharex=True)

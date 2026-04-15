@@ -1,7 +1,3 @@
-"""
-Motor de simulacion temporal multi-dispositivo.
-"""
-
 from typing import Callable, Dict, List, Optional
 
 import numpy as np
@@ -65,7 +61,7 @@ class Simulator:
         )
         sim_c.time_step_hours = sim_cfg.time_step_hours
         environment = EnvironmentProfile(sim_c, env_c)
-
+            
         definition = build_device_definition(sim_cfg.device_key)
         dynamics_config = build_runtime_dynamics_config(sim_cfg.device_key, self.config.house)
         device = ControlledDevice(
@@ -87,9 +83,11 @@ class Simulator:
             controller_inputs = self._build_controller_inputs(device, env_state)
             try:
                 control_level = float(np.clip(controller_fn(controller_inputs), 0.0, 100.0))
+                print(f"\nStep: {step}")
             except Exception:
                 control_level = 0.0
 
+                        
             ambient_temperature = self._resolve_ambient_temperature(sim_cfg.device_key, env_state)
             step_inputs = {
                 "ambient_temperature": ambient_temperature,

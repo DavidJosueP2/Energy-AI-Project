@@ -1,16 +1,3 @@
-# ==============================================================================
-# fuzzy_plots.py - Visualizacion completa del proceso de inferencia difusa
-# ==============================================================================
-"""
-Genera graficos detallados del proceso de inferencia difusa:
-- Funciones de pertenencia de cada variable
-- Activacion de conjuntos difusos para un valor dado
-- Reglas activadas con sus grados
-- Agregacion de consecuentes
-- Desfuzzificacion por centroide
-- Comparacion de funciones de pertenencia antes/despues de optimizacion
-"""
-
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')

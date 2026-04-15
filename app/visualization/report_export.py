@@ -1,13 +1,3 @@
-# ==============================================================================
-# report_export.py - Exportación de reportes
-# ==============================================================================
-"""
-Genera reportes en múltiples formatos:
-- CSV con datos de simulación
-- Imágenes PNG de gráficos
-- Reporte HTML profesional con métricas, gráficos y resumen
-"""
-
 import os
 import base64
 from io import BytesIO

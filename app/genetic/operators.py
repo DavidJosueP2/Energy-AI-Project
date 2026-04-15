@@ -1,23 +1,3 @@
-# ==============================================================================
-# operators.py - Operadores genéticos: selección, cruce, mutación
-# ==============================================================================
-"""
-Operadores genéticos básicos para cromosomas reales.
-
-Este módulo implementa los operadores que transforman una población de
-soluciones candidatas en nuevas variantes dentro del ciclo evolutivo.
-
-En este proyecto los cromosomas no son cadenas binarias. Son vectores de
-valores reales que codifican parámetros de funciones de pertenencia difusa.
-Por eso los operadores implementados aquí están pensados para optimización
-continua:
-
-- selección por torneo para elegir padres prometedores;
-- cruce BLX-α para recombinar genes reales con exploración local;
-- mutación gaussiana para perturbar genes de forma proporcional a su escala;
-- elitismo para no perder soluciones buenas ya encontradas.
-"""
-
 import numpy as np
 from typing import Tuple
 

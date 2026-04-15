@@ -1,7 +1,3 @@
-"""
-Conversion entre representaciones linguistico-difusas y valores numericos.
-"""
-
 from typing import Dict, List, Optional
 
 from app.fuzzy.controller import FuzzyController

@@ -1,16 +1,3 @@
-"""
-Definiciones unificadas de dispositivos y modelo dinamico.
-
-Este modulo es la fuente unica de verdad por dispositivo:
-- identidad y etiquetas visibles;
-- limites operativos y defaults de interfaz;
-- dinamica fisica del modelo;
-- especificacion difusa base.
-
-La idea es que HVAC o refrigerador se definan una sola vez aqui, y que
-GUI, simulacion y controlador difuso lean de esta misma definicion.
-"""
-
 from dataclasses import dataclass, field, replace
 from typing import Dict, List, Optional, Tuple
 
@@ -144,8 +131,10 @@ def _build_hvac_definition() -> DeviceDefinition:
         display_name="HVAC Mitsubishi MSZ-GL24NA / MUZ-GL24NA",
         control_display_name="Nivel de climatizacion Mitsubishi",
         temperature_display_name="Temperatura interior controlada",
-        default_target_temperature=22.0,
-        default_comfort_range=2.0,
+        # Banda HVAC inicial aproximada tomada de la zona ASHRAE de 0.1 m/s:
+        # 22.0 °C a 25.5 °C -> centro 23.75 °C con semi-ancho 1.75 °C.
+        default_target_temperature=23.75,
+        default_comfort_range=1.75,
         target_min=16.0,
         target_max=31.0,
         comfort_min=0.5,

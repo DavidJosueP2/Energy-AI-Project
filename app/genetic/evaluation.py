@@ -1,25 +1,3 @@
-# ==============================================================================
-# evaluation.py - Evaluación comparativa base vs optimizado
-# ==============================================================================
-"""
-Evaluación comparativa entre controlador base y controlador optimizado.
-
-Este módulo existe para la capa de análisis y presentación del proyecto.
-Mientras `fitness.py` se centra en producir un score para el algoritmo
-genético, este módulo se centra en responder una pregunta distinta:
-
-“Una vez terminada la optimización, ¿cómo se comporta el sistema base frente
-al sistema optimizado cuando ambos se comparan con las mismas condiciones?”
-
-Por eso aquí se ejecutan simulaciones completas y se conservan resultados
-listos para:
-
-- tablas comparativas;
-- gráficos base vs optimizado;
-- resúmenes textuales;
-- exportación de reportes.
-"""
-
 from typing import Dict, Tuple, Optional
 import pandas as pd
 

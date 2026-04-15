@@ -1,24 +1,3 @@
-# ==============================================================================
-# optimizer.py - Optimizador principal del algoritmo genético
-# ==============================================================================
-"""
-Implementa el bucle principal del algoritmo genético para optimizar
-los parámetros del controlador difuso.
-
-Flujo del GA:
-1. Generar población inicial (perturbada desde parámetros por defecto)
-2. Evaluar fitness de cada individuo
-3. Repetir por N generaciones:
-   a. Seleccionar padres (torneo)
-   b. Cruzar (BLX-α)
-   c. Mutar (gaussiana)
-   d. Reparar restricciones
-   e. Evaluar nueva generación
-   f. Aplicar elitismo
-   g. Registrar estadísticas
-4. Retornar el mejor individuo encontrado
-"""
-
 import numpy as np
 import time
 from typing import Optional, Callable, List, Dict

@@ -341,14 +341,14 @@ class MainWindow(QMainWindow):
         layout.addWidget(QLabel("T. Objetivo (C):"), 2, 0)
         self.spin_target = QDoubleSpinBox()
         self.spin_target.setRange(-10.0, 30.0)
-        self.spin_target.setValue(22.0)
+        self.spin_target.setValue(23.75)
         self.spin_target.setSingleStep(0.5)
         layout.addWidget(self.spin_target, 2, 1)
 
         layout.addWidget(QLabel("Rango confort (+/-C):"), 3, 0)
         self.spin_comfort = QDoubleSpinBox()
         self.spin_comfort.setRange(0.5, 5.0)
-        self.spin_comfort.setValue(2.0)
+        self.spin_comfort.setValue(1.75)
         self.spin_comfort.setSingleStep(0.5)
         layout.addWidget(self.spin_comfort, 3, 1)
 
@@ -849,8 +849,8 @@ class MainWindow(QMainWindow):
 
     def _on_base_finished(self, result, metrics):
         self.base_result = result
-        self.base_metrics = metrics
-
+        self.base_metrics = metrics    
+        
         self._log(f"Simulacion base completada: {result.num_steps} pasos")
         self._log(f"   Energia: {metrics.total_energy_kwh:.1f} kWh | "
                   f"Costo: ${metrics.total_cost:.2f} | "
@@ -911,6 +911,9 @@ class MainWindow(QMainWindow):
                   f"Costo: ${self.optimized_metrics.total_cost:.2f} | "
                   f"Confort: {self.optimized_metrics.comfort_percentage:.1f}%")
         
+        #print(f"Base Result {self.base_result.data[["control_level"]]}"
+        #      + f"Optmized Result {self.optimized_result.data[["control_level"]]}")
+                   
         self._update_all_plots()
         self._update_ga_plot()
         self._update_metrics_table()
@@ -996,7 +999,6 @@ class MainWindow(QMainWindow):
         self.log_text.setTextCursor(cursor)
 
     def _update_mf_plot(self):
-        """Actualiza el grafico de funciones de pertenencia."""
         if not self.base_controller:
             return
         try:
@@ -1007,7 +1009,7 @@ class MainWindow(QMainWindow):
             self.canvas_mf.update_figure(fig)
         except Exception as e:
             self._log(f"Error en MF plot: {e}")
-
+    
     def _update_all_plots(self):
         """Actualiza TODOS los graficos con datos actuales, siempre comparativos."""
         if not self.base_result:

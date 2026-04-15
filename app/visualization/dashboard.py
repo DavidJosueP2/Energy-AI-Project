@@ -1,11 +1,3 @@
-# ==============================================================================
-# dashboard.py - Dashboard multiplot para visualización rápida
-# ==============================================================================
-"""
-Genera dashboards compuestos con múltiples gráficos en una sola figura.
-Útil para obtener una vista general rápida de los resultados.
-"""
-
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -38,8 +30,8 @@ def _device_temperature_series(df: pd.DataFrame) -> pd.Series:
 
 
 def create_simulation_dashboard(df: pd.DataFrame,
-                                 target_temp: float = 22.0,
-                                 comfort_range: float = 2.0,
+                                 target_temp: float = 23.75,
+                                 comfort_range: float = 1.75,
                                  title: str = "Dashboard de Simulación") -> Figure:
     """
     Crea un dashboard completo con 6 paneles para una simulación.
@@ -139,8 +131,8 @@ def create_comparison_dashboard(df_base: pd.DataFrame,
                                  df_opt: pd.DataFrame,
                                  base_metrics: PerformanceMetrics,
                                  opt_metrics: PerformanceMetrics,
-                                 target_temp: float = 22.0,
-                                 comfort_range: float = 2.0) -> Figure:
+                                 target_temp: float = 23.75,
+                                 comfort_range: float = 1.75) -> Figure:
     """Dashboard comparativo base vs optimizado."""
     apply_style()
     fig = plt.figure(figsize=(18, 14))

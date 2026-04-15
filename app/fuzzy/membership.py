@@ -1,15 +1,3 @@
-# ==============================================================================
-# membership.py - Funciones de pertenencia para lógica difusa
-# ==============================================================================
-"""
-Implementa funciones de pertenencia parametrizables:
-- Triangular: definida por tres puntos (a, b, c) → pico en b
-- Trapezoidal: definida por cuatro puntos (a, b, c, d) → meseta entre b y c
-
-También define la clase FuzzyVariable que agrupa conjuntos difusos
-sobre un universo de discurso compartido.
-"""
-
 import numpy as np
 from typing import Dict, List, Tuple, Optional
 

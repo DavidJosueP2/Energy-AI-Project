@@ -1,6 +1,3 @@
-# ==============================================================================
-# house_model.py - Modelo térmico de la vivienda
-# ==============================================================================
 """
 Modelo térmico simplificado pero coherente de una vivienda residencial.
 

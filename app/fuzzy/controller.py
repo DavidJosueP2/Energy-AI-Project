@@ -1,7 +1,3 @@
-"""
-Controlador difuso interpretable y multi-dispositivo.
-"""
-
 from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
@@ -105,7 +101,7 @@ class FuzzyController:
         self.inference_engine = MamdaniInference(
             input_variables=self.input_variables,
             output_variable=self.output_variable,
-            rule_base=self.rule_base,
+            fuzzy_rule_set=self.rule_base,
         )
 
     def normalize_inputs(self, inputs: Dict[str, float]) -> Dict[str, float]:
@@ -198,20 +194,19 @@ class FuzzyController:
 
         detail.membership_degrees = self.inference_engine._fuzzify(controller_inputs)
         activated_outputs = self.inference_engine._evaluate_rules(detail.membership_degrees)
+        implied_outputs = self.inference_engine._implicate(activated_outputs)
         detail.rules_with_strength = self.inference_engine.get_rule_activations(controller_inputs)
         detail.consequent_activations = [
             ConsequentActivation(
-                set_name=set_name,
+                set_name=rule.consequent[1],
                 strength=strength,
                 source_rule=str(rule),
             )
-            for (rule, strength), (set_name, _) in zip(
-                detail.rules_with_strength,
-                activated_outputs + [("", 0.0)] * max(0, len(detail.rules_with_strength) - len(activated_outputs)),
-            )
+            for rule, strength in detail.rules_with_strength
             if strength > 0.01
         ]
-        detail.aggregated_output = self.inference_engine._aggregate(activated_outputs)
+        
+        detail.aggregated_output = self.inference_engine._aggregate(implied_outputs)
         detail.centroid_value = self.inference_engine._defuzzify(detail.aggregated_output)
         detail.output_memberships = self.output_variable.fuzzify(detail.centroid_value)
         detail.output_label = max(

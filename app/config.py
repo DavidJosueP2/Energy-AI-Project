@@ -16,10 +16,13 @@ class SimulationConfig:
     random_seed: int = 42
     
     # Temperatura objetivo de confort (°C)
-    target_temperature: float = 22.0
+    # Basado en una banda HVAC inicial aproximada ASHRAE de 0.1 m/s:
+    # 22.0 °C a 25.5 °C -> centro 23.75 °C.
+    target_temperature: float = 23.75
     
     # Rango de confort aceptable alrededor del objetivo (°C)
-    comfort_range: float = 2.0
+    # Banda inicial aproximada ASHRAE de 0.1 m/s: ±1.75 °C alrededor de 23.75 °C.
+    comfort_range: float = 1.75
     
     # Tipo de escenario: 'verano', 'invierno', 'primavera', 'mixto'
     scenario_type: str = 'verano'

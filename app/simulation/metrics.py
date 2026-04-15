@@ -1,7 +1,3 @@
-"""
-Calculo de metricas de desempeno para simulaciones del controlador difuso.
-"""
-
 from dataclasses import dataclass
 from typing import Dict
 

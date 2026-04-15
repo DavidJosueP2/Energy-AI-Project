@@ -191,7 +191,7 @@ class FuzzyController:
     def evaluate_with_detail(self, controller_inputs: Dict[str, float]) -> Tuple[float, InferenceDetail]:
         controller_inputs = self.normalize_inputs(controller_inputs)
         detail = InferenceDetail(crisp_inputs=dict(controller_inputs))
-
+        
         detail.membership_degrees = self.inference_engine._fuzzify(controller_inputs)
         activated_outputs = self.inference_engine._evaluate_rules(detail.membership_degrees)
         implied_outputs = self.inference_engine._implicate(activated_outputs)

@@ -83,7 +83,6 @@ class Simulator:
             controller_inputs = self._build_controller_inputs(device, env_state)
             try:
                 control_level = float(np.clip(controller_fn(controller_inputs), 0.0, 100.0))
-                print(f"\nStep: {step}")
             except Exception:
                 control_level = 0.0
 
